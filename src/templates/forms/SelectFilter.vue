@@ -38,21 +38,6 @@ export default {
         'price-desc': 'Цены: по убыванию'
       })
     },
-    filterParam: {
-      type: String,
-      required: true,
-      default: ''
-    }
-  },
-
-  created() {
-    const windowData = Object.fromEntries(
-      new URL(window.location).searchParams.entries()
-    );
-
-    if (windowData[this.filterParam]) {
-      this.selected = windowData[this.filterParam];
-    }
   },
 
   methods: {
@@ -63,20 +48,6 @@ export default {
 
   mounted() {
     this.selected = this.selectedFirstItem;
-    console.log(this.$route);
-  },
-
-  watch: {
-    selected() {
-      
-      // const url = new URL(window.location.href);
-      // const params = url.searchParams;
-      // params.set(this.filterParam, this.selected);
-
-      // const newUrl = `${url.pathname}?${params.toString()}`;
-      
-      // window.history.pushState(null, document.title, newUrl);
-    }
   }
 }
 </script>

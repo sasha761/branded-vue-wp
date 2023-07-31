@@ -305,7 +305,7 @@
                   <div class="l-shop__result-count">
                     <p class="woocommerce-result-count">Отображение 1–16 из 750</p>
                   </div>
-                  <select-filter @select-filter="sortHendler" :options="filterOrderby" filterParam="orderby" />
+                  <select-filter-form @select-filter="sortHendler" :options="filterOrderby" filterParam="orderby" />
                 </div>
                 <div v-if="filteredProducts" class="l-shop__product">
                   <div class="row js-load-more">
@@ -317,92 +317,9 @@
                       <CProduct :product="product" />
                     </div>
                   </div>
-                  <div class="c-load-icon js-load-more-icon">
-                    <span class="c-spinner"> <span></span> <span></span> <span></span> </span>
-                  </div>
-                  <button
-                    data-current-page="1"
-                    data-all-pages="11"
-                    data-slug="women"
-                    data-count="16"
-                    data-all-posts="762"
-                    data-category="product_cat"
-                    class="u-btn is-load-more is-medium is-black js-show-more-product"
-                  >
-                    Загрузить еще
-                  </button>
+                  <CLoadrMore />
                 </div>
-                <div class="c-pagination">
-                  <ul>
-                    <li class="is-active">
-                      <span class="page-number page-numbers current">1</span>
-                    </li>
-                    <li>
-                      <a
-                        href="https://branded.com.ua/product-category/women/page/2/"
-                        class="page-number page-numbers"
-                        >2</a
-                      >
-                    </li>
-                    <li>
-                      <a
-                        href="https://branded.com.ua/product-category/women/page/3/"
-                        class="page-number page-numbers"
-                        >3</a
-                      >
-                    </li>
-                    <li>
-                      <a
-                        href="https://branded.com.ua/product-category/women/page/4/"
-                        class="page-number page-numbers"
-                        >4</a
-                      >
-                    </li>
-                    <li>
-                      <a
-                        href="https://branded.com.ua/product-category/women/page/5/"
-                        class="page-number page-numbers"
-                        >5</a
-                      >
-                    </li>
-                    <li>
-                      <a
-                        href="https://branded.com.ua/product-category/women/page/6/"
-                        class="page-number page-numbers"
-                        >6</a
-                      >
-                    </li>
-                    <li>
-                      <a
-                        href="https://branded.com.ua/product-category/women/page/7/"
-                        class="page-number page-numbers"
-                        >7</a
-                      >
-                    </li>
-                    <li>
-                      <a
-                        href="https://branded.com.ua/product-category/women/page/8/"
-                        class="page-number page-numbers"
-                        >8</a
-                      >
-                    </li>
-                    <li>
-                      <a
-                        href="https://branded.com.ua/product-category/women/page/9/"
-                        class="page-number page-numbers"
-                        >9</a
-                      >
-                    </li>
-                    <li class="is-active"><span class="dots">…</span></li>
-                    <li>
-                      <a
-                        href="https://branded.com.ua/product-category/women/page/47/"
-                        class="page-number page-numbers"
-                        >47</a
-                      >
-                    </li>
-                  </ul>
-                </div>
+                <CPagination />
               </section>
             </div>
           </div>
@@ -445,23 +362,27 @@
 </template>
 
 <script>
-import selectFilter from './components/SelectFilter.vue'
-import headerLayout from './components/HeaderLayout.vue'
-import footerLayout from './components/FooterLayout.vue'
-import ModalComponent from './components/CModal.vue'
-import CProduct from './components/CProduct.vue'
-import icons from './components/iconsSvg.vue'
+import selectFilterForm from './templates/forms/SelectFilterForm.vue'
+import headerLayout from './templates/layout/HeaderLayout.vue'
+import footerLayout from './templates/layout/FooterLayout.vue'
+import ModalComponent from './templates/components/CModal.vue'
+import CProduct from './templates/components/CProduct.vue'
+import icons from './templates/partial/iconsSvg.vue'
+import CPagination from './templates/components/CPagination.vue'
+import CLoadrMore from './templates/components/CLoadMore.vue'
 
 export default {
   name: "App",
 
   components: {
-    selectFilter,
+    selectFilterForm,
     headerLayout,
     footerLayout,
     ModalComponent,
     CProduct,
-    icons
+    icons,
+    CPagination,
+    CLoadrMore,
   },
 
   data() {
@@ -484,11 +405,9 @@ export default {
 
   methods: {
     async getProducts() {
-      // return fetch('https://branded.loc/wp-json/api/archive/get_products')
-      //   .then((result) => result.json())
-      //   .then((rowData) => (this.products = rowData))
-
-      return false
+      return fetch('https://branded.loc/wp-json/api/archive/get_products')
+        .then((result) => result.json())
+        .then((rowData) => (this.products = rowData))
     },
 
     handleSearch(searchResults) {
@@ -499,6 +418,8 @@ export default {
     },
 
     sortHendler(selectedOption) {
+      console.log(selectedOption);
+
       this.sortedStr = selectedOption
       this.handleSort()
     },
