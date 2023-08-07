@@ -3,12 +3,14 @@ import Vue from 'vue'
 import App from './App.vue'
 import VueRouter from 'vue-router'
 
+
 const routes = [
-  { path: '/foo', component: null },
-  { path: '/bar', component: null }
+  { path: '/product-category/:id', component: () => import('./templates/pages/P-Shop.vue') },
+  { path: '/product/:id', component: () => import('./templates/pages/P-Product.vue') }
 ]
 const router = new VueRouter({
-  routes
+  routes,
+  mode: 'history' 
 })
 
 Vue.config.productionTip = false

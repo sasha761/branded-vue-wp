@@ -1,5 +1,5 @@
 <template>
-  <select-filter @select-filter="handleSelectChange" :options="options"/>
+  <select-filter @select-filter="handleSelectChange" :options="options" :current-option="currentOption"/>
 </template>
 
 <script>
@@ -14,7 +14,6 @@ export default {
 
   data() {
     return {
-      filteredOptions: Object
     }
   },
   
@@ -34,25 +33,10 @@ export default {
       default: ''
     }
   },
-  
-  created() {
-    // const windowData = Object.fromEntries(
-    //   new URL(window.location).searchParams.entries()
-    // );
 
-    // if (windowData[this.filterParam]) {
-    //   
-    // }
-
-    ///  какая-то хуйня получается не могу изменять обьект походу
-    const filteredOptions = this.options;
-    const queryVal = this.options[this.$route.query[this.filterParam]];
-    const queryKey = Object.values(this.$route.query)[0];
-    console.log(queryKey, queryVal);
-    if (this.$route.query) {
-      delete filteredOptions[queryKey];
-      Object.assign({'queryKey': 2}, filteredOptions);
-      console.log(filteredOptions);
+  computed: {
+    currentOption() {
+      return this.$route.query[this.filterParam];
     }
   },
 

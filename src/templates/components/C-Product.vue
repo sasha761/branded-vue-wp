@@ -2,7 +2,7 @@
   <div
     class="c-product js-product-item"
     :data-id="product.post_id"
-    data-brand="Bant Atelier"
+    :data-brand="product.post_attr_brand"
   >
     <a :href="product.post_link" class="c-product__img">
       <picture>

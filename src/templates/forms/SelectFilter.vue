@@ -22,12 +22,6 @@ export default {
     }
   },
 
-  computed: {
-    selectedFirstItem() {
-      return Object.keys(this.options)[0] || ''
-    }
-  },
-
   props: {
     options: {
       type: Object,
@@ -38,16 +32,25 @@ export default {
         'price-desc': 'Цены: по убыванию'
       })
     },
+    currentOption: {
+      type: String,
+    }
   },
 
   methods: {
     handleSelectChange() {
       this.$emit('select-filter', this.selected)
+    },
+
+    selectFilterInit() {
+      this.selected = this.currentOption || Object.keys(this.options)[0];
     }
   },
 
   mounted() {
-    this.selected = this.selectedFirstItem;
+    this.selectFilterInit();
+
+    console.log(Object.keys(this.options)[0]);
   }
 }
 </script>
