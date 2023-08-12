@@ -50,7 +50,7 @@ export default {
   mounted() {
     this.selectFilterInit();
 
-    console.log(Object.keys(this.options)[0]);
+    // console.log(Object.keys(this.options)[0]);
   }
 }
 </script>

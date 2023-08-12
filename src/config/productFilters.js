@@ -15,12 +15,22 @@ export default {
     'lexie': 'Lexie',
     'wearme': 'WearMe'
   },
+  filterBrandKeys: {
+    'bant-atelier': 'bant-atelier',
+    'be-om': 'be-om',
+    'lexie': 'lexie',
+    'wearme': 'wearme'
+  },
   filterSize: {
     'xs': 'XS',
     's': 'S',
     'm': 'M',
     'l': 'L'
   },
-
-
+  filterSizeKey: {
+    'xs': 'xs',
+    's': 's',
+    'm': 'm',
+    'l': 'l'
+  },
 }

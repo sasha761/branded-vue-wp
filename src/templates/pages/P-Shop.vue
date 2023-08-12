@@ -87,11 +87,12 @@ export default {
       resaultProducts: [],
       sortedData: false,
       sortedStr: '',
-      searchResults: '',
       filterOrderby: ProductFiltersData.filterOrderby,
       filterOrderbyKeys: ProductFiltersData.filterOrderbyKeys,
       filterBrand: ProductFiltersData.filterBrand,
+      filterBrandKeys: ProductFiltersData.filterBrandKeys,
       filterSize: ProductFiltersData.filterSize, 
+      filterSizeKey: ProductFiltersData.filterSizeKey, 
     }
   },
 
@@ -100,10 +101,10 @@ export default {
   },
 
   computed: {
-    filteredProducts() {
-      return Object.values(this.products).filter((item) =>
+    filteredProducts() { // тут загвостка
+      return Object.values(this.products).filter((item) => {
         item.post_title.toLowerCase().includes(this.searchResults.toLowerCase())
-      )
+      })
     },
   },
 
@@ -111,17 +112,22 @@ export default {
     async getProducts() {
       return fetch('https://branded.loc/wp-json/api/archive/get_products')
         .then((result) => result.json())
-        .then((rowData) => {this.products = rowData; this.resaultProducts = rowData})
+        .then((rowData) => {this.products = rowData; this.resaultProducts = rowData;})
     },
 
     handleSearch(searchResults) {
-      this.searchResults = searchResults;
-      if (this.sortedData) this.handleSort()
+      // this.searchResults = searchResults;
+
+      this.resaultProducts = Object.values(this.products).filter((item) => {
+        return item.post_title.toLowerCase().includes(searchResults.toLowerCase())
+      })
+      if (this.sortedData) this.sortHendler()
     },
 
     sortHendler(selectedOption) {
-
-      this.handleSort(selectedOption)
+      this.handleSortBrand(selectedOption)
+      this.handleSortPrice(selectedOption)
+      this.handleSortSize(selectedOption)
     },
 
     filterProductsByUpPrice(products) {
@@ -132,20 +138,87 @@ export default {
       return products.sort((a, b) => b.post_price - a.post_price)
     },
 
-    handleSort(selectedOption) {
+    filterProductsByBrand(products, brandName) {
+      return products.filter((item) => {
+        return item.post_attr_brand.toLowerCase().includes(brandName.toLowerCase())
+      })
+    },
+
+    filterProductsBySize(products, productSize) {
+      return products.filter((item) => {
+        return item.post_attr_size.toLowerCase().split(', ').includes(productSize.toLowerCase())
+      })
+    },
+
+    handleSortPrice(selectedOption) {
       switch(selectedOption) {
         case this.filterOrderbyKeys['price-asc']:
           this.sortedData = true
-          this.resaultProducts = this.filterProductsByUpPrice(this.filteredProducts);
+          this.resaultProducts = this.filterProductsByUpPrice(this.resaultProducts);
           break;
         case this.filterOrderbyKeys['price-desc']:
           this.sortedData = true
-          this.resaultProducts = this.filterProductsByDownPrice(this.filteredProducts);
+          this.resaultProducts = this.filterProductsByDownPrice(this.resaultProducts);
           break;
         default :
-          this.resaultProducts = this.filteredProducts;
       }
-    }
+    },
+
+    handleSortSize(selectedOption) {
+      switch(selectedOption) {
+        case this.filterSizeKey['xs']:
+          this.sortedData = true
+          this.resaultProducts = this.filterProductsBySize(this.filteredProducts, 'xs');
+          break;
+        case this.filterSizeKey['s']:
+          this.sortedData = true
+          this.resaultProducts = this.filterProductsBySize(this.filteredProducts, 's');
+          break;
+        case this.filterSizeKey['m']:
+          this.sortedData = true
+          this.resaultProducts = this.filterProductsBySize(this.filteredProducts, 'm');
+          break;
+        case this.filterSizeKey['l']:
+          this.sortedData = true
+          this.resaultProducts = this.filterProductsBySize(this.filteredProducts, 'l');
+          break;
+        case this.filterSizeKey['xl']:
+          this.sortedData = true
+          this.resaultProducts = this.filterProductsBySize(this.filteredProducts, 'xl');
+          break;   
+      } 
+    },
+
+    handleSortBrand(selectedOption) {
+      let brandName;
+      switch(selectedOption) {
+        case this.filterBrandKeys['bant-atelier']:
+          this.sortedData = true
+          brandName = 'Bant Atelier';
+          this.resaultProducts = this.filterProductsByBrand(this.filteredProducts, brandName);
+          break;
+        case this.filterBrandKeys['be-om']:
+          this.sortedData = true
+          brandName = 'BeOm Design';
+          this.resaultProducts = this.filterProductsByBrand(this.filteredProducts, brandName);
+          break;
+        case this.filterBrandKeys['lexie']:
+          this.sortedData = true
+          brandName = 'Lexie';
+          this.resaultProducts = this.filterProductsByBrand(this.filteredProducts, brandName);
+          break;  
+        case this.filterBrandKeys['wearme']:
+          this.sortedData = true
+          brandName = 'WearMe';
+          this.resaultProducts = this.filterProductsByBrand(this.filteredProducts, brandName);
+          break;  
+      }
+    },
+  },
+  watch: {
+    resaultProducts: function (val) {
+      console.log(val)
+    },
   }
 }
 </script>

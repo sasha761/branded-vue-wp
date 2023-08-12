@@ -3,6 +3,7 @@
     class="c-product js-product-item"
     :data-id="product.post_id"
     :data-brand="product.post_attr_brand"
+    :data-size="product.post_attr_size"
   >
     <a :href="product.post_link" class="c-product__img">
       <picture>

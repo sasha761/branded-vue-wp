@@ -43,7 +43,10 @@ export default {
   methods: {
     handleSelectChange(selectedOption) {
       this.$emit('select-filter', selectedOption)
-      this.$router.push({ path: '', query: { [this.filterParam]: selectedOption } })
+      const query = { ...this.$route.query };
+      query[this.filterParam] = selectedOption;
+      this.$router.push({ path: '', query });
+      // this.$router.push({ path: '', query: { [this.filterParam]: selectedOption } })
     },
   }
 }
