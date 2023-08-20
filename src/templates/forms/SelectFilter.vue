@@ -4,9 +4,9 @@
       <option 
         v-for="(value, key) in options" 
         :key="key" 
-        :value="key"
+        :value="value.key"
       >
-        {{ value }}
+        {{ value.text }}
       </option>
     </select>
   </div>
@@ -24,13 +24,11 @@ export default {
 
   props: {
     options: {
-      type: Object,
+      type: Array,
       required: true,
-      default: () => ({
-        'date': 'По новизне',
-        'price-asc': 'Цены: по возрастанию',
-        'price-desc': 'Цены: по убыванию'
-      })
+    },
+    filterParam: {
+      type: String,
     },
     currentOption: {
       type: String,
@@ -38,12 +36,16 @@ export default {
   },
 
   methods: {
-    handleSelectChange() {
-      this.$emit('select-filter', this.selected)
+    handleSelectChange(event) {
+      const selectedOption = event.target.options[event.target.selectedIndex];
+
+      this.$emit('select-filter', {type: this.filterParam, key: this.selected, text: selectedOption.text})
+
+      // console.log(selectedOption.text);
     },
 
     selectFilterInit() {
-      this.selected = this.currentOption || Object.keys(this.options)[0];
+      this.selected = this.currentOption || this.options[0].key;
     }
   },
 

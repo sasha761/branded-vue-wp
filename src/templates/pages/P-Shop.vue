@@ -1,7 +1,7 @@
 <template>
   <div>
     <C-Modal />
-    <L-Header :products="products" @search-product="handleSearch" />
+    <L-Header :products="products" @search-product="searchHendler" />
     <div class="wrapper">
       <main class="p-shop">
         <div class="u-container">
@@ -15,17 +15,17 @@
                 <h1 class="u-h2">Женщинам</h1>
                 <div class="l-filter">
                   <div class="widget">
-                    <Select-filter-form @select-filter="sortHendler" :options="filterBrand" filterParam="filter_brand" />
+                    <Select-filter-form @select-filter="sortHendler" :options="filterBrand" filter-param="brand" />
                   </div>
                   <div class="widget">
-                    <Select-filter-form @select-filter="sortHendler" :options="filterSize" filterParam="filter_size" />
+                    <Select-filter-form @select-filter="sortHendler" :options="filterSize" filter-param="size" />
                   </div>
                 </div>
                 <div class="l-shop__result">
                   <div class="l-shop__result-count">
                     <p class="woocommerce-result-count">Отображение 1–16 из 750</p>
                   </div>
-                  <Select-filter-form @select-filter="sortHendler" :options="filterOrderby" filterParam="orderby" />
+                  <Select-filter-form @select-filter="sortHendler" :options="filterOrderby" filter-param="orderby" />
                 </div>
                 <div v-if="resaultProducts" class="l-shop__product">
                   <div class="row js-load-more">
@@ -64,7 +64,8 @@ import CPagination from '@/templates/components/C-Pagination.vue'
 import CLoadrMore from '@/templates/components/C-LoadMore.vue'
 import CBreadcrumb from '@/templates/components/C-Breadcrumbs.vue'
 
-import ProductFiltersData from '@/config/productFilters'
+// import ProductFiltersData from '@/config/productFilters'
+import ProductFiltersData from '@/config/productFilterNew'
 
 export default {
   name: "App",
@@ -85,14 +86,16 @@ export default {
     return {
       products: [],
       resaultProducts: [],
+      currentFilters: [],
+      // currentFilters: [
+      //   {flag: false, type: 'brand', text: ''}, 
+      //   {flag: false, type: 'size', text: ''}
+      // ],
       sortedData: false,
-      sortedStr: '',
-      filterOrderby: ProductFiltersData.filterOrderby,
-      filterOrderbyKeys: ProductFiltersData.filterOrderbyKeys,
-      filterBrand: ProductFiltersData.filterBrand,
-      filterBrandKeys: ProductFiltersData.filterBrandKeys,
-      filterSize: ProductFiltersData.filterSize, 
-      filterSizeKey: ProductFiltersData.filterSizeKey, 
+      filterOrderby: ProductFiltersData.orderby,
+      filterBrand: ProductFiltersData.brand,
+      filterSize: ProductFiltersData.size, 
+      
     }
   },
 
@@ -112,22 +115,10 @@ export default {
     async getProducts() {
       return fetch('https://branded.loc/wp-json/api/archive/get_products')
         .then((result) => result.json())
-        .then((rowData) => {this.products = rowData; this.resaultProducts = rowData;})
-    },
-
-    handleSearch(searchResults) {
-      // this.searchResults = searchResults;
-
-      this.resaultProducts = Object.values(this.products).filter((item) => {
-        return item.post_title.toLowerCase().includes(searchResults.toLowerCase())
-      })
-      if (this.sortedData) this.sortHendler()
-    },
-
-    sortHendler(selectedOption) {
-      this.handleSortBrand(selectedOption)
-      this.handleSortPrice(selectedOption)
-      this.handleSortSize(selectedOption)
+        .then((rowData) => {
+          this.products = rowData; 
+          this.resaultProducts = rowData;
+        })
     },
 
     filterProductsByUpPrice(products) {
@@ -150,74 +141,78 @@ export default {
       })
     },
 
-    handleSortPrice(selectedOption) {
-      switch(selectedOption) {
-        case this.filterOrderbyKeys['price-asc']:
-          this.sortedData = true
-          this.resaultProducts = this.filterProductsByUpPrice(this.resaultProducts);
-          break;
-        case this.filterOrderbyKeys['price-desc']:
-          this.sortedData = true
-          this.resaultProducts = this.filterProductsByDownPrice(this.resaultProducts);
-          break;
-        default :
+    filterCollection(selectedOption) {
+      if (!this.currentFilters.some(item => item.type === selectedOption.type)) {
+        this.currentFilters.push(selectedOption)
+      } else {
+        const findedEl = this.currentFilters.find(item => item.type === selectedOption.type)
+        const findedElIndex = this.currentFilters.indexOf(findedEl)
+        this.currentFilters[findedElIndex] = selectedOption
       }
     },
 
-    handleSortSize(selectedOption) {
-      switch(selectedOption) {
-        case this.filterSizeKey['xs']:
-          this.sortedData = true
-          this.resaultProducts = this.filterProductsBySize(this.filteredProducts, 'xs');
-          break;
-        case this.filterSizeKey['s']:
-          this.sortedData = true
-          this.resaultProducts = this.filterProductsBySize(this.filteredProducts, 's');
-          break;
-        case this.filterSizeKey['m']:
-          this.sortedData = true
-          this.resaultProducts = this.filterProductsBySize(this.filteredProducts, 'm');
-          break;
-        case this.filterSizeKey['l']:
-          this.sortedData = true
-          this.resaultProducts = this.filterProductsBySize(this.filteredProducts, 'l');
-          break;
-        case this.filterSizeKey['xl']:
-          this.sortedData = true
-          this.resaultProducts = this.filterProductsBySize(this.filteredProducts, 'xl');
-          break;   
-      } 
+    searchHendler(searchResults) {
+      let products = Object.values(this.products).filter((item) => {
+        return item.post_title.toLowerCase().includes(searchResults.toLowerCase())
+      })
+      this.resaultProducts = products;
+      this.sortHendler('', products)
+      // if (this.sortedData) this.sortHendler()
     },
 
-    handleSortBrand(selectedOption) {
-      let brandName;
-      switch(selectedOption) {
-        case this.filterBrandKeys['bant-atelier']:
-          this.sortedData = true
-          brandName = 'Bant Atelier';
-          this.resaultProducts = this.filterProductsByBrand(this.filteredProducts, brandName);
-          break;
-        case this.filterBrandKeys['be-om']:
-          this.sortedData = true
-          brandName = 'BeOm Design';
-          this.resaultProducts = this.filterProductsByBrand(this.filteredProducts, brandName);
-          break;
-        case this.filterBrandKeys['lexie']:
-          this.sortedData = true
-          brandName = 'Lexie';
-          this.resaultProducts = this.filterProductsByBrand(this.filteredProducts, brandName);
-          break;  
-        case this.filterBrandKeys['wearme']:
-          this.sortedData = true
-          brandName = 'WearMe';
-          this.resaultProducts = this.filterProductsByBrand(this.filteredProducts, brandName);
-          break;  
+    sortHendler(selectedOption, products = this.products) {
+      if (selectedOption) {
+        let filteredProduct = products;
+        this.filterCollection(selectedOption)
+      
+        if(this.currentFilters.length) {
+          this.currentFilters.forEach(item => {
+            if(item.type === 'brand') {
+              filteredProduct = this.filterProductsByBrand(filteredProduct, item.text);
+            } 
+            if (item.type === 'size') {
+              filteredProduct = this.filterProductsBySize(filteredProduct, item.text);
+            }
+            if (item.type === 'orderby') {
+              if (item.key === 'price-asc') {
+                filteredProduct = this.filterProductsByUpPrice(filteredProduct)
+              } else if (item.key === 'price-desc') {
+                filteredProduct = this.filterProductsByDownPrice(filteredProduct)
+              }
+            }
+          }); 
+        }
+
+        this.resaultProducts = filteredProduct;
       }
-    },
-  },
-  watch: {
-    resaultProducts: function (val) {
-      console.log(val)
+      // let filteredProduct = this.products;
+      // const findedEl = this.currentFilters.find(item => item.type === selectedOption.type)
+      // const findedElIndex = this.currentFilters.indexOf(findedEl)
+
+      // this.currentFilters[findedElIndex].text = selectedOption.text
+      // this.currentFilters[findedElIndex].flag = true
+
+      // this.currentFilters.forEach(filter => {
+      //   let funcName = `filterProductsBy${filter.type}`;
+
+      //   if(filter.flag) {
+      //     filteredProduct = this[funcName](filteredProduct, filter.text);
+      //   }
+      // });
+
+
+      // ================================================ //
+      // this.currentFilters[selectedOption.type].text = selectedOption.text;
+      // this.currentFilters[selectedOption.type].flag = true;
+
+      // Object.values(this.currentFilters).forEach(filter => {
+      //   console.log(filter);
+      //     if(filter.flag) {
+      //       filteredProduct = this[`filterProductsBy${filter[0]}`](filteredProduct, item.text);
+      //     }
+      // });
+
+      
     },
   }
 }
