@@ -1,0 +1,120 @@
+<template>
+  <div>
+    <div class="l-filter">
+      <div class="widget">
+        <Select-filter-form @select-filter="sortHendler" :options="filterBrand" filter-param="brand" />
+      </div>
+      <div class="widget">
+        <Select-filter-form @select-filter="sortHendler" :options="filterSize" filter-param="size" />
+      </div>
+    </div>
+    <div class="l-shop__result">
+      <div class="l-shop__result-count">
+        <p class="woocommerce-result-count">Отображение 1–16 из 750</p>
+      </div>
+      <Select-filter-form @select-filter="sortHendler" :options="filterOrderby" filter-param="orderby" />
+    </div>
+  </div>
+</template>
+
+<script>
+import SelectFilterForm from '@/templates/forms/SelectFilterForm.vue'
+import ProductFiltersData from '@/config/productFilterNew'
+
+
+export default {
+  data() {
+    return {
+      currentFilters: [],
+      filterOrderby: ProductFiltersData.orderby,
+      filterBrand: ProductFiltersData.brand,
+      filterSize: ProductFiltersData.size, 
+      filterTypes: ProductFiltersData.types, 
+    }
+  },
+  props: {
+    products: {
+      type: Array,
+      required: true,
+    },
+  },
+
+  components: {
+    SelectFilterForm,
+  },
+
+  methods: {
+    
+    sortProductsByUpPrice(products) {
+      return products.sort((a, b) => a.price - b.price);
+    },
+
+    sortProductsByDownPrice(products) {
+      return products.sort((a, b) => b.price - a.price)
+    },
+
+    sortProductsByPrice(filteredProduct, key) {
+      if (key === 'price-asc') {
+        return this.sortProductsByUpPrice(filteredProduct)
+      } 
+      if (key === 'price-desc') {
+        return this.sortProductsByDownPrice(filteredProduct)
+      }
+    },
+
+    filterProductsByAttr(filteredProduct, filterType, value) {
+      if(filterType === this.filterTypes.brand) {
+        return this.filterProductsByBrand(filteredProduct, value);
+      } 
+      if (filterType === this.filterTypes.size) {
+        return this.filterProductsBySize(filteredProduct, value);
+      }
+    },
+
+    filterProductsByBrand(products, brandName) {
+      return products.filter((item) => {
+        return item.post_attr_brand.toLowerCase().includes(brandName.toLowerCase())
+      })
+    },
+
+    filterProductsBySize(products, productSize) {
+      return products.filter((item) => {
+        return item.post_attr_size.toLowerCase().split(', ').includes(productSize.toLowerCase())
+      })
+    },
+
+    filterCollection(selectedOption) {
+      const hasFilter = this.currentFilters.some(item => item.type === selectedOption.type);
+
+      if (!hasFilter) {
+        this.currentFilters.push(selectedOption)
+      } else {
+        const findedEl = this.currentFilters.find(item => item.type === selectedOption.type)
+        const findedElIndex = this.currentFilters.indexOf(findedEl)
+        this.currentFilters[findedElIndex] = selectedOption
+      }
+    },
+
+
+    sortHendler(selectedOption, products = this.products) {
+      if (!selectedOption) return; 
+      
+      let filteredProduct = products;
+      this.filterCollection(selectedOption)
+    
+      if(this.currentFilters.length) {
+        this.currentFilters.forEach(item => {
+          if (item.type === this.filterTypes.orderby) {
+            filteredProduct = this.sortProductsByPrice(filteredProduct, item.key)
+          } 
+          else {
+            filteredProduct = this.filterProductsByAttr(filteredProduct, item.type, item.text);
+          }
+        }); 
+      }
+
+      this.$emit('filtered-product', filteredProduct)
+    },
+  }
+}
+</script>

@@ -5,8 +5,8 @@ import VueRouter from 'vue-router'
 
 
 const routes = [
-  { path: '/product-category/:id', component: () => import('./templates/pages/P-Shop.vue') },
-  { path: '/product/:id', component: () => import('./templates/pages/P-Product.vue') }
+  { path: '/product-category/:id', name: 'product-category', component: () => import('./templates/pages/P-Shop.vue') },
+  { path: '/product/:productName', name: 'product', component: () => import('./templates/pages/P-Product.vue') }
 ]
 const router = new VueRouter({
   routes,

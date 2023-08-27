@@ -1,11 +1,19 @@
 <template>
   <div
     class="c-product js-product-item"
-    :data-id="product.post_id"
+    :data-id="product.id"
     :data-brand="product.post_attr_brand"
     :data-size="product.post_attr_size"
   >
-    <a :href="product.post_link" class="c-product__img">
+    <router-link
+      :to="{ 
+        name: 'product', 
+        params: { productName: extractProductName(product.permalink) }, 
+        query: { id: product.id }
+      }" 
+      class="c-product__img"
+    >
+      
       <picture>
         <source
           :data-srcset="product.post_img_xl"
@@ -26,12 +34,14 @@
           data-ll-status="loaded"
         />
       </picture>
-    </a>
+      <!-- <img :src="product.images[0].src" :alt="product.name"> -->
+    </router-link>
     <div class="c-product__text">
       <p class="c-product__text-title">
-        {{ product.post_title }}
+        {{ product.name }}
       </p>
-      <p class="c-price">{{ product.post_price }} грн</p>
+      
+      <p class="c-price" v-html="product.price_html"></p>
     </div>
   </div>
 </template>
@@ -42,6 +52,13 @@ export default {
     product: {
       type: Object,
     }
-  } 
+  },
+  
+  methods: {
+    extractProductName(url) {
+      const parts = url.split('/');
+      return parts[parts.length - 2];
+    }
+  }
 }
 </script>

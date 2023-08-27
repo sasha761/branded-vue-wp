@@ -40,7 +40,6 @@ export default {
       const selectedOption = event.target.options[event.target.selectedIndex];
 
       this.$emit('select-filter', {type: this.filterParam, key: this.selected, text: selectedOption.text})
-
       // console.log(selectedOption.text);
     },
 
@@ -51,8 +50,6 @@ export default {
 
   mounted() {
     this.selectFilterInit();
-
-    // console.log(Object.keys(this.options)[0]);
   }
 }
 </script>

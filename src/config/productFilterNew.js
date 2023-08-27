@@ -1,8 +1,13 @@
 export default {
+  types: {
+    brand: 'brand',
+    size: 'size',
+    orderby: 'orderby'
+  },
   orderby: [
     {
       text: 'По новизне',
-      key: 'date'
+      key: 'date',
     },
     {
       text: 'Цены: по возрастанию',
