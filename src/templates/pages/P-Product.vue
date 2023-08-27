@@ -963,21 +963,30 @@ export default {
     CBreadcrumb,
     CModal
   },
+
   data() {
     return {
       product: []
     }
   },
 
+  props: ['productData'],
+
   mounted() {
-    this.getProduct();
+    if(this.productData) {
+      this.product = this.productData
+    } else {
+      this.getProduct();
+    }
+    console.log(this.$route)
+    
   },
 
   methods: {
     getProduct() {
-      this.$root.api.get(`products/${this.$route.query.id }`)
+      this.$root.api.get(`products/?slug=${this.$route.params.productName}`)
       .then((response) => {
-        this.product = response.data
+        this.product = response.data[0]
         console.log(this.product)
       })
       .catch(error => console.log(error));

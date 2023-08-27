@@ -21,6 +21,10 @@
 import SelectFilterForm from '@/templates/forms/SelectFilterForm.vue'
 import ProductFiltersData from '@/config/productFilterNew'
 
+const sortTypes = {
+  priceAsc: 'price-asc',
+  priceDesc: 'price-desc'
+}
 
 export default {
   data() {
@@ -46,18 +50,18 @@ export default {
   methods: {
     
     sortProductsByUpPrice(products) {
-      return products.sort((a, b) => a.price - b.price);
+      return products.sort((a, b) => a?.price - b?.price);
     },
 
     sortProductsByDownPrice(products) {
-      return products.sort((a, b) => b.price - a.price)
+      return products.sort((a, b) => b?.price - a?.price)
     },
 
     sortProductsByPrice(filteredProduct, key) {
-      if (key === 'price-asc') {
+      if (key === sortTypes.priceAsc) {
         return this.sortProductsByUpPrice(filteredProduct)
       } 
-      if (key === 'price-desc') {
+      if (key === sortTypes.priceDesc) {
         return this.sortProductsByDownPrice(filteredProduct)
       }
     },
@@ -73,13 +77,13 @@ export default {
 
     filterProductsByBrand(products, brandName) {
       return products.filter((item) => {
-        return item.post_attr_brand.toLowerCase().includes(brandName.toLowerCase())
+        return item?.post_attr_brand.toLowerCase().includes(brandName.toLowerCase())
       })
     },
 
     filterProductsBySize(products, productSize) {
       return products.filter((item) => {
-        return item.post_attr_size.toLowerCase().split(', ').includes(productSize.toLowerCase())
+        return item?.post_attr_size.toLowerCase().split(', ').includes(productSize.toLowerCase())
       })
     },
 
@@ -89,8 +93,7 @@ export default {
       if (!hasFilter) {
         this.currentFilters.push(selectedOption)
       } else {
-        const findedEl = this.currentFilters.find(item => item.type === selectedOption.type)
-        const findedElIndex = this.currentFilters.indexOf(findedEl)
+        const findedElIndex = this.currentFilters.findIndex(item => item.type === selectedOption.type)
         this.currentFilters[findedElIndex] = selectedOption
       }
     },

@@ -126,7 +126,6 @@ export default {
   props: {
     products: {
       type: Array,
-      require: false
     }
   },
   methods: {

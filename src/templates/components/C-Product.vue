@@ -8,8 +8,7 @@
     <router-link
       :to="{ 
         name: 'product', 
-        params: { productName: extractProductName(product.permalink) }, 
-        query: { id: product.id }
+        params: { productName: extractProductName(product.permalink), productData: product }
       }" 
       class="c-product__img"
     >
@@ -56,6 +55,8 @@ export default {
   
   methods: {
     extractProductName(url) {
+      if (!url) return;
+
       const parts = url.split('/');
       return parts[parts.length - 2];
     }
