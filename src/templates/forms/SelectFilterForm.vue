@@ -26,14 +26,23 @@ export default {
       type: String,
       required: true,
       default: ''
-    }
+    },
+    currentOption: {
+      type: String,
+      required: true,
+      default: ''
+    },
   },
 
   computed: {
-    currentOption() {
-      return ''
-      // return this.$route.query[this.filterParam];
-    }
+    // currentOption() {
+    //   return this.filterParam
+    //   // return this.$route.query[this.filterParam];
+    // }
+  },
+
+  mounted() {
+    console.log(this.currentOption);
   },
 
   methods: {

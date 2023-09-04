@@ -24,7 +24,7 @@
                       <C-Product :product="product" />
                     </div>
                   </div>
-                  <C-LoadrMore />
+                  <C-LoadrMore @load-more-products="loadMoreProducts" :products-length="products.length" />
                 </div>
                 <C-Pagination />
               </section>
@@ -94,18 +94,8 @@ export default {
     //   .catch(error => console.log(error));
     // },
     getProducts() {
-      // return fetch(`${process.env.VUE_APP_WP_SITE_URL}/wp-json/api/archive/get_products`)
-      //   .then((result) => result.json())
-      //   .then((rowData) => {
-      //     this.products = rowData; 
-      //     this.resaultProducts = rowData;
-      //     console.log(this.products)
-      //   })
-      // Api.get('archive/get_products').then((result) => {
-      //   this.products = result.data; 
-      //   this.resaultProducts = result.data;
-      // }).catch(err => console.log(err))
-      let url = this.$route.fullPath.replace('/product-category/', '');
+      // let url = this.$route.fullPath.replace('/product-category/', '');
+      let url = this.$route.params.subcategorySlug ? this.$route.params.subcategorySlug : this.$route.params.categorySlug;
 
       Api.post('archive/get_products', {
         url: url
@@ -120,6 +110,10 @@ export default {
       });
     },
 
+    loadMoreProducts(loadMoreProducts) {
+      // console.log(loadMoreProducts)
+      this.resaultProducts = [...this.resaultProducts, ...loadMoreProducts];
+    },
 
     searchHendler(searchResults) {
       let products = Object.values(this.products).filter((item) => {

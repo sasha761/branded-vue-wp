@@ -2,17 +2,17 @@
   <div>
     <div class="l-filter">
       <div class="widget">
-        <Select-filter-form @select-filter="sortHendler" :options="filterBrand" filter-param="brand" />
+        <Select-filter-form @select-filter="sortHendler" :options="filterBrand" filter-param="brand" current-option="Бренд" />
       </div>
       <div class="widget">
-        <Select-filter-form @select-filter="sortHendler" :options="filterSize" filter-param="size" />
+        <Select-filter-form @select-filter="sortHendler" :options="filterSize" filter-param="size" current-option="Размер" />
       </div>
     </div>
     <div class="l-shop__result">
       <div class="l-shop__result-count">
         <p class="woocommerce-result-count">Отображение 1–16 из 750</p>
       </div>
-      <Select-filter-form @select-filter="sortHendler" :options="filterOrderby" filter-param="orderby" />
+      <Select-filter-form @select-filter="sortHendler" :options="filterOrderby" filter-param="orderby" current-option="По новизне" />
     </div>
   </div>
 </template>

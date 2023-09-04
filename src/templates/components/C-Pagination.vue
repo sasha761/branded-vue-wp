@@ -1,17 +1,25 @@
 <template>
-  <div class="c-pagination">
+  <div v-if="maxPages > 1" class="c-pagination">
     <ul>
-      <li class="is-active">
+      <!-- <li class="is-active">
         <span class="page-number page-numbers current">1</span>
-      </li>
-      <li>
-        <a
-          href="https://branded.com.ua/product-category/women/page/2/"
+      </li> -->
+      <li 
+        v-for="(page, key) in maxPages"
+        :key="key"
+        :class="{'is-active' : page === currentPage}"
+      >
+        <router-link
+          :to="{ 
+            name: 'product-category', 
+            params: { query:{page: page} }
+          }" 
           class="page-number page-numbers"
-          >2</a
         >
+          {{page}}
+        </router-link>
       </li>
-      <li>
+      <!-- <li>
         <a
           href="https://branded.com.ua/product-category/women/page/3/"
           class="page-number page-numbers"
@@ -67,7 +75,43 @@
           class="page-number page-numbers"
           >47</a
         >
-      </li>
+      </li> -->
     </ul>
   </div>
 </template>
+
+<script>
+import Api from '@/api/Axios'
+
+export default {
+  data() {
+    return {
+      pagination: [],
+      maxPages: 1,
+      currentPage: 1
+    }
+  },
+
+  mounted() {
+    this.loadPagination()
+  },  
+
+  methods: {
+    loadPagination() {
+      let url = this.$route.params.subcategorySlug ? this.$route.params.subcategorySlug : this.$route.params.categorySlug;
+
+      Api.post('archive/pagination', {
+        url: url
+      })
+      .then((result) => {
+        console.log(result)
+        this.maxPages = result.data.max_num_pages
+        this.currentPage = result.data.current_page
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+    }
+  }
+}
+</script>
