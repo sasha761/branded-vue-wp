@@ -15,7 +15,8 @@
     "stream": "^0.0.2",
     "stream-browserify": "^3.0.0",
     "vue": "^2.6.14",
-    "vue-router": "^3.0.0"
+    "vue-router": "^3.0.0",
+    "vuex": "^3.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",

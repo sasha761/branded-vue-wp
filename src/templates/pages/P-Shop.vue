@@ -50,7 +50,9 @@ import CPagination from '@/templates/components/C-Pagination.vue'
 import CLoadrMore from '@/templates/components/C-LoadMore.vue'
 import CBreadcrumb from '@/templates/components/C-Breadcrumbs.vue'
 
-import Api from '@/api/Axios'
+// import Api from '@/api/Axios'
+
+import { mapActions } from 'vuex';
 
 export default {
   name: "App",
@@ -75,12 +77,22 @@ export default {
   },
 
   mounted() {
-    this.getProducts();
+    // console.log(this.$store);
+    // this.getProducts();
+    this.fetchProducts(this.categorySlugFromRoute).then(result => this.resaultProducts = result)
 
-    console.log(this.$route)
+    console.log(this.fetchProducts)
+    console.log(this.categorySlugFromRoute)
+  },
+
+  computed: {
+    categorySlugFromRoute() { return this.$route.params.subcategorySlug || this.$route.params.categorySlug }
   },
 
   methods: {
+    ...mapActions({
+      fetchProducts: 'Catalog/fetchProducts'
+    }),
     // getProducts() {
     //   this.$root.api.get("products", {
     //     per_page: 16,
@@ -93,22 +105,21 @@ export default {
     //   })
     //   .catch(error => console.log(error));
     // },
-    getProducts() {
-      // let url = this.$route.fullPath.replace('/product-category/', '');
-      let url = this.$route.params.subcategorySlug ? this.$route.params.subcategorySlug : this.$route.params.categorySlug;
+    // getProducts() {
+    //   // let url = this.$route.fullPath.replace('/product-category/', '');
 
-      Api.post('archive/get_products', {
-        url: url
-      })
-      .then((result) => {
-        this.products = result.data; 
-        this.resaultProducts = result.data;
-        console.log(result);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    },
+    //   Api.post('archive/get_products', {
+    //     url: url
+    //   })
+    //   .then((result) => {
+    //     this.products = result.data; 
+    //     this.resaultProducts = result.data;
+    //     console.log(result);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
+    // },
 
     loadMoreProducts(loadMoreProducts) {
       // console.log(loadMoreProducts)

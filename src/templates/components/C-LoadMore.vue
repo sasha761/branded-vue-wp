@@ -8,6 +8,7 @@
       </span>
     </div>
     <button
+      type="button"
       :data-current-page="data.current_page"
       :data-all-pages="allPages"
       :data-slug="data.query_object.slug"
@@ -60,7 +61,7 @@ export default {
 
   methods: {
     getCategoryInfo() {
-      let url = this.$route.params.subcategorySlug ? this.$route.params.subcategorySlug : this.$route.params.categorySlug;
+      let url = this.$route.params.subcategorySlug || this.$route.params.categorySlug;
 
       Api.post('archive/load_more_products_button', {
         url: url

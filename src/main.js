@@ -2,8 +2,9 @@ import './assets/main.css'
 import Vue from 'vue'
 import App from './App.vue'
 import VueRouter from 'vue-router'
+import Store from './store';
 
-
+console.log(Store);
 const routes = [
   { 
     path: '/product-category/:categorySlug/:subcategorySlug?', 
@@ -27,5 +28,6 @@ Vue.use(VueRouter);
 
 new Vue({
   router,
+  Store,
   render: h => h(App),
 }).$mount('#app')
