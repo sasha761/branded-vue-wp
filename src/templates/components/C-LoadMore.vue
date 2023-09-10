@@ -1,16 +1,28 @@
 <template>
-  <div v-if="isShow">
-    <div :class="{ 'is-show': isActive }" class="c-load-icon js-load-more-icon">
+  <div>
+    <div 
+      v-if="isShow"
+      :class="{ 'is-show': isActive }" 
+      class="c-load-icon js-load-more-icon"
+    >
       <CSpinner />
     </div>
-    <CButton @button-click="loadMore">Загрузить еще</CButton>
+    <CButton 
+      v-if="isShow"
+      class="is-load-more is-medium is-black js-show-more-product"
+      @button-click="loadMore"
+    >
+      Загрузить еще
+    </CButton>
   </div>
 </template>
 
 <script>
-import Api from '@/api/Axios'
+// import Api from '@/api/Axios'
 import CButton from '@/templates/components/C-Button.vue';
 import CSpinner from '@/templates/components/C-Spinner.vue';
+
+import { mapActions } from 'vuex';
 
 export default {
   components: {
@@ -24,7 +36,6 @@ export default {
       isActive: false,
       page: null,
       offset: null,
-      isShow: false,
     }
   },
 
@@ -51,13 +62,17 @@ export default {
     }
   },
 
-  watch: {
-    countProducts(countProducts) {
-      this.isShow = countProducts > 16;
+  computed: {
+    isShow() {
+      return this.countProducts > this.productsLength;
     }
   },
 
   methods: {
+    ...mapActions({
+      fetchMoreProducts: 'Catalog/fetchMoreProducts'
+    }),
+
     loadMore() {
       this.offset = this.productsLength * this.page;
       this.page += 1;
@@ -70,24 +85,32 @@ export default {
       
       this.isActive = true;
 
-      Api.post('archive/load_more_products', {
-        url: window.location.href,
-        page: this.page,
-        offset: this.offset,
-        slug: this.categorySlug,
+      this.fetchMoreProducts(window.location.href, this.page, this.offset, this.categorySlug).then(result => {
+        console.log(result)
+        if(!result && !result.status) return;
+
+        this.isActive = false;
+        if(result.status === 'nomore') this.isShow = false;
       })
-      .then((result) => {
-        if(result.data.products !== 'nomore') {
-          this.$emit('load-more-products', result.data.products)
-          this.isActive = false;
-        } else {
-          this.isActive = false;
-          this.isShow = false;
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      })
+
+      // Api.post('archive/load_more_products', {
+      //   url: window.location.href,
+      //   page: this.page,
+      //   offset: this.offset,
+      //   slug: this.categorySlug,
+      // })
+      // .then((result) => {
+      //   if(result.data.products !== 'nomore') {
+      //     this.$emit('load-more-products', result.data.products)
+      //     this.isActive = false;
+      //   } else {
+      //     this.isActive = false;
+      //     this.isShow = false;
+      //   }
+      // })
+      // .catch((error) => {
+      //   console.log(error);
+      // })
     }
   }
 }

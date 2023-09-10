@@ -2,7 +2,7 @@
   <button
       type="button"
       @click="handleClick"
-      class="u-btn is-load-more is-medium is-black js-show-more-product"
+      class="u-btn"
     >
       <slot></slot>
   </button>

@@ -18,8 +18,9 @@
             params: { 
               categorySlug: $route.params.categorySlug,
               subcategorySlug: $route.params.subcategorySlug,
-              page: 'page',
-              numberPage:  page
+            },
+            query: {
+              page: page
             }
           }" 
           class="page-number page-numbers"

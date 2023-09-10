@@ -14,18 +14,17 @@
               <section class="l-shop" data-categories="Женщинам" data-cat-id="17">
                 <h1 class="u-h2">Женщинам</h1>
                 <L-Filter-Block :products="products" @filtered-product="filteredProduct" />
-                <div v-if="resaultProducts" class="l-shop__product">
+                <div v-if="resultProducts" class="l-shop__product">
                   <div class="row js-load-more">
                     <div
-                      v-for="product in resaultProducts"
+                      v-for="product in resultProducts"
                       :key="product.id"
                       class="col-lg-3 col-md-4 col-sm-6 col-6 u-col js-gallery-item"
                     >
                       <C-Product :product="product" />
                     </div>
                   </div>
-                  <C-LoadMore 
-                    @load-more-products="loadMoreProducts" 
+                  <C-LoadMore
                     :products-length="products.length" 
                     :current-page="currentPage"
                     :category-slug="categorySlugFromRoute"
@@ -58,7 +57,7 @@ import CBreadcrumb from '@/templates/components/C-Breadcrumbs.vue'
 
 // import Api from '@/api/Axios'
 
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters, mapMutations } from 'vuex';
 
 export default {
   name: "App",
@@ -77,26 +76,29 @@ export default {
 
   data() {
     return {
-      products: [],
-      resaultProducts: [],
-      countProducts: null
+      countProducts: 0
     }
   },
 
   mounted() {
     this.fetchProducts(this.categorySlugFromRoute).then(result => {
-      this.products = result.products;
-      this.resaultProducts = result.products;
       this.countProducts = result.products_count;
     })
   },
 
+  // 1) в фильтрах добавлять 
+
   computed: {
+    ...mapGetters({
+      products: 'Catalog/products',
+      resultProducts: 'Catalog/resultProducts',
+    }),
+    
+
     categorySlugFromRoute() { return this.$route.params.subcategorySlug || this.$route.params.categorySlug },
     currentPage() { 
-      const numberPage = this.$route.params?.numberPage;
       const queryPage = this.$route?.query?.page;
-      const currentPageNumber = Number(numberPage) || Number(queryPage) || 1;
+      const currentPageNumber = Number(queryPage) || 1;
 
       return currentPageNumber;
     }
@@ -106,48 +108,22 @@ export default {
     ...mapActions({
       fetchProducts: 'Catalog/fetchProducts'
     }),
-    // getProducts() {
-    //   this.$root.api.get("products", {
-    //     per_page: 16,
-    //     category: 17
-    //   })
-    //   .then((response) => {
-    //     this.products = response.data
-    //     this.resaultProducts = response.data;
-    //     console.log(this.resaultProducts)
-    //   })
-    //   .catch(error => console.log(error));
-    // },
-    // getProducts() {
-    //   // let url = this.$route.fullPath.replace('/product-category/', '');
 
-    //   Api.post('archive/get_products', {
-    //     url: url
-    //   })
-    //   .then((result) => {
-    //     this.products = result.data; 
-    //     this.resaultProducts = result.data;
-    //     console.log(result);
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
-    // },
+    ...mapMutations({
+      setResultProducts: 'Catalog/setResultProducts'
+    }),
 
-    loadMoreProducts(loadMoreProducts) {
-      this.resaultProducts = [...this.resaultProducts, ...loadMoreProducts];
-    },
 
     searchHendler(searchResults) {
       let products = Object.values(this.products).filter((item) => {
         return item.post_title.toLowerCase().includes(searchResults.toLowerCase())
       })
-      this.resaultProducts = products;
+      this.resultProducts = products;
       // this.sortHendler('', products)
     },
 
     filteredProduct(filteredProduct) {
-      this.resaultProducts = filteredProduct;
+      this.setResultProducts(filteredProduct);
     }
 
   }

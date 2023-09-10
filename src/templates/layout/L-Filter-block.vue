@@ -47,6 +47,29 @@ export default {
     SelectFilterForm,
   },
 
+  computed: {
+    filteredProducts() { 
+      if(!this.currentFilters.length) return;
+
+      let filteredProductResult = this.products;
+
+      this.currentFilters.forEach(item => {
+        if (item.type === this.filterTypes.orderby) {
+          filteredProductResult = this.sortProductsByPrice(filteredProductResult, item.key)
+        } 
+        else {
+          filteredProductResult = this.filterProductsByAttr(filteredProductResult, item.type, item.text);
+        }
+      }); 
+
+      this.$emit('filtered-product', filteredProductResult)
+
+      console.log('filteredProductResult: ', filteredProductResult);
+
+      return filteredProductResult;
+    }
+  },
+
   methods: {
     
     sortProductsByUpPrice(products) {
@@ -99,24 +122,10 @@ export default {
     },
 
 
-    sortHendler(selectedOption, products = this.products) {
+    sortHendler(selectedOption) {
       if (!selectedOption) return; 
-      
-      let filteredProduct = products;
-      this.filterCollection(selectedOption)
-    
-      if(this.currentFilters.length) {
-        this.currentFilters.forEach(item => {
-          if (item.type === this.filterTypes.orderby) {
-            filteredProduct = this.sortProductsByPrice(filteredProduct, item.key)
-          } 
-          else {
-            filteredProduct = this.filterProductsByAttr(filteredProduct, item.type, item.text);
-          }
-        }); 
-      }
 
-      this.$emit('filtered-product', filteredProduct)
+      this.filterCollection(selectedOption)
     },
   }
 }

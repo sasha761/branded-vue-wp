@@ -6,8 +6,8 @@ import {store} from './store';
 
 const routes = [
   { 
-    path: '/product-category/:categorySlug/:subcategorySlug?/:page?/:numberPage?', 
-    name: 'product-category', 
+    path: '/product-category/:categorySlug/:subcategorySlug?', 
+    name: 'product-category',
     component: () => import('./templates/pages/P-Shop.vue') 
   },
   { 
