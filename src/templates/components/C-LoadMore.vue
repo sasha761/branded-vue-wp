@@ -1,102 +1,83 @@
 <template>
   <div v-if="isShow">
     <div :class="{ 'is-show': isActive }" class="c-load-icon js-load-more-icon">
-      <span class="c-spinner"> 
-        <span></span> 
-        <span></span> 
-        <span></span> 
-      </span>
+      <CSpinner />
     </div>
-    <button
-      type="button"
-      :data-current-page="data.current_page"
-      :data-all-pages="allPages"
-      :data-slug="data.query_object.slug"
-      :data-count="productsLength"
-      :data-all-posts="data.query_object.count"
-      :data-category="data.query_object.taxonomy"
-      @click="loadMore"
-      class="u-btn is-load-more is-medium is-black js-show-more-product"
-    >
-      Загрузить еще
-    </button>
+    <CButton @button-click="loadMore">Загрузить еще</CButton>
   </div>
 </template>
 
 <script>
 import Api from '@/api/Axios'
+import CButton from '@/templates/components/C-Button.vue';
+import CSpinner from '@/templates/components/C-Spinner.vue';
 
 export default {
+  components: {
+    CButton,
+    CSpinner
+  },
+
   data() {
     return {
-      data: {
-        query_object: {
-          slug: ''
-        }
-      },
+      data: {},
       isActive: false,
-      isShow: true
-    }
-  },
-
-  computed: {
-    allPages: function () {
-      return this.productsLength >= 16 ? Math.ceil(this.data?.query_object?.count / this.productsLength) : 1;
-    },
-
-    offset: function () {
-      return this.productsLength * this.data.current_page;
-    }
-  },
-
-  props: {
-    productsLength: {
-      type: Number
+      page: null,
+      offset: null,
+      isShow: false,
     }
   },
 
   mounted() {
-    this.getCategoryInfo()
+    this.page = this.currentPage;
+  },
+
+  props: {
+    productsLength: {
+      type: Number,
+      default: 16
+    },
+    categorySlug: {
+      type: String,
+      require: true
+    },
+    countProducts: {
+      type: Number,
+      default: 16
+    },
+    currentPage: {
+      type: Number,
+      default: 1
+    }
+  },
+
+  watch: {
+    countProducts(countProducts) {
+      this.isShow = countProducts > 16;
+    }
   },
 
   methods: {
-    getCategoryInfo() {
-      let url = this.$route.params.subcategorySlug || this.$route.params.categorySlug;
-
-      Api.post('archive/load_more_products_button', {
-        url: url
-      })
-      .then((result) => {
-        this.data = result.data; 
-        console.log(result);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    },
-
-
-
     loadMore() {
-      if (this.productsLength >= this.data?.query_object?.count) {
+      this.offset = this.productsLength * this.page;
+      this.page += 1;
+    
+      if (this.productsLength >= this.countProducts) {
         this.isActive = false;
         this.isShow = false;
         return;
       }
-
-      this.isActive = true;
-      const url = this.$route.fullPath
       
+      this.isActive = true;
+
       Api.post('archive/load_more_products', {
-        url: url,
-        page: this.data.current_page,
+        url: window.location.href,
+        page: this.page,
         offset: this.offset,
-        slug: this.data.query_object.slug,
-        taxonomy: this.data.query_object.taxonomy,
+        slug: this.categorySlug,
       })
       .then((result) => {
         if(result.data.products !== 'nomore') {
-          this.data.current_page += 1
           this.$emit('load-more-products', result.data.products)
           this.isActive = false;
         } else {

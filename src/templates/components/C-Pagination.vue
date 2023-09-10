@@ -4,15 +4,23 @@
       <!-- <li class="is-active">
         <span class="page-number page-numbers current">1</span>
       </li> -->
+
+      <!-- {{$route.params}} -->
       <li 
         v-for="(page, key) in maxPages"
         :key="key"
         :class="{'is-active' : page === currentPage}"
       >
+        <!-- <span v-if="maxPages > 10 & key === 6" class="dots">…</span> -->
         <router-link
           :to="{ 
             name: 'product-category', 
-            params: { query:{page: page} }
+            params: { 
+              categorySlug: $route.params.categorySlug,
+              subcategorySlug: $route.params.subcategorySlug,
+              page: 'page',
+              numberPage:  page
+            }
           }" 
           class="page-number page-numbers"
         >
@@ -88,20 +96,22 @@ export default {
     return {
       pagination: [],
       maxPages: 1,
-      currentPage: 1
+      currentPage: 1,
+      url: ''
     }
   },
 
   mounted() {
     this.loadPagination()
+    console.log(this.url)
   },  
 
   methods: {
     loadPagination() {
-      let url = this.$route.params.subcategorySlug ? this.$route.params.subcategorySlug : this.$route.params.categorySlug;
+      this.url = this.$route.params.subcategorySlug || this.$route.params.categorySlug;
 
       Api.post('archive/pagination', {
-        url: url
+        url: this.url
       })
       .then((result) => {
         console.log(result)

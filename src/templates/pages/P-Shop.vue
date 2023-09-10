@@ -24,7 +24,13 @@
                       <C-Product :product="product" />
                     </div>
                   </div>
-                  <C-LoadrMore @load-more-products="loadMoreProducts" :products-length="products.length" />
+                  <C-LoadMore 
+                    @load-more-products="loadMoreProducts" 
+                    :products-length="products.length" 
+                    :current-page="currentPage"
+                    :category-slug="categorySlugFromRoute"
+                    :count-products="countProducts"
+                  />
                 </div>
                 <C-Pagination />
               </section>
@@ -47,7 +53,7 @@ import LFilterBlock from '@/templates/layout/L-Filter-block.vue'
 import CModal from '@/templates/components/C-Modal.vue'
 import CProduct from '@/templates/components/C-Product.vue'
 import CPagination from '@/templates/components/C-Pagination.vue'
-import CLoadrMore from '@/templates/components/C-LoadMore.vue'
+import CLoadMore from '@/templates/components/C-LoadMore.vue'
 import CBreadcrumb from '@/templates/components/C-Breadcrumbs.vue'
 
 // import Api from '@/api/Axios'
@@ -65,7 +71,7 @@ export default {
     CModal,
     CProduct,
     CPagination,
-    CLoadrMore,
+    CLoadMore,
     CBreadcrumb
   },
 
@@ -73,20 +79,27 @@ export default {
     return {
       products: [],
       resaultProducts: [],
+      countProducts: null
     }
   },
 
   mounted() {
-    // console.log(this.$store);
-    // this.getProducts();
-    this.fetchProducts(this.categorySlugFromRoute).then(result => this.resaultProducts = result)
-
-    console.log(this.fetchProducts)
-    console.log(this.categorySlugFromRoute)
+    this.fetchProducts(this.categorySlugFromRoute).then(result => {
+      this.products = result.products;
+      this.resaultProducts = result.products;
+      this.countProducts = result.products_count;
+    })
   },
 
   computed: {
-    categorySlugFromRoute() { return this.$route.params.subcategorySlug || this.$route.params.categorySlug }
+    categorySlugFromRoute() { return this.$route.params.subcategorySlug || this.$route.params.categorySlug },
+    currentPage() { 
+      const numberPage = this.$route.params?.numberPage;
+      const queryPage = this.$route?.query?.page;
+      const currentPageNumber = Number(numberPage) || Number(queryPage) || 1;
+
+      return currentPageNumber;
+    }
   },
 
   methods: {
@@ -122,7 +135,6 @@ export default {
     // },
 
     loadMoreProducts(loadMoreProducts) {
-      // console.log(loadMoreProducts)
       this.resaultProducts = [...this.resaultProducts, ...loadMoreProducts];
     },
 

@@ -1,14 +1,14 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
-import Commons from './commons';
+import commons from './commons';
 import Catalog from './catalog';
 
 Vue.use(Vuex)
 
-export default new Vuex.Store({
-  ...Commons,
+export const store = new Vuex.Store({
+  ...commons,
   modules: {
-    Catalog: Catalog,
+    Catalog,
   },
 });

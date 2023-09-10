@@ -10,12 +10,11 @@ const mutations = {
 };
 const actions = {
   fetchProducts({commit}, url) {
-    console.log(url)
     return Api.post('archive/get_products', {
       url: url
     })
     .then((result) => {
-      commit('setProductsList', result.data)
+      commit('setProductsList', result.data.products)
       return result.data;
     })
     .catch((error) => {

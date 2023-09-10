@@ -2,12 +2,11 @@ import './assets/main.css'
 import Vue from 'vue'
 import App from './App.vue'
 import VueRouter from 'vue-router'
-import Store from './store';
+import {store} from './store';
 
-console.log(Store);
 const routes = [
   { 
-    path: '/product-category/:categorySlug/:subcategorySlug?', 
+    path: '/product-category/:categorySlug/:subcategorySlug?/:page?/:numberPage?', 
     name: 'product-category', 
     component: () => import('./templates/pages/P-Shop.vue') 
   },
@@ -28,6 +27,6 @@ Vue.use(VueRouter);
 
 new Vue({
   router,
-  Store,
+  store,
   render: h => h(App),
 }).$mount('#app')
