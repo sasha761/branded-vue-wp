@@ -25,7 +25,7 @@
                     </div>
                   </div>
                   <C-LoadMore
-                    :products-length="products.length" 
+                    :products-length="16" 
                     :current-page="currentPage"
                     :category-slug="categorySlugFromRoute"
                     :count-products="countProducts"
@@ -82,7 +82,7 @@ export default {
 
   mounted() {
     this.fetchProducts(this.categorySlugFromRoute).then(result => {
-      this.countProducts = result.products_count;
+      this.countProducts = result?.products_count;
     })
   },
 
@@ -90,8 +90,8 @@ export default {
 
   computed: {
     ...mapGetters({
-      products: 'Catalog/products',
-      resultProducts: 'Catalog/resultProducts',
+      products: 'catalog/products',
+      resultProducts: 'catalog/resultProducts',
     }),
     
 
@@ -106,11 +106,11 @@ export default {
 
   methods: {
     ...mapActions({
-      fetchProducts: 'Catalog/fetchProducts'
+      fetchProducts: 'catalog/fetchProducts'
     }),
 
     ...mapMutations({
-      setResultProducts: 'Catalog/setResultProducts'
+      changeResultProducts: 'catalog/changeResultProducts'
     }),
 
 
@@ -123,9 +123,8 @@ export default {
     },
 
     filteredProduct(filteredProduct) {
-      this.setResultProducts(filteredProduct);
+      this.changeResultProducts(filteredProduct);
     }
-
   }
 }
 </script>

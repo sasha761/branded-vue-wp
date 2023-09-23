@@ -12,8 +12,12 @@ const mutations = {
     state.products = [...state.products, ...moreProducts];
   },
   setResultProducts(state, resultProducts) {
-    state.resultProducts = [...state.resultProducts, ...resultProducts]
-  }
+    state.resultProducts = [...state.resultProducts, ...resultProducts];
+    console.log(resultProducts);
+  },
+  changeResultProducts(state, resultProducts) {
+    state.resultProducts = resultProducts;
+  },
 };
 const actions = {
   fetchProducts({commit}, url) {
@@ -30,7 +34,7 @@ const actions = {
     });
   },
 
-  fetchMoreProducts({commit}, url, page, offset, slug) {
+  fetchMoreProducts({commit}, {url, page, offset, slug}) {
     return Api.post('archive/load_more_products', {
       url: url,
       page: page,
@@ -42,21 +46,30 @@ const actions = {
         commit('setMoreProductsList', result.data.products)
         commit('setResultProducts', result.data.products)
       } 
-      console.log(result.data, commit);
       return result.data;
     })
     .catch((error) => {
       console.log(error);
     })
-  }
+  },
+
+  sortProductsByUpPrice({commit, state}) {
+    const result = state.resultProducts.sort((a, b) => a?.price - b?.price);
+    commit('changeResultProducts', result);
+  },
+  sortProductsByDownPrice({commit}, state) {
+    const result = state.resultProducts.sort((a, b) => b?.price - a?.price)
+    commit('changeResultProducts', result);
+  },
 };
 const getters = {
   products(state) {
     return state.products;
   },
+
   resultProducts(state) {
     return state.resultProducts
-  }
+  },
 };
 
 export default {namespaced: true, state, mutations, actions, getters};

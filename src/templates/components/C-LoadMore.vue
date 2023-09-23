@@ -74,6 +74,7 @@ export default {
     }),
 
     loadMore() {
+      console.log(this.productsLength)
       this.offset = this.productsLength * this.page;
       this.page += 1;
     
@@ -85,32 +86,17 @@ export default {
       
       this.isActive = true;
 
-      this.fetchMoreProducts(window.location.href, this.page, this.offset, this.categorySlug).then(result => {
-        console.log(result)
+      this.fetchMoreProducts({
+        url: this.$route.fullPath, 
+        page: this.page, 
+        offset: this.offset, 
+        slug: this.categorySlug
+      }).then(result => {
         if(!result && !result.status) return;
 
         this.isActive = false;
         if(result.status === 'nomore') this.isShow = false;
       })
-
-      // Api.post('archive/load_more_products', {
-      //   url: window.location.href,
-      //   page: this.page,
-      //   offset: this.offset,
-      //   slug: this.categorySlug,
-      // })
-      // .then((result) => {
-      //   if(result.data.products !== 'nomore') {
-      //     this.$emit('load-more-products', result.data.products)
-      //     this.isActive = false;
-      //   } else {
-      //     this.isActive = false;
-      //     this.isShow = false;
-      //   }
-      // })
-      // .catch((error) => {
-      //   console.log(error);
-      // })
     }
   }
 }

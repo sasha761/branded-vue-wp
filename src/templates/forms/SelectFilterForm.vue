@@ -41,9 +41,9 @@ export default {
     // }
   },
 
-  mounted() {
-    console.log(this.currentOption);
-  },
+  // mounted() {
+  //   console.log(this.currentOption);
+  // },
 
   methods: {
     handleSelectChange(selectedOption) {

@@ -20,6 +20,7 @@
 <script>
 import SelectFilterForm from '@/templates/forms/SelectFilterForm.vue'
 import ProductFiltersData from '@/config/productFilterNew'
+import { mapGetters, mapMutations } from 'vuex'
 
 const sortTypes = {
   priceAsc: 'price-asc',
@@ -54,38 +55,32 @@ export default {
       let filteredProductResult = this.products;
 
       this.currentFilters.forEach(item => {
-        if (item.type === this.filterTypes.orderby) {
-          filteredProductResult = this.sortProductsByPrice(filteredProductResult, item.key)
-        } 
-        else {
-          filteredProductResult = this.filterProductsByAttr(filteredProductResult, item.type, item.text);
+        if (item.key) {
+          if (item.type === this.filterTypes.orderby) {
+            filteredProductResult = this.sortProductsByPrice(filteredProductResult, item.key)
+          } else {
+            filteredProductResult = this.filterProductsByAttr(filteredProductResult, item.type, item.text);
+          }
         }
       }); 
-
-      this.$emit('filtered-product', filteredProductResult)
-
-      console.log('filteredProductResult: ', filteredProductResult);
 
       return filteredProductResult;
     }
   },
 
   methods: {
-    
-    sortProductsByUpPrice(products) {
-      return products.sort((a, b) => a?.price - b?.price);
-    },
-
-    sortProductsByDownPrice(products) {
-      return products.sort((a, b) => b?.price - a?.price)
-    },
+    ...mapMutations({
+      sortProductsByUpPrice: 'catalog/sortProductsByUpPrice',
+      sortProductsByDownPrice: 'catalog/sortProductsByDownPrice'
+    }),
 
     sortProductsByPrice(filteredProduct, key) {
+      console.log(filteredProduct)
       if (key === sortTypes.priceAsc) {
-        return this.sortProductsByUpPrice(filteredProduct)
+        this.sortProductsByUpPrice(filteredProduct)
       } 
       if (key === sortTypes.priceDesc) {
-        return this.sortProductsByDownPrice(filteredProduct)
+        this.sortProductsByDownPrice(filteredProduct)
       }
     },
 
@@ -100,13 +95,13 @@ export default {
 
     filterProductsByBrand(products, brandName) {
       return products.filter((item) => {
-        return item?.post_attr_brand.toLowerCase().includes(brandName.toLowerCase())
+        return item?.post_attr_brand?.toLowerCase().includes(brandName.toLowerCase())
       })
     },
 
     filterProductsBySize(products, productSize) {
       return products.filter((item) => {
-        return item?.post_attr_size.toLowerCase().split(', ').includes(productSize.toLowerCase())
+        return item?.post_attr_size?.toLowerCase().split(', ').includes(productSize.toLowerCase())
       })
     },
 
@@ -117,16 +112,16 @@ export default {
         this.currentFilters.push(selectedOption)
       } else {
         const findedElIndex = this.currentFilters.findIndex(item => item.type === selectedOption.type)
-        this.currentFilters[findedElIndex] = selectedOption
+        this.currentFilters.splice(findedElIndex, 1, selectedOption);
       }
     },
 
-
     sortHendler(selectedOption) {
-      if (!selectedOption) return; 
-
+      if (!selectedOption) return;
+      
       this.filterCollection(selectedOption)
+      this.$emit('filtered-product', this.filteredProducts)
     },
-  }
+  },
 }
 </script>

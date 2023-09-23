@@ -1,7 +1,7 @@
 <template>
   <div class="c-sort js-filter-sort">
-    <select v-model="selected" @change="handleSelectChange" name="orderby" class="orderby" >
-      <!-- <option :value="selected">{{selected}}:</option> -->
+    <select v-model="selected" @change="handleSelectChange">
+      <option value="">{{currentOption}}</option>
       <option 
         v-for="(value, key) in options" 
         :key="key" 
@@ -19,7 +19,7 @@
 export default {
   data() {
     return {
-      selected: false
+      selected: ''
     }
   },
 
@@ -39,21 +39,18 @@ export default {
   },
 
   methods: {
-    handleSelectChange(event) {
-      const selectedOption = event.target.options[event.target.selectedIndex];
-      // console.log(selectedOption);
-
-      this.$emit('select-filter', {type: this.filterParam, key: this.selected, text: selectedOption.text})
-      // console.log(selectedOption.text);
+    handleSelectChange() {
+      const selectedOption = this.options.find(option => option?.key === this.selected)?.text;
+      this.$emit('select-filter', {type: this.filterParam, key: this.selected, text: selectedOption})
     },
 
     // selectFilterInit() {
-    //   this.selected = this.currentOption || this.options[0].key;
+    //   this.selected = '';
     // }
   },
 
-  mounted() {
-    // this.selectFilterInit();
-  }
+  // mounted() {
+  //   this.selectFilterInit();
+  // }
 }
 </script>
