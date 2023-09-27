@@ -1,5 +1,10 @@
 <template>
-  <select-filter @select-filter="handleSelectChange" :options="options" :filter-param="filterParam" :current-option="currentOption"/>
+  <select-filter 
+    @select-filter="handleSelectChange" 
+    :options="options" 
+    :filter-param="filterParam" 
+    :current-option="currentOption"
+  />
 </template>
 
 <script>
@@ -46,12 +51,24 @@ export default {
   // },
 
   methods: {
+    addQueryParams(selectedOption) {
+      const query = { ...this.$route.query };
+      query[this.filterParam] = selectedOption.key;
+      this.$router.push({ path: '', query });
+    },
+    removeQueryParams(selectedOption) {
+      const query = { ...this.$route.query };
+      delete query[selectedOption.type];
+      this.$router.push({ path: '', query });
+    },
     handleSelectChange(selectedOption) {
-      this.$emit('select-filter', selectedOption)
-      // const query = { ...this.$route.query };
-      // query[this.filterParam] = selectedOption;
-      // this.$router.push({ path: '', query });
-      // this.$router.push({ path: '', query: { ...this.$route.query, [this.filterParam]: selectedOption } })
+      this.$emit('select-filter', selectedOption);
+
+      if(selectedOption.key) {
+         this.addQueryParams(selectedOption);
+      } else {
+        this.removeQueryParams(selectedOption);
+      }
     },
   }
 }

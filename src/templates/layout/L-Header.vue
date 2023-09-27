@@ -123,18 +123,18 @@ export default {
     }
   },
 
-  props: {
-    products: {
-      type: Array,
-    }
-  },
+  // props: {
+  //   products: {
+  //     type: Array,
+  //   }
+  // },
   methods: {
     handleSearch() {
       // const searchResults = Object.values(this.products).filter(item =>
       //   item.post_title.toLowerCase().includes(this.search.toLowerCase())
       // );
 
-      this.$emit('search-product', this.search)
+      // this.$emit('search-product', this.search)
       
     }
   }

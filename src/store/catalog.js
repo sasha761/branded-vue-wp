@@ -13,10 +13,30 @@ const mutations = {
   },
   setResultProducts(state, resultProducts) {
     state.resultProducts = [...state.resultProducts, ...resultProducts];
-    console.log(resultProducts);
   },
   changeResultProducts(state, resultProducts) {
     state.resultProducts = resultProducts;
+  },
+  resetResultProducts(state) {
+    state.resultProducts = state.products;
+  },
+
+  sortProductsByUpPrice(state) {
+    state.resultProducts.sort((a, b) => a?.price - b?.price);
+  },
+  sortProductsByDownPrice(state) {
+    state.resultProducts.sort((a, b) => b?.price - a?.price)
+  },
+
+  filterProductsByBrand(state, brandName) {
+    state.resultProducts = state.products.filter((item) => {
+      return item?.post_attr_brand?.toLowerCase().includes(brandName.toLowerCase())
+    })
+  },
+  filterProductsBySize(state, productSize) {
+    state.resultProducts = state.products.filter((item) => {
+      return item?.post_attr_size?.toLowerCase().split(', ').includes(productSize.toLowerCase())
+    })
   },
 };
 const actions = {
@@ -51,15 +71,6 @@ const actions = {
     .catch((error) => {
       console.log(error);
     })
-  },
-
-  sortProductsByUpPrice({commit, state}) {
-    const result = state.resultProducts.sort((a, b) => a?.price - b?.price);
-    commit('changeResultProducts', result);
-  },
-  sortProductsByDownPrice({commit}, state) {
-    const result = state.resultProducts.sort((a, b) => b?.price - a?.price)
-    commit('changeResultProducts', result);
   },
 };
 const getters = {

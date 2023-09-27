@@ -37,72 +37,55 @@ export default {
       filterTypes: ProductFiltersData.types, 
     }
   },
-  props: {
-    products: {
-      type: Array,
-      required: true,
-    },
-  },
 
   components: {
     SelectFilterForm,
   },
 
-  computed: {
-    filteredProducts() { 
-      if(!this.currentFilters.length) return;
-
-      let filteredProductResult = this.products;
-
-      this.currentFilters.forEach(item => {
-        if (item.key) {
-          if (item.type === this.filterTypes.orderby) {
-            filteredProductResult = this.sortProductsByPrice(filteredProductResult, item.key)
-          } else {
-            filteredProductResult = this.filterProductsByAttr(filteredProductResult, item.type, item.text);
-          }
-        }
-      }); 
-
-      return filteredProductResult;
-    }
-  },
-
   methods: {
     ...mapMutations({
       sortProductsByUpPrice: 'catalog/sortProductsByUpPrice',
-      sortProductsByDownPrice: 'catalog/sortProductsByDownPrice'
+      sortProductsByDownPrice: 'catalog/sortProductsByDownPrice',
+      filterProductsByBrand: 'catalog/filterProductsByBrand',
+      filterProductsBySize: 'catalog/filterProductsBySize',
+      resetResultProducts: 'catalog/resetResultProducts'
+    }),
+    ...mapGetters({
+      products: 'catalog/products',
     }),
 
-    sortProductsByPrice(filteredProduct, key) {
-      console.log(filteredProduct)
+    filteredProducts() { 
+      if(!this.currentFilters.length) return;
+      
+      this.currentFilters.forEach(item => {
+        if (item.key) {
+          if (item.type === this.filterTypes.orderby) {
+            this.sortProductsByPrice(item.key)
+          } else {
+            this.filterProductsByAttr(item.type, item.text);
+          }
+        } else {
+          this.resetResultProducts()
+        }
+      }); 
+    },
+
+    sortProductsByPrice(key) {
       if (key === sortTypes.priceAsc) {
-        this.sortProductsByUpPrice(filteredProduct)
+        this.sortProductsByUpPrice()
       } 
       if (key === sortTypes.priceDesc) {
-        this.sortProductsByDownPrice(filteredProduct)
+        this.sortProductsByDownPrice()
       }
     },
 
-    filterProductsByAttr(filteredProduct, filterType, value) {
+    filterProductsByAttr(filterType, value) {
       if(filterType === this.filterTypes.brand) {
-        return this.filterProductsByBrand(filteredProduct, value);
+        this.filterProductsByBrand(value);
       } 
       if (filterType === this.filterTypes.size) {
-        return this.filterProductsBySize(filteredProduct, value);
+        this.filterProductsBySize(value);
       }
-    },
-
-    filterProductsByBrand(products, brandName) {
-      return products.filter((item) => {
-        return item?.post_attr_brand?.toLowerCase().includes(brandName.toLowerCase())
-      })
-    },
-
-    filterProductsBySize(products, productSize) {
-      return products.filter((item) => {
-        return item?.post_attr_size?.toLowerCase().split(', ').includes(productSize.toLowerCase())
-      })
     },
 
     filterCollection(selectedOption) {
@@ -120,7 +103,7 @@ export default {
       if (!selectedOption) return;
       
       this.filterCollection(selectedOption)
-      this.$emit('filtered-product', this.filteredProducts)
+      this.filteredProducts()
     },
   },
 }

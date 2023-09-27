@@ -70,7 +70,7 @@ export default {
 
   methods: {
     ...mapActions({
-      fetchMoreProducts: 'Catalog/fetchMoreProducts'
+      fetchMoreProducts: 'catalog/fetchMoreProducts'
     }),
 
     loadMore() {

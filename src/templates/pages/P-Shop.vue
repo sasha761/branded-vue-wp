@@ -1,7 +1,7 @@
 <template>
   <div>
     <C-Modal />
-    <L-Header :products="products" @search-product="searchHendler" />
+    <L-Header />
     <div class="wrapper">
       <main class="p-shop">
         <div class="u-container">
@@ -13,7 +13,7 @@
             <div class="p-shop__catalog">
               <section class="l-shop" data-categories="Женщинам" data-cat-id="17">
                 <h1 class="u-h2">Женщинам</h1>
-                <L-Filter-Block :products="products" @filtered-product="filteredProduct" />
+                <L-Filter-Block />
                 <div v-if="resultProducts" class="l-shop__product">
                   <div class="row js-load-more">
                     <div
@@ -86,15 +86,12 @@ export default {
     })
   },
 
-  // 1) в фильтрах добавлять 
-
   computed: {
     ...mapGetters({
       products: 'catalog/products',
       resultProducts: 'catalog/resultProducts',
     }),
     
-
     categorySlugFromRoute() { return this.$route.params.subcategorySlug || this.$route.params.categorySlug },
     currentPage() { 
       const queryPage = this.$route?.query?.page;
@@ -112,19 +109,6 @@ export default {
     ...mapMutations({
       changeResultProducts: 'catalog/changeResultProducts'
     }),
-
-
-    searchHendler(searchResults) {
-      let products = Object.values(this.products).filter((item) => {
-        return item.post_title.toLowerCase().includes(searchResults.toLowerCase())
-      })
-      this.resultProducts = products;
-      // this.sortHendler('', products)
-    },
-
-    filteredProduct(filteredProduct) {
-      this.changeResultProducts(filteredProduct);
-    }
   }
 }
 </script>
