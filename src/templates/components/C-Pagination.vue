@@ -6,30 +6,6 @@
       :per-page="16"
       @paginate="callback"
     />
-
-    <!-- <ul>
-      <li 
-        v-for="(page, key) in maxPages"
-        :key="key"
-        :class="{'is-active' : page === currentPage}"
-      >
-        <router-link
-          :to="{ 
-            name: 'product-category', 
-            params: { 
-              categorySlug: $route.params.categorySlug,
-              subcategorySlug: $route.params.subcategorySlug,
-            },
-            query: {
-              page: page
-            }
-          }" 
-          class="page-number page-numbers"
-        >
-          {{page}}
-        </router-link>
-      </li>
-    </ul> -->
   </div>
 </template>
 
@@ -56,28 +32,24 @@ export default {
     }
   },
 
+  beforeMount() {
+    this.page = this.currentPage
+  },
+
   props: {
     countProducts: {
       type: Number,
       default: 16
     },
-  },
-
-  mounted() {
-    // this.loadPagination();
-    console.log(this.page);
-  },  
-
-  computed: {
-    categorySlugFromRoute() { return this.$route.params.subcategorySlug || this.$route.params.categorySlug },
-    currentPage() { 
-      const queryPage = this.$route?.query?.page;
-      const currentPageNumber = Number(queryPage) || 1;
-
-      return currentPageNumber;
+    categorySlugFromRoute: {
+      type: String
+    },
+    currentPage: {
+      type: Number,
+      default: 1
     }
   },
-
+ 
   methods: {
     ...mapActions({
       fetchProducts: 'catalog/fetchProducts'
@@ -85,20 +57,16 @@ export default {
 
     callback: function(changedPage) {
       this.addQueryParams(changedPage);
-      this.offset = this.productsLength * this.currentPage;
 
-      console.log(this.currentPage);
+      console.log(this.page);
+      this.offset = this.productsLength * this.page;
+
       this.fetchProducts({
         url: this.$route.fullPath, 
-        page: this.currentPage, 
+        page: this.page, 
         slug: this.categorySlugFromRoute,
         offset: this.offset, 
       })
-      // if(changedPage > 1) {
-        
-      // } else {
-        // this.removeQueryParams();
-      // }
     },
 
     addQueryParams(currentPage) {
@@ -112,22 +80,6 @@ export default {
       delete query['page'];
       this.$router.push({ path: '', query });
     },
-
-    // loadPagination() {
-    //   this.url = this.$route.params.subcategorySlug || this.$route.params.categorySlug;
-
-    //   Api.post('archive/pagination', {
-    //     url: this.url
-    //   })
-    //   .then((result) => {
-    //     console.log(result)
-    //     this.maxPages = result.data.max_num_pages
-    //     this.currentPage = result.data.current_page
-    //   })
-    //   .catch((error) => {
-    //     console.log(error)
-    //   })
-    // }
   }
 }
 </script>

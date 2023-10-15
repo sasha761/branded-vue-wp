@@ -49,12 +49,14 @@ const actions = {
       slug: slug,
     })
     .then((result) => {
-      // commit('setProductsList', result.data.products)
-      // commit('changeResultProducts', result.data.products)
+      
       // console.log(result);
       if(result?.data?.status !== 'nomore') {
-        commit('setMoreProductsList', result?.data?.products)
-        commit('setResultProducts', result?.data?.products)
+        // commit('setMoreProductsList', result?.data?.products)
+        // commit('setResultProducts', result?.data?.products)
+
+        commit('setProductsList', result.data.products)
+        commit('changeResultProducts', result.data.products)
       }
       return result.data;
     })

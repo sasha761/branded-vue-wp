@@ -31,7 +31,11 @@
                     :count-products="countProducts"
                   />
                 </div>
-                <C-Pagination :count-products="countProducts" />
+                <C-Pagination 
+                  :category-slug-from-route="categorySlugFromRoute" 
+                  :count-products="countProducts" 
+                  :current-page="currentPage"
+                />
               </section>
             </div>
           </div>

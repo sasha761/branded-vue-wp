@@ -16,11 +16,11 @@
               <div class="col-lg-6 col-md-12 col-sm-12 u-col">
                 <div  class="l-product__img">
                   <a
-                    v-if="productData.post_img_xl"
-                    :href="productData.post_img_xl"
+                    v-if="product.post_img_xl"
+                    :href="product.post_img_xl"
                     class="js-lightbox"
                   >
-                    <img :src="productData.post_img_xl" alt="">
+                    <img :src="product.post_img_xl" alt="">
                   </a>
                 </div>
               </div>
@@ -33,9 +33,9 @@
                     >Staff</a
                   >
                   <h1 class="l-product__name">
-                    {{productData.name}}
+                    {{product.name}}
                   </h1>
-                  <p class="c-price" v-html="productData.price_html"></p>
+                  <p class="c-price" v-html="product.price_html"></p>
                   <form
                     class="js-product-form cart c-product-form variations_form wvs-loaded"
                     data-product_id="32307"
@@ -174,7 +174,7 @@
                         />
                         <div class="c-product-form__btn">
                           <button
-                            @click="setProductToCart(productData)"
+                            @click="setProductToCart(product)"
                             type="button"
                             class="u-btn is-medium is-black single_add_to_cart_button button disabled wc-variation-selection-needed"
                             name="add-to-cart"
@@ -195,10 +195,10 @@
                   </form>
                   <div class="l-product__text">
                     <h4 class="l-product__text-title">Описание:</h4>
-                    <div v-if="productData.sku">
-                      <span>Артикул: </span> <span>{{productData.sku}}</span>
+                    <div v-if="product.sku">
+                      <span>Артикул: </span> <span>{{product.sku}}</span>
                     </div>
-                    <div v-html="productData.short_description"></div>
+                    <div v-html="product.short_description"></div>
                   </div>
                   <div class="l-product__info js-accordion">
                     <div class="l-product__info-block js-accordion__item">
@@ -263,10 +263,10 @@
                 </div>
               </div>
             </div>
-            <div class="row d-none d-lg-flex" v-if="productData.images.length">
+            <div class="row d-none d-lg-flex" v-if="hasProductImages">
               <div 
                 class="col-lg-6 u-col" 
-                v-for="(imageItem, index) in productData.images"
+                v-for="(imageItem, index) in product.images"
                 :key="index"
                 >
                 <a
@@ -914,7 +914,7 @@ import LSubscribe from '@/templates/layout/L-Subscribe.vue'
 import CModal from '@/templates/components/C-Modal.vue'
 import CBreadcrumb from '@/templates/components/C-Breadcrumbs.vue'
 
-import { mapActions, mapMutations, mapGetters } from 'vuex';
+import { mapActions, mapMutations } from 'vuex';
 
 export default {
   components: {
@@ -927,26 +927,24 @@ export default {
 
   data() {
     return {
-      productData: []
+      product: []
     }
   },
 
   // props: ['productData'],
 
   computed: {
-    
-    ...mapGetters({
-      productData: 'product/getSingleProduct',
-    }),
+    hasProductImages() {
+      return this.product?.images?.length
+    }
   },
 
   mounted() {
     if(this.$route.params.productData) {
-      this.productData = this.$route.params.productData
+      this.product = this.$route.params.productData
     } else {
-      this.fetchSingleProduct(this.$route.params.productName);
+      this.fetchSingleProduct(this.$route.params.productName).then(result => this.product = result);
     }
-    console.log(this.$route)
   },
 
   methods: {
@@ -957,15 +955,6 @@ export default {
     ...mapMutations({
       setProductToCart: 'cart/setProductToCart'
     }),
-    // getProduct() {
-    //   this.$root.api.get(`products/?slug=${this.$route.params.productName}`)
-    //   .then((response) => {
-    //     this.product = response.data[0]
-    //     console.log(this.product)
-    //   })
-    //   .catch(error => console.log(error));
-    // },
-
   }
 }
 </script>
