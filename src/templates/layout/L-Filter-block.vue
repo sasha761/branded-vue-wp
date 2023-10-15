@@ -20,7 +20,7 @@
 <script>
 import SelectFilterForm from '@/templates/forms/SelectFilterForm.vue'
 import ProductFiltersData from '@/config/productFilterNew'
-import { mapGetters, mapMutations } from 'vuex'
+import { mapMutations } from 'vuex'
 
 const sortTypes = {
   priceAsc: 'price-asc',
@@ -50,22 +50,17 @@ export default {
       filterProductsBySize: 'catalog/filterProductsBySize',
       resetResultProducts: 'catalog/resetResultProducts'
     }),
-    ...mapGetters({
-      products: 'catalog/products',
-    }),
 
     filteredProducts() { 
       if(!this.currentFilters.length) return;
+
+      this.resetResultProducts()
       
       this.currentFilters.forEach(item => {
-        if (item.key) {
-          if (item.type === this.filterTypes.orderby) {
-            this.sortProductsByPrice(item.key)
-          } else {
-            this.filterProductsByAttr(item.type, item.text);
-          }
+        if (item.type === this.filterTypes.orderby) {
+          this.sortProductsByPrice(item.key)
         } else {
-          this.resetResultProducts()
+          this.filterProductsByAttr(item.type, item.text);
         }
       }); 
     },
@@ -80,6 +75,7 @@ export default {
     },
 
     filterProductsByAttr(filterType, value) {
+      console.log(filterType, value);
       if(filterType === this.filterTypes.brand) {
         this.filterProductsByBrand(value);
       } 

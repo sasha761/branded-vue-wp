@@ -11,55 +11,16 @@
       >
         <div class="u-container">
           <C-Breadcrumb />
-          <!-- <nav class="c-breadcrumbs">
-            <span
-              ><span><a href="https://branded.com.ua/">Главная</a></span> -
-              <span
-                ><a href="https://branded.com.ua/product-category/women/"
-                  >Женщинам</a
-                ></span
-              >
-              -
-              <span class="breadcrumb_last" aria-current="page"
-                >Футболка женская укороченная молочная от Staff</span
-              ></span
-            >
-          </nav> -->
           <section class="l-product">
             <div class="row">
               <div class="col-lg-6 col-md-12 col-sm-12 u-col">
                 <div  class="l-product__img">
                   <a
-                    v-if="product.images"
-                    :href="product.images[0].src"
+                    v-if="productData.post_img_xl"
+                    :href="productData.post_img_xl"
                     class="js-lightbox"
                   >
-                    <img :src="product.images[0].src" alt="">
-                    <!-- <picture>
-                      <source
-                        data-srcset="https://branded.com.ua/wp-content/uploads/2023/07/G2-86138ccdb9b24f01b1321d5b86d1f73f-840x1080.jpeg"
-                        media="(min-width: 426px)"
-                        srcset="
-                          https://branded.com.ua/wp-content/uploads/2023/07/G2-86138ccdb9b24f01b1321d5b86d1f73f-840x1080.jpeg
-                        "
-                      />
-                      <source
-                        data-srcset="https://branded.com.ua/wp-content/uploads/2023/07/G2-86138ccdb9b24f01b1321d5b86d1f73f-532x665.jpeg"
-                        media="(max-width: 425px)"
-                        srcset="
-                          https://branded.com.ua/wp-content/uploads/2023/07/G2-86138ccdb9b24f01b1321d5b86d1f73f-532x665.jpeg
-                        "
-                      />
-                      <img
-                        src="data:image/gif;base64,R0lGODlhBwAJAIAAAP///wAAACH5BAEAAAEALAAAAAAHAAkAAAIHjI+py+1cAAA7"
-                        alt="Футболка женская укороченная молочная от Staff"
-                        title="Футболка женская укороченная молочная от Staff"
-                        width="840"
-                        height="1080"
-                        class="lazy entered loaded"
-                        data-ll-status="loaded"
-                      />
-                    </picture> -->
+                    <img :src="productData.post_img_xl" alt="">
                   </a>
                 </div>
               </div>
@@ -72,14 +33,11 @@
                     >Staff</a
                   >
                   <h1 class="l-product__name">
-                    {{product.name}}
+                    {{productData.name}}
                   </h1>
-                  <p class="c-price" v-html="product.price_html"></p>
+                  <p class="c-price" v-html="productData.price_html"></p>
                   <form
                     class="js-product-form cart c-product-form variations_form wvs-loaded"
-                    action="https://branded.com.ua/product/futbolka-zhenskaya-ukorochennaya-molochnaya-ot-staff/"
-                    method="post"
-                    enctype="multipart/form-data"
                     data-product_id="32307"
                     data-product_variations='[{"attributes":{"attribute_pa_size":"xs"},"availability_html":"","backorders_allowed":false,"dimensions":{"length":"","width":"","height":""},"dimensions_html":"\u041d\/\u0414","display_price":699,"display_regular_price":699,"image":{"title":"G2-86138ccdb9b24f01b1321d5b86d1f73f","caption":"","url":"https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f.jpeg","alt":"G2-86138ccdb9b24f01b1321d5b86d1f73f","src":"https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f.jpeg","srcset":"https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f.jpeg 1896w, https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f-532x665.jpeg 532w","sizes":"(max-width: 600px) 100vw, 600px","full_src":"https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f.jpeg","full_src_w":1896,"full_src_h":2369,"gallery_thumbnail_src":"https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f-100x100.jpeg","gallery_thumbnail_src_w":100,"gallery_thumbnail_src_h":100,"thumb_src":"https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f-300x300.jpeg","thumb_src_w":300,"thumb_src_h":300,"src_w":600,"src_h":750},"image_id":32314,"is_downloadable":false,"is_in_stock":true,"is_purchasable":true,"is_sold_individually":"no","is_virtual":false,"max_qty":"","min_qty":1,"price_html":"","sku":"KKK0936","variation_description":"","variation_id":32308,"variation_is_active":true,"variation_is_visible":true,"weight":"","weight_html":"\u041d\/\u0414"},{"attributes":{"attribute_pa_size":"s"},"availability_html":"","backorders_allowed":false,"dimensions":{"length":"","width":"","height":""},"dimensions_html":"\u041d\/\u0414","display_price":699,"display_regular_price":699,"image":{"title":"G2-86138ccdb9b24f01b1321d5b86d1f73f","caption":"","url":"https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f.jpeg","alt":"G2-86138ccdb9b24f01b1321d5b86d1f73f","src":"https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f.jpeg","srcset":"https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f.jpeg 1896w, https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f-532x665.jpeg 532w","sizes":"(max-width: 600px) 100vw, 600px","full_src":"https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f.jpeg","full_src_w":1896,"full_src_h":2369,"gallery_thumbnail_src":"https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f-100x100.jpeg","gallery_thumbnail_src_w":100,"gallery_thumbnail_src_h":100,"thumb_src":"https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f-300x300.jpeg","thumb_src_w":300,"thumb_src_h":300,"src_w":600,"src_h":750},"image_id":32314,"is_downloadable":false,"is_in_stock":true,"is_purchasable":true,"is_sold_individually":"no","is_virtual":false,"max_qty":"","min_qty":1,"price_html":"","sku":"KKK0936","variation_description":"","variation_id":32309,"variation_is_active":true,"variation_is_visible":true,"weight":"","weight_html":"\u041d\/\u0414"},{"attributes":{"attribute_pa_size":"m"},"availability_html":"","backorders_allowed":false,"dimensions":{"length":"","width":"","height":""},"dimensions_html":"\u041d\/\u0414","display_price":699,"display_regular_price":699,"image":{"title":"G2-86138ccdb9b24f01b1321d5b86d1f73f","caption":"","url":"https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f.jpeg","alt":"G2-86138ccdb9b24f01b1321d5b86d1f73f","src":"https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f.jpeg","srcset":"https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f.jpeg 1896w, https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f-532x665.jpeg 532w","sizes":"(max-width: 600px) 100vw, 600px","full_src":"https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f.jpeg","full_src_w":1896,"full_src_h":2369,"gallery_thumbnail_src":"https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f-100x100.jpeg","gallery_thumbnail_src_w":100,"gallery_thumbnail_src_h":100,"thumb_src":"https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f-300x300.jpeg","thumb_src_w":300,"thumb_src_h":300,"src_w":600,"src_h":750},"image_id":32314,"is_downloadable":false,"is_in_stock":true,"is_purchasable":true,"is_sold_individually":"no","is_virtual":false,"max_qty":"","min_qty":1,"price_html":"","sku":"KKK0936","variation_description":"","variation_id":32310,"variation_is_active":true,"variation_is_visible":true,"weight":"","weight_html":"\u041d\/\u0414"},{"attributes":{"attribute_pa_size":"l"},"availability_html":"","backorders_allowed":false,"dimensions":{"length":"","width":"","height":""},"dimensions_html":"\u041d\/\u0414","display_price":699,"display_regular_price":699,"image":{"title":"G2-86138ccdb9b24f01b1321d5b86d1f73f","caption":"","url":"https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f.jpeg","alt":"G2-86138ccdb9b24f01b1321d5b86d1f73f","src":"https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f.jpeg","srcset":"https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f.jpeg 1896w, https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f-532x665.jpeg 532w","sizes":"(max-width: 600px) 100vw, 600px","full_src":"https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f.jpeg","full_src_w":1896,"full_src_h":2369,"gallery_thumbnail_src":"https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f-100x100.jpeg","gallery_thumbnail_src_w":100,"gallery_thumbnail_src_h":100,"thumb_src":"https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f-300x300.jpeg","thumb_src_w":300,"thumb_src_h":300,"src_w":600,"src_h":750},"image_id":32314,"is_downloadable":false,"is_in_stock":true,"is_purchasable":true,"is_sold_individually":"no","is_virtual":false,"max_qty":"","min_qty":1,"price_html":"","sku":"KKK0936","variation_description":"","variation_id":32311,"variation_is_active":true,"variation_is_visible":true,"weight":"","weight_html":"\u041d\/\u0414"}]'
                     current-image=""
@@ -216,7 +174,8 @@
                         />
                         <div class="c-product-form__btn">
                           <button
-                            type="submit"
+                            @click="setProductToCart(productData)"
+                            type="button"
                             class="u-btn is-medium is-black single_add_to_cart_button button disabled wc-variation-selection-needed"
                             name="add-to-cart"
                             value="32307"
@@ -236,10 +195,10 @@
                   </form>
                   <div class="l-product__text">
                     <h4 class="l-product__text-title">Описание:</h4>
-                    <div v-if="product.sku">
-                      <span>Артикул: </span> <span>{{product.sku}}</span>
+                    <div v-if="productData.sku">
+                      <span>Артикул: </span> <span>{{productData.sku}}</span>
                     </div>
-                    <div v-html="product.short_description"></div>
+                    <div v-html="productData.short_description"></div>
                   </div>
                   <div class="l-product__info js-accordion">
                     <div class="l-product__info-block js-accordion__item">
@@ -304,17 +263,17 @@
                 </div>
               </div>
             </div>
-            <div class="row d-none d-lg-flex" v-if="product.images && product.images.length > 1">
+            <div class="row d-none d-lg-flex" v-if="productData.images.length">
               <div 
                 class="col-lg-6 u-col" 
-                v-for="(imageItem, index) in product.images.slice(1)"
+                v-for="(imageItem, index) in productData.images"
                 :key="index"
                 >
                 <a
-                  :href="imageItem.src"
+                  :href="imageItem"
                   class="js-lightbox"
                 >
-                  <img :src="imageItem.src" alt="">
+                  <img :src="imageItem" alt="">
                 </a>
               </div>
             </div>
@@ -955,6 +914,8 @@ import LSubscribe from '@/templates/layout/L-Subscribe.vue'
 import CModal from '@/templates/components/C-Modal.vue'
 import CBreadcrumb from '@/templates/components/C-Breadcrumbs.vue'
 
+import { mapActions, mapMutations, mapGetters } from 'vuex';
+
 export default {
   components: {
     LHeader,
@@ -966,31 +927,45 @@ export default {
 
   data() {
     return {
-      product: []
+      productData: []
     }
   },
 
-  props: ['productData'],
+  // props: ['productData'],
+
+  computed: {
+    
+    ...mapGetters({
+      productData: 'product/getSingleProduct',
+    }),
+  },
 
   mounted() {
-    if(this.productData) {
-      this.product = this.productData
+    if(this.$route.params.productData) {
+      this.productData = this.$route.params.productData
     } else {
-      this.getProduct();
+      this.fetchSingleProduct(this.$route.params.productName);
     }
     console.log(this.$route)
-    
   },
 
   methods: {
-    getProduct() {
-      this.$root.api.get(`products/?slug=${this.$route.params.productName}`)
-      .then((response) => {
-        this.product = response.data[0]
-        console.log(this.product)
-      })
-      .catch(error => console.log(error));
-    },
+    ...mapActions({
+      fetchSingleProduct: 'product/fetchSingleProduct'
+    }),
+
+    ...mapMutations({
+      setProductToCart: 'cart/setProductToCart'
+    }),
+    // getProduct() {
+    //   this.$root.api.get(`products/?slug=${this.$route.params.productName}`)
+    //   .then((response) => {
+    //     this.product = response.data[0]
+    //     console.log(this.product)
+    //   })
+    //   .catch(error => console.log(error));
+    // },
+
   }
 }
 </script>

@@ -33,7 +33,6 @@
           data-ll-status="loaded"
         />
       </picture>
-      <!-- <img :src="product.images[0].src" :alt="product.name"> -->
     </router-link>
     <div class="c-product__text">
       <p class="c-product__text-title">

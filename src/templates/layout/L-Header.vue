@@ -60,14 +60,68 @@
           </div>
           <div class="c-service cart d-none d-sm-block">
             <div>
-              <span class="c-service__count">0</span>
+              <span class="c-service__count">{{getCartProducts.length}}</span>
               <svg width="20px" height="20px"><use xlink:href="#cart"></use></svg>
             </div>
             <div class="c-service__dropdown">
               <div class="l-mini-cart widget_shopping_cart_content">
+        
                 <p class="u-h3">Корзина</p>
-                <span class="l-mini-cart__count">0 товар</span>
-                <p>Корзина пуста</p>
+                <span class="l-mini-cart__count">{{getCartProducts.length}} товар</span>
+                <div v-if="getCartProducts">
+                  <ul class="l-mini-cart__list">
+                    <li 
+                      v-for="product in getCartProducts" 
+                      :key="product.id"
+                      class="l-mini-cart__item"
+                    >
+                      <div class="l-mini-cart__item-img">
+                        <a href="#">
+                          <img :src="product.post_img_md"> 
+                        </a>
+                      </div>
+                      <div class="l-mini-cart__item-info">
+                        <div v-if="product.post_attr_brand" class="is-brand">{{product.post_attr_brand}}</div>
+                        <span class="is-name">{{product.name}}</span>
+                        <!-- {% if product.quantity >= 2 %}
+                          <p class="is-quantity">{{ 'Quantity' | translateString('Cart - Quantity') }}: <b>{{product.quantity}}</b></p>
+                        {% endif %} -->
+                        <div class="l-mini-cart__item-attr">
+                          <!-- {% if product.attr.size %}
+                            <div class="is-size">
+                              <span>{{ 'Size' | translateString('Cart - Size') }}:</span>
+                              <span class="is-bold">{{product.attr.size}}</span>
+                            </div>
+                          {% endif %}	 -->
+                          <!-- {% if product.attr.color %}
+                            <div class="is-color">
+                              <span>{{ 'Color' | translateString('Cart - Color') }}:</span>
+                              <span class="is-bold">{{product.attr.color}}</span>
+                            </div>
+                          {% endif %} -->
+                        </div>
+
+                        <p class="c-price">
+                          {{ product.price }}
+                        </p>
+
+                      </div>
+                      <!-- <a href="#" class="c-remove" :data-product_id="{{ product.delete_productid }}" data-product_sku="{{ product.delete_sku }}">x</a> -->
+                    </li>
+                  </ul>
+                  <div class="l-mini-cart__total">
+                    <span>Сумма заказа</span>
+                    <span class="is-bold"></span>
+                  </div>
+
+                  <div class="l-mini-cart__btn">
+                    <a href="" class="u-btn is-black" >Оформление заказа</a>
+                    <a href="" class="is-cart">В корзину</a>
+                  </div>
+                </div>
+                <div v-else>
+                  <p>Корзина пуста</p>
+                </div>
               </div>
             </div>
           </div>
@@ -116,6 +170,9 @@
 </template>
 
 <script>
+
+import { mapGetters } from 'vuex';
+
 export default {
   data() {
     return {
@@ -128,6 +185,11 @@ export default {
   //     type: Array,
   //   }
   // },
+  computed: {
+    ...mapGetters({
+      getCartProducts: 'cart/getCartProducts'
+    }),
+  },
   methods: {
     handleSearch() {
       // const searchResults = Object.values(this.products).filter(item =>

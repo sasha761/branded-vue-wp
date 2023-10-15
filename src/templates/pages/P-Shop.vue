@@ -31,7 +31,7 @@
                     :count-products="countProducts"
                   />
                 </div>
-                <C-Pagination />
+                <C-Pagination :count-products="countProducts" />
               </section>
             </div>
           </div>
@@ -76,12 +76,19 @@ export default {
 
   data() {
     return {
-      countProducts: 0
+      countProducts: 0,
     }
   },
 
   mounted() {
-    this.fetchProducts(this.categorySlugFromRoute).then(result => {
+    // console.log(this.currentPage);
+
+    this.fetchProducts({
+      url: this.$route.fullPath, 
+      page: this.currentPage,
+      slug: this.categorySlugFromRoute,
+      offset: null
+    }).then(result => {
       this.countProducts = result?.products_count;
     })
   },
@@ -91,6 +98,10 @@ export default {
       products: 'catalog/products',
       resultProducts: 'catalog/resultProducts',
     }),
+
+    offset() {
+      return 16 * this.currentPage;
+    },
     
     categorySlugFromRoute() { return this.$route.params.subcategorySlug || this.$route.params.categorySlug },
     currentPage() { 

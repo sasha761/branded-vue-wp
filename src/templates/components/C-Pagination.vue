@@ -1,17 +1,18 @@
 <template>
-  <div v-if="maxPages > 1" class="c-pagination">
-    <ul>
-      <!-- <li class="is-active">
-        <span class="page-number page-numbers current">1</span>
-      </li> -->
+  <div v-if="maxPages > 0" class="c-pagination">
+    <pagination 
+      v-model="page" 
+      :records="countProducts" 
+      :per-page="16"
+      @paginate="callback"
+    />
 
-      <!-- {{$route.params}} -->
+    <!-- <ul>
       <li 
         v-for="(page, key) in maxPages"
         :key="key"
         :class="{'is-active' : page === currentPage}"
       >
-        <!-- <span v-if="maxPages > 10 & key === 6" class="dots">…</span> -->
         <router-link
           :to="{ 
             name: 'product-category', 
@@ -28,101 +29,105 @@
           {{page}}
         </router-link>
       </li>
-      <!-- <li>
-        <a
-          href="https://branded.com.ua/product-category/women/page/3/"
-          class="page-number page-numbers"
-          >3</a
-        >
-      </li>
-      <li>
-        <a
-          href="https://branded.com.ua/product-category/women/page/4/"
-          class="page-number page-numbers"
-          >4</a
-        >
-      </li>
-      <li>
-        <a
-          href="https://branded.com.ua/product-category/women/page/5/"
-          class="page-number page-numbers"
-          >5</a
-        >
-      </li>
-      <li>
-        <a
-          href="https://branded.com.ua/product-category/women/page/6/"
-          class="page-number page-numbers"
-          >6</a
-        >
-      </li>
-      <li>
-        <a
-          href="https://branded.com.ua/product-category/women/page/7/"
-          class="page-number page-numbers"
-          >7</a
-        >
-      </li>
-      <li>
-        <a
-          href="https://branded.com.ua/product-category/women/page/8/"
-          class="page-number page-numbers"
-          >8</a
-        >
-      </li>
-      <li>
-        <a
-          href="https://branded.com.ua/product-category/women/page/9/"
-          class="page-number page-numbers"
-          >9</a
-        >
-      </li>
-      <li class="is-active"><span class="dots">…</span></li>
-      <li>
-        <a
-          href="https://branded.com.ua/product-category/women/page/47/"
-          class="page-number page-numbers"
-          >47</a
-        >
-      </li> -->
-    </ul>
+    </ul> -->
   </div>
 </template>
 
 <script>
-import Api from '@/api/Axios'
+// import Api from '@/api/Axios'
+import Pagination from 'vue-pagination-2';
+
+import { mapActions } from 'vuex';
 
 export default {
+  components: {
+    Pagination
+  },
+
+  // options: {
+  //   chunksNavigation: 'fixed',
+  // },  
+
   data() {
     return {
-      pagination: [],
+      page: 1,
       maxPages: 1,
-      currentPage: 1,
-      url: ''
+      offset: null,
     }
   },
 
+  props: {
+    countProducts: {
+      type: Number,
+      default: 16
+    },
+  },
+
   mounted() {
-    this.loadPagination()
-    console.log(this.url)
+    // this.loadPagination();
+    console.log(this.page);
   },  
 
-  methods: {
-    loadPagination() {
-      this.url = this.$route.params.subcategorySlug || this.$route.params.categorySlug;
+  computed: {
+    categorySlugFromRoute() { return this.$route.params.subcategorySlug || this.$route.params.categorySlug },
+    currentPage() { 
+      const queryPage = this.$route?.query?.page;
+      const currentPageNumber = Number(queryPage) || 1;
 
-      Api.post('archive/pagination', {
-        url: this.url
-      })
-      .then((result) => {
-        console.log(result)
-        this.maxPages = result.data.max_num_pages
-        this.currentPage = result.data.current_page
-      })
-      .catch((error) => {
-        console.log(error)
-      })
+      return currentPageNumber;
     }
+  },
+
+  methods: {
+    ...mapActions({
+      fetchProducts: 'catalog/fetchProducts'
+    }),
+
+    callback: function(changedPage) {
+      this.addQueryParams(changedPage);
+      this.offset = this.productsLength * this.currentPage;
+
+      console.log(this.currentPage);
+      this.fetchProducts({
+        url: this.$route.fullPath, 
+        page: this.currentPage, 
+        slug: this.categorySlugFromRoute,
+        offset: this.offset, 
+      })
+      // if(changedPage > 1) {
+        
+      // } else {
+        // this.removeQueryParams();
+      // }
+    },
+
+    addQueryParams(currentPage) {
+      const query = { ...this.$route.query };
+      query['page'] = currentPage;
+      this.$router.push({ path: '', query });
+    },
+
+    removeQueryParams() {
+      const query = { ...this.$route.query };
+      delete query['page'];
+      this.$router.push({ path: '', query });
+    },
+
+    // loadPagination() {
+    //   this.url = this.$route.params.subcategorySlug || this.$route.params.categorySlug;
+
+    //   Api.post('archive/pagination', {
+    //     url: this.url
+    //   })
+    //   .then((result) => {
+    //     console.log(result)
+    //     this.maxPages = result.data.max_num_pages
+    //     this.currentPage = result.data.current_page
+    //   })
+    //   .catch((error) => {
+    //     console.log(error)
+    //   })
+    // }
   }
 }
 </script>

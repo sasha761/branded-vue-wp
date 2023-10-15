@@ -64,17 +64,17 @@ export default {
 
   computed: {
     isShow() {
+      console.log(this.countProducts, this.productsLength);
       return this.countProducts > this.productsLength;
     }
   },
 
   methods: {
     ...mapActions({
-      fetchMoreProducts: 'catalog/fetchMoreProducts'
+      fetchProducts: 'catalog/fetchProducts'
     }),
 
     loadMore() {
-      console.log(this.productsLength)
       this.offset = this.productsLength * this.page;
       this.page += 1;
     
@@ -83,16 +83,18 @@ export default {
         this.isShow = false;
         return;
       }
+
+      // console.log(this.$route);
       
       this.isActive = true;
 
-      this.fetchMoreProducts({
+      this.fetchProducts({
         url: this.$route.fullPath, 
         page: this.page, 
         offset: this.offset, 
         slug: this.categorySlug
       }).then(result => {
-        if(!result && !result.status) return;
+        if(!result && !result?.status) return;
 
         this.isActive = false;
         if(result.status === 'nomore') this.isShow = false;

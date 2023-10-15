@@ -2,7 +2,7 @@ import Api from '@/api/Axios'
 
 const state = {
   products: [],
-  resultProducts: []
+  resultProducts: [],
 };
 const mutations = {
   setProductsList(state, products) {
@@ -29,24 +29,33 @@ const mutations = {
   },
 
   filterProductsByBrand(state, brandName) {
-    state.resultProducts = state.products.filter((item) => {
+    state.resultProducts = state.resultProducts.filter((item) => {
       return item?.post_attr_brand?.toLowerCase().includes(brandName.toLowerCase())
     })
   },
   filterProductsBySize(state, productSize) {
-    state.resultProducts = state.products.filter((item) => {
+    state.resultProducts = state.resultProducts.filter((item) => {
       return item?.post_attr_size?.toLowerCase().split(', ').includes(productSize.toLowerCase())
     })
   },
 };
 const actions = {
-  fetchProducts({commit}, url) {
+  fetchProducts({commit}, {url, page, offset, slug}) {
+    console.log(url, page, offset, slug);
     return Api.post('archive/get_products', {
-      url: url
+      url: url,
+      page: page,
+      offset: offset,
+      slug: slug,
     })
     .then((result) => {
-      commit('setProductsList', result.data.products)
-      commit('setResultProducts', result.data.products)
+      // commit('setProductsList', result.data.products)
+      // commit('changeResultProducts', result.data.products)
+      // console.log(result);
+      if(result?.data?.status !== 'nomore') {
+        commit('setMoreProductsList', result?.data?.products)
+        commit('setResultProducts', result?.data?.products)
+      }
       return result.data;
     })
     .catch((error) => {
@@ -54,24 +63,24 @@ const actions = {
     });
   },
 
-  fetchMoreProducts({commit}, {url, page, offset, slug}) {
-    return Api.post('archive/load_more_products', {
-      url: url,
-      page: page,
-      offset: offset,
-      slug: slug,
-    })
-    .then((result) => {
-      if(result.data.status !== 'nomore') {
-        commit('setMoreProductsList', result.data.products)
-        commit('setResultProducts', result.data.products)
-      } 
-      return result.data;
-    })
-    .catch((error) => {
-      console.log(error);
-    })
-  },
+  // fetchMoreProducts({commit}, {url, page, offset, slug}) {
+  //   return Api.post('archive/load_more_products', {
+  //     url: url,
+  //     page: page,
+  //     offset: offset,
+  //     slug: slug,
+  //   })
+  //   .then((result) => {
+  //     if(result?.data?.status !== 'nomore') {
+  //       commit('setMoreProductsList', result?.data?.products)
+  //       commit('setResultProducts', result?.data?.products)
+  //     } 
+  //     return result?.data;
+  //   })
+  //   .catch((error) => {
+  //     console.log(error);
+  //   })
+  // },
 };
 const getters = {
   products(state) {
