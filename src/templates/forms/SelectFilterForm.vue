@@ -39,12 +39,12 @@ export default {
     },
   },
 
-  computed: {
+  // computed: {
     // currentOption() {
     //   return this.filterParam
     //   // return this.$route.query[this.filterParam];
     // }
-  },
+  // },
 
   // mounted() {
   //   console.log(this.currentOption);
@@ -62,13 +62,13 @@ export default {
       this.$router.push({ path: '', query });
     },
     handleSelectChange(selectedOption) {
-      this.$emit('select-filter', selectedOption);
-
       if(selectedOption.key) {
          this.addQueryParams(selectedOption);
       } else {
         this.removeQueryParams(selectedOption);
       }
+
+      this.$emit('select-filter', selectedOption);
     },
   }
 }

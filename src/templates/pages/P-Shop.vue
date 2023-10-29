@@ -14,26 +14,26 @@
               <section class="l-shop" data-categories="Женщинам" data-cat-id="17">
                 <h1 class="u-h2">Женщинам</h1>
                 <L-Filter-Block />
-                <div v-if="resultProducts" class="l-shop__product">
+                <div v-if="products" class="l-shop__product">
                   <div class="row js-load-more">
                     <div
-                      v-for="product in resultProducts"
+                      v-for="product in products"
                       :key="product.id"
                       class="col-lg-3 col-md-4 col-sm-6 col-6 u-col js-gallery-item"
                     >
                       <C-Product :product="product" />
                     </div>
                   </div>
-                  <C-LoadMore
+                  <!-- <C-LoadMore
                     :products-length="16" 
                     :current-page="currentPage"
                     :category-slug="categorySlugFromRoute"
                     :count-products="countProducts"
-                  />
+                  /> -->
                 </div>
                 <C-Pagination 
                   :category-slug-from-route="categorySlugFromRoute" 
-                  :count-products="countProducts" 
+                  :count-products="productsCount" 
                   :current-page="currentPage"
                 />
               </section>
@@ -56,12 +56,12 @@ import LFilterBlock from '@/templates/layout/L-Filter-block.vue'
 import CModal from '@/templates/components/C-Modal.vue'
 import CProduct from '@/templates/components/C-Product.vue'
 import CPagination from '@/templates/components/C-Pagination.vue'
-import CLoadMore from '@/templates/components/C-LoadMore.vue'
+// import CLoadMore from '@/templates/components/C-LoadMore.vue'
 import CBreadcrumb from '@/templates/components/C-Breadcrumbs.vue'
 
 // import Api from '@/api/Axios'
 
-import { mapActions, mapGetters, mapMutations } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
   name: "App",
@@ -74,7 +74,7 @@ export default {
     CModal,
     CProduct,
     CPagination,
-    CLoadMore,
+    // CLoadMore,
     CBreadcrumb
   },
 
@@ -93,14 +93,16 @@ export default {
       slug: this.categorySlugFromRoute,
       offset: null
     }).then(result => {
-      this.countProducts = result?.products_count;
+      console.log(result);
+      // this.countProducts = result?.products_count;
     })
   },
 
   computed: {
     ...mapGetters({
       products: 'catalog/products',
-      resultProducts: 'catalog/resultProducts',
+      productsCount: 'catalog/productsCount',
+      // resultProducts: 'catalog/resultProducts',
     }),
 
     offset() {
@@ -121,9 +123,9 @@ export default {
       fetchProducts: 'catalog/fetchProducts'
     }),
 
-    ...mapMutations({
-      changeResultProducts: 'catalog/changeResultProducts'
-    }),
+    // ...mapMutations({
+    //   changeResultProducts: 'catalog/changeResultProducts'
+    // }),
   }
 }
 </script>
