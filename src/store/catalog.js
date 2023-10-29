@@ -2,8 +2,7 @@ import Api from '@/api/Axios'
 
 const state = {
   products: [],
-  // resultProducts: [],
-  productsCount: 0,
+  resultProducts: [],
 };
 const mutations = {
   setProductsList(state, products) {
@@ -12,36 +11,33 @@ const mutations = {
   setMoreProductsList(state, moreProducts) {
     state.products = [...state.products, ...moreProducts];
   },
-  setProductsCount(state, productsCount) {
-    state.productsCount = productsCount;
+  setResultProducts(state, resultProducts) {
+    state.resultProducts = [...state.resultProducts, ...resultProducts];
   },
-  // setResultProducts(state, resultProducts) {
-  //   state.resultProducts = [...state.resultProducts, ...resultProducts];
-  // },
-  // changeResultProducts(state, resultProducts) {
-  //   state.resultProducts = resultProducts;
-  // },
-  // resetResultProducts(state) {
-  //   state.resultProducts = state.products;
-  // },
+  changeResultProducts(state, resultProducts) {
+    state.resultProducts = resultProducts;
+  },
+  resetResultProducts(state) {
+    state.resultProducts = state.products;
+  },
 
-  // sortProductsByUpPrice(state) {
-  //   state.resultProducts.sort((a, b) => a?.price - b?.price);
-  // },
-  // sortProductsByDownPrice(state) {
-  //   state.resultProducts.sort((a, b) => b?.price - a?.price)
-  // },
+  sortProductsByUpPrice(state) {
+    state.resultProducts.sort((a, b) => a?.price - b?.price);
+  },
+  sortProductsByDownPrice(state) {
+    state.resultProducts.sort((a, b) => b?.price - a?.price)
+  },
 
-  // filterProductsByBrand(state, brandName) {
-  //   state.resultProducts = state.resultProducts.filter((item) => {
-  //     return item?.post_attr_brand?.toLowerCase().includes(brandName.toLowerCase())
-  //   })
-  // },
-  // filterProductsBySize(state, productSize) {
-  //   state.resultProducts = state.resultProducts.filter((item) => {
-  //     return item?.post_attr_size?.toLowerCase().split(', ').includes(productSize.toLowerCase())
-  //   })
-  // },
+  filterProductsByBrand(state, brandName) {
+    state.resultProducts = state.resultProducts.filter((item) => {
+      return item?.post_attr_brand?.toLowerCase().includes(brandName.toLowerCase())
+    })
+  },
+  filterProductsBySize(state, productSize) {
+    state.resultProducts = state.resultProducts.filter((item) => {
+      return item?.post_attr_size?.toLowerCase().split(', ').includes(productSize.toLowerCase())
+    })
+  },
 };
 const actions = {
   fetchProducts({commit}, {url, page, offset, slug}) {
@@ -53,10 +49,14 @@ const actions = {
       slug: slug,
     })
     .then((result) => {
+      
+      // console.log(result);
       if(result?.data?.status !== 'nomore') {
-        commit('setProductsCount', result.data.products_count);
+        // commit('setMoreProductsList', result?.data?.products)
+        // commit('setResultProducts', result?.data?.products)
+
         commit('setProductsList', result.data.products)
-        // commit('changeResultProducts', result.data.products)
+        commit('changeResultProducts', result.data.products)
       }
       return result.data;
     })
@@ -88,9 +88,7 @@ const getters = {
   products(state) {
     return state.products;
   },
-  productsCount(state) {
-    return state.productsCount;
-  },
+
   resultProducts(state) {
     return state.resultProducts
   },
