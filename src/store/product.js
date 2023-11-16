@@ -12,13 +12,12 @@ const mutations = {
 
 const actions = {
   fetchSingleProduct({commit}, url) {
-    console.log(url);
     return Api.post('product/get_single_product', {
       url: url
     })
     .then((result) => {
       commit('setSingleProduct', result.data)
-      console.log(result)
+      // console.log(result)
       return result.data;
     })
     .catch((error) => {

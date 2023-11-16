@@ -5,12 +5,12 @@
       :records="countProducts" 
       :per-page="16"
       @paginate="callback"
+      :options="{texts: null}"
     />
   </div>
 </template>
 
 <script>
-// import Api from '@/api/Axios'
 import Pagination from 'vue-pagination-2';
 
 import { mapActions } from 'vuex';
@@ -19,10 +19,6 @@ export default {
   components: {
     Pagination
   },
-
-  // options: {
-  //   chunksNavigation: 'fixed',
-  // },  
 
   data() {
     return {
@@ -83,3 +79,9 @@ export default {
   }
 }
 </script>
+
+<style>
+  .VuePagination__count {
+    display: none;
+  }
+</style>

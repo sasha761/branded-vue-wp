@@ -1,25 +1,25 @@
 <template>
   <div class="c-sort js-filter-sort">
-    <select v-model="selected" @change="handleSelectChange">
-      <option value="">{{currentOption}}</option>
-      <option 
-        v-for="(value, key) in options" 
-        :key="key" 
-        :value="value.key"
-      >
-        {{ value.text }}
-      </option>
-    </select>
+    <v-select 
+      v-model="selected" 
+      @input="handleSelectChange" 
+      :options="optionsAdapted" 
+      label="text"></v-select>
   </div>
 </template>
 
 <script>
-// import niceSelect from '../js/niceSelect.js'
+import vSelect from "vue-select";
 
 export default {
+  components: {
+    vSelect
+  },
+
   data() {
     return {
-      selected: ''
+      selected: '',
+      optionsAdapted: []
     }
   },
 
@@ -32,25 +32,31 @@ export default {
       type: String,
     },
     currentOption: {
-      type: String,
+      type: Object,
       required: true,
-      default: ''
     },
+  },
+
+  beforeMount() {
+    this.selected = this.currentOption.text;
+  },
+
+  mounted() {
+    this.optionsAdapted = this.options.filter(x => x.key !== this.currentOption.key);
   },
 
   methods: {
-    handleSelectChange() {
-      const selectedOption = this.options.find(option => option?.key === this.selected)?.text;
-      this.$emit('select-filter', {type: this.filterParam, key: this.selected, text: selectedOption})
+    handleSelectChange(value) {
+      if (value !== null) {
+        this.$emit('select-filter', {type: this.filterParam, key: value.key, text: value.text})
+      } else {
+        this.selected = 'Показать все';
+        this.$emit('select-filter', {type: this.filterParam, key: 'all', text: 'Показать все'})
+      }      
     },
-
-    // selectFilterInit() {
-    //   this.selected = '';
-    // }
   },
-
-  // mounted() {
-  //   this.selectFilterInit();
-  // }
 }
 </script>
+<style>
+  @import "vue-select/dist/vue-select.css";
+</style>

@@ -19,6 +19,7 @@ export default {
 
   data() {
     return {
+
     }
   },
   
@@ -33,9 +34,8 @@ export default {
       default: ''
     },
     currentOption: {
-      type: String,
-      required: true,
-      default: ''
+      type: Object,
+      required: true
     },
   },
 
@@ -61,8 +61,9 @@ export default {
       delete query[selectedOption.type];
       this.$router.push({ path: '', query });
     },
+
     handleSelectChange(selectedOption) {
-      if(selectedOption.key) {
+      if(selectedOption.key !== 'all') {
          this.addQueryParams(selectedOption);
       } else {
         this.removeQueryParams(selectedOption);

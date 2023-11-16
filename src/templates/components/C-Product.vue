@@ -15,14 +15,14 @@
       
       <picture>
         <source
-          :data-srcset="product.post_img_xl"
+          :data-srcset="product.post_img_l"
           media="(min-width: 426px)"
-          :srcset="product.post_img_xl"
+          :srcset="product.post_img_l"
         />
         <source
-          :data-srcset="product.post_img_md"
+          :data-srcset="product.post_img_m"
           media="(max-width: 425px)"
-          :srcset="product.post_img_md"
+          :srcset="product.post_img_m"
         />
         <img
           src="data:image/gif;base64,R0lGODlhBAAFAIAAAP///wAAACH5BAEAAAEALAAAAAAEAAUAAAIEjI+ZBQA7"

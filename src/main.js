@@ -1,4 +1,4 @@
-import './assets/main.css'
+import './assets/scss/main.scss'
 import Vue from 'vue'
 import App from './App.vue'
 import VueRouter from 'vue-router'
@@ -17,10 +17,16 @@ const routes = [
     component: () => import('./templates/pages/P-Product.vue') 
   }
 ]
+
 const router = new VueRouter({
   routes,
-  mode: 'history' 
+  mode: 'history',
+  scrollBehavior() {
+    return { x: 0, y: 0 }
+  },
 })
+  
+
 
 Vue.config.productionTip = false
 Vue.use(VueRouter);

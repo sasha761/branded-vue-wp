@@ -5,15 +5,16 @@
     <div class="wrapper">
       <main
         class="p-product"
-        data-id="32307"
-        data-price="699.00"
-        data-categories="Женщинам, Футболки и поло"
+        :data-id="product.id"
+        :data-price="product.price"
+        :data-categories="getProductCategory"
       >
         <div class="u-container">
           <C-Breadcrumb />
           <section class="l-product">
             <div class="row">
               <div class="col-lg-6 col-md-12 col-sm-12 u-col">
+                <!-- <pre>{{product}}</pre> -->
                 <div  class="l-product__img">
                   <a
                     v-if="product.post_img_xl"
@@ -30,7 +31,7 @@
                   <a
                     href="https://branded.com.ua/brand/staff/"
                     class="l-product__category"
-                    >Staff</a
+                    >{{product.post_attr_brand}}</a
                   >
                   <h1 class="l-product__name">
                     {{product.name}}
@@ -38,14 +39,12 @@
                   <p class="c-price" v-html="product.price_html"></p>
                   <form
                     class="js-product-form cart c-product-form variations_form wvs-loaded"
-                    data-product_id="32307"
-                    data-product_variations='[{"attributes":{"attribute_pa_size":"xs"},"availability_html":"","backorders_allowed":false,"dimensions":{"length":"","width":"","height":""},"dimensions_html":"\u041d\/\u0414","display_price":699,"display_regular_price":699,"image":{"title":"G2-86138ccdb9b24f01b1321d5b86d1f73f","caption":"","url":"https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f.jpeg","alt":"G2-86138ccdb9b24f01b1321d5b86d1f73f","src":"https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f.jpeg","srcset":"https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f.jpeg 1896w, https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f-532x665.jpeg 532w","sizes":"(max-width: 600px) 100vw, 600px","full_src":"https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f.jpeg","full_src_w":1896,"full_src_h":2369,"gallery_thumbnail_src":"https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f-100x100.jpeg","gallery_thumbnail_src_w":100,"gallery_thumbnail_src_h":100,"thumb_src":"https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f-300x300.jpeg","thumb_src_w":300,"thumb_src_h":300,"src_w":600,"src_h":750},"image_id":32314,"is_downloadable":false,"is_in_stock":true,"is_purchasable":true,"is_sold_individually":"no","is_virtual":false,"max_qty":"","min_qty":1,"price_html":"","sku":"KKK0936","variation_description":"","variation_id":32308,"variation_is_active":true,"variation_is_visible":true,"weight":"","weight_html":"\u041d\/\u0414"},{"attributes":{"attribute_pa_size":"s"},"availability_html":"","backorders_allowed":false,"dimensions":{"length":"","width":"","height":""},"dimensions_html":"\u041d\/\u0414","display_price":699,"display_regular_price":699,"image":{"title":"G2-86138ccdb9b24f01b1321d5b86d1f73f","caption":"","url":"https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f.jpeg","alt":"G2-86138ccdb9b24f01b1321d5b86d1f73f","src":"https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f.jpeg","srcset":"https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f.jpeg 1896w, https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f-532x665.jpeg 532w","sizes":"(max-width: 600px) 100vw, 600px","full_src":"https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f.jpeg","full_src_w":1896,"full_src_h":2369,"gallery_thumbnail_src":"https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f-100x100.jpeg","gallery_thumbnail_src_w":100,"gallery_thumbnail_src_h":100,"thumb_src":"https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f-300x300.jpeg","thumb_src_w":300,"thumb_src_h":300,"src_w":600,"src_h":750},"image_id":32314,"is_downloadable":false,"is_in_stock":true,"is_purchasable":true,"is_sold_individually":"no","is_virtual":false,"max_qty":"","min_qty":1,"price_html":"","sku":"KKK0936","variation_description":"","variation_id":32309,"variation_is_active":true,"variation_is_visible":true,"weight":"","weight_html":"\u041d\/\u0414"},{"attributes":{"attribute_pa_size":"m"},"availability_html":"","backorders_allowed":false,"dimensions":{"length":"","width":"","height":""},"dimensions_html":"\u041d\/\u0414","display_price":699,"display_regular_price":699,"image":{"title":"G2-86138ccdb9b24f01b1321d5b86d1f73f","caption":"","url":"https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f.jpeg","alt":"G2-86138ccdb9b24f01b1321d5b86d1f73f","src":"https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f.jpeg","srcset":"https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f.jpeg 1896w, https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f-532x665.jpeg 532w","sizes":"(max-width: 600px) 100vw, 600px","full_src":"https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f.jpeg","full_src_w":1896,"full_src_h":2369,"gallery_thumbnail_src":"https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f-100x100.jpeg","gallery_thumbnail_src_w":100,"gallery_thumbnail_src_h":100,"thumb_src":"https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f-300x300.jpeg","thumb_src_w":300,"thumb_src_h":300,"src_w":600,"src_h":750},"image_id":32314,"is_downloadable":false,"is_in_stock":true,"is_purchasable":true,"is_sold_individually":"no","is_virtual":false,"max_qty":"","min_qty":1,"price_html":"","sku":"KKK0936","variation_description":"","variation_id":32310,"variation_is_active":true,"variation_is_visible":true,"weight":"","weight_html":"\u041d\/\u0414"},{"attributes":{"attribute_pa_size":"l"},"availability_html":"","backorders_allowed":false,"dimensions":{"length":"","width":"","height":""},"dimensions_html":"\u041d\/\u0414","display_price":699,"display_regular_price":699,"image":{"title":"G2-86138ccdb9b24f01b1321d5b86d1f73f","caption":"","url":"https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f.jpeg","alt":"G2-86138ccdb9b24f01b1321d5b86d1f73f","src":"https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f.jpeg","srcset":"https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f.jpeg 1896w, https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f-532x665.jpeg 532w","sizes":"(max-width: 600px) 100vw, 600px","full_src":"https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f.jpeg","full_src_w":1896,"full_src_h":2369,"gallery_thumbnail_src":"https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f-100x100.jpeg","gallery_thumbnail_src_w":100,"gallery_thumbnail_src_h":100,"thumb_src":"https:\/\/branded.com.ua\/wp-content\/uploads\/2023\/07\/G2-86138ccdb9b24f01b1321d5b86d1f73f-300x300.jpeg","thumb_src_w":300,"thumb_src_h":300,"src_w":600,"src_h":750},"image_id":32314,"is_downloadable":false,"is_in_stock":true,"is_purchasable":true,"is_sold_individually":"no","is_virtual":false,"max_qty":"","min_qty":1,"price_html":"","sku":"KKK0936","variation_description":"","variation_id":32311,"variation_is_active":true,"variation_is_visible":true,"weight":"","weight_html":"\u041d\/\u0414"}]'
-                    current-image=""
+                    :data-product_id="product.id"
                   >
                     <div class="variations woo-variation-items-wrapper">
                       <div class="c-product-form__size">
                         <div class="label">
-                          <label for="pa_size"> Размер </label
+                          <label for="pa_size">Размер </label
                           ><span
                             class="woo-selected-variation-item-name"
                             data-default=""
@@ -53,7 +52,13 @@
                         </div>
                       </div>
                       <div class="value woo-variation-items-wrapper">
-                        <select
+                        <v-select 
+                          v-model="selectedSize" 
+                          @input="handleSelectChange" 
+                          :options="product.size_attribute"
+                          label="name">
+                        </v-select>
+                        <!-- <select
                           style="display: none"
                           id="pa_size"
                           class="woo-variation-raw-select"
@@ -66,131 +71,28 @@
                           <option value="s" class="attached enabled">S</option>
                           <option value="m" class="attached enabled">M</option>
                           <option value="l" class="attached enabled">L</option>
-                        </select>
-                        <ul
-                          role="radiogroup"
-                          aria-label="Размер"
-                          class="variable-items-wrapper button-variable-items-wrapper wvs-style-squared"
-                          data-attribute_name="attribute_pa_size"
-                          data-attribute_values='["xs","s","m","l"]'
-                        >
-                          <li
-                            aria-checked="false"
-                            tabindex="0"
-                            data-wvstooltip="XS"
-                            class="variable-item button-variable-item button-variable-item-xs"
-                            title="XS"
-                            data-title="XS"
-                            data-value="xs"
-                            role="radio"
-                            data-wvstooltip-out-of-stock=""
-                          >
-                            <div class="variable-item-contents">
-                              <span
-                                class="variable-item-span variable-item-span-button"
-                                >XS</span
-                              >
-                            </div>
-                          </li>
-                          <li
-                            aria-checked="false"
-                            tabindex="0"
-                            data-wvstooltip="S"
-                            class="variable-item button-variable-item button-variable-item-s"
-                            title="S"
-                            data-title="S"
-                            data-value="s"
-                            role="radio"
-                            data-wvstooltip-out-of-stock=""
-                          >
-                            <div class="variable-item-contents">
-                              <span
-                                class="variable-item-span variable-item-span-button"
-                                >S</span
-                              >
-                            </div>
-                          </li>
-                          <li
-                            aria-checked="false"
-                            tabindex="0"
-                            data-wvstooltip="M"
-                            class="variable-item button-variable-item button-variable-item-m"
-                            title="M"
-                            data-title="M"
-                            data-value="m"
-                            role="radio"
-                            data-wvstooltip-out-of-stock=""
-                          >
-                            <div class="variable-item-contents">
-                              <span
-                                class="variable-item-span variable-item-span-button"
-                                >M</span
-                              >
-                            </div>
-                          </li>
-                          <li
-                            aria-checked="false"
-                            tabindex="0"
-                            data-wvstooltip="L"
-                            class="variable-item button-variable-item button-variable-item-l"
-                            title="L"
-                            data-title="L"
-                            data-value="l"
-                            role="radio"
-                            data-wvstooltip-out-of-stock=""
-                          >
-                            <div class="variable-item-contents">
-                              <span
-                                class="variable-item-span variable-item-span-button"
-                                >L</span
-                              >
-                            </div>
-                          </li>
-                        </ul>
+                        </select> -->
+
                       </div>
                       <div class="js-product-form-notification"></div>
                     </div>
-                    <div class="single_variation_wrap">
-                      <div
-                        class="woocommerce-variation single_variation"
-                        style="display: none"
-                      ></div>
-                      <div
-                        class="woocommerce-variation-add-to-cart variations_button woocommerce-variation-add-to-cart-disabled"
+                    <div class="c-product-form__btn">
+                      <button
+                        @click="setProductToCart(product)"
+                        type="button"
+                        class="u-btn is-medium is-black single_add_to_cart_button button disabled wc-variation-selection-needed"
+                        name="add-to-cart"
+                        :value="product.id"
                       >
-                        <input
-                          type="hidden"
-                          class="qty"
-                          name="quantity"
-                          value="1"
-                        />
-                        <input type="hidden" name="add-to-cart" value="32307" />
-                        <input type="hidden" name="product_id" value="32307" />
-                        <input
-                          type="hidden"
-                          name="variation_id"
-                          class="variation_id"
-                          value="0"
-                        />
-                        <div class="c-product-form__btn">
-                          <button
-                            @click="setProductToCart(product)"
-                            type="button"
-                            class="u-btn is-medium is-black single_add_to_cart_button button disabled wc-variation-selection-needed"
-                            name="add-to-cart"
-                            value="32307"
-                          >
-                            <span>В корзину</span>
-                          </button>
-                          <button
-                            type="button"
-                            class="u-btn is-medium is-black-border js-quick-add-to-card is-disabled"
-                            data-modal=""
-                          >
-                            <span>Купить в 1 клик</span>
-                          </button>
-                        </div>
-                      </div>
+                        <span>В корзину</span>
+                      </button>
+                      <button
+                        type="button"
+                        class="u-btn is-medium is-black-border js-quick-add-to-card is-disabled"
+                        data-modal=""
+                      >
+                        <span>Купить в 1 клик</span>
+                      </button>
                     </div>
                   </form>
                   <div class="l-product__text">
@@ -316,19 +218,9 @@
                 </svg>
               </div>
             </div>
-            <div
-              class="js-product-row swiper swiper-initialized swiper-horizontal swiper-pointer-events swiper-backface-hidden"
-            >
-              <div
-                class="swiper-wrapper"
-                id="swiper-wrapper-3276b83ac8ebdde9"
-                aria-live="off"
-                style="
-                  transform: translate3d(-1270px, 0px, 0px);
-                  transition-duration: 0ms;
-                "
-              >
-                <div class="u-col swiper-slide" role="group" aria-label="1 / 10">
+            <div class="js-product-row swiper">
+              <div class="swiper-wrapper">
+                <div class="u-col swiper-slide">
                   <div
                     class="c-product js-product-item"
                     data-id="32307"
@@ -373,7 +265,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="u-col swiper-slide" role="group" aria-label="2 / 10">
+                <div class="u-col swiper-slide">
                   <div
                     class="c-product js-product-item"
                     data-id="32290"
@@ -425,7 +317,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="u-col swiper-slide" role="group" aria-label="3 / 10">
+                <div class="u-col swiper-slide">
                   <div
                     class="c-product js-product-item"
                     data-id="32265"
@@ -477,7 +369,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="u-col swiper-slide" role="group" aria-label="4 / 10">
+                <div class="u-col swiper-slide">
                   <div
                     class="c-product js-product-item"
                     data-id="31746"
@@ -529,11 +421,7 @@
                     </div>
                   </div>
                 </div>
-                <div
-                  class="u-col swiper-slide swiper-slide-prev"
-                  role="group"
-                  aria-label="5 / 10"
-                >
+                <div class="u-col swiper-slide">
                   <div
                     class="c-product js-product-item"
                     data-id="31629"
@@ -585,11 +473,7 @@
                     </div>
                   </div>
                 </div>
-                <div
-                  class="u-col swiper-slide swiper-slide-active"
-                  role="group"
-                  aria-label="6 / 10"
-                >
+                <div class="u-col swiper-slide">
                   <div
                     class="c-product js-product-item"
                     data-id="31609"
@@ -641,11 +525,7 @@
                     </div>
                   </div>
                 </div>
-                <div
-                  class="u-col swiper-slide swiper-slide-next"
-                  role="group"
-                  aria-label="7 / 10"
-                >
+                <div class="u-col swiper-slide">
                   <div
                     class="c-product js-product-item"
                     data-id="31598"
@@ -697,7 +577,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="u-col swiper-slide" role="group" aria-label="8 / 10">
+                <div class="u-col swiper-slide">
                   <div
                     class="c-product js-product-item"
                     data-id="30544"
@@ -742,7 +622,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="u-col swiper-slide" role="group" aria-label="9 / 10">
+                <div class="u-col swiper-slide">
                   <div
                     class="c-product js-product-item"
                     data-id="30518"
@@ -787,7 +667,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="u-col swiper-slide" role="group" aria-label="10 / 10">
+                <div class="u-col swiper-slide">
                   <div
                     class="c-product js-product-item"
                     data-id="30501"
@@ -833,11 +713,6 @@
                   </div>
                 </div>
               </div>
-              <span
-                class="swiper-notification"
-                aria-live="assertive"
-                aria-atomic="true"
-              ></span>
             </div>
           </div>
         </section>
@@ -906,7 +781,15 @@
   </div>
 </template>
 
+<style>
+  @import 'vue-select/dist/vue-select.css';
+  @import 'swiper/css/bundle';
+
+</style>
+
 <script>
+import Swiper from 'swiper/bundle';
+import vSelect from 'vue-select';
 import LHeader from '@/templates/layout/L-Header.vue'
 import LFooter from '@/templates/layout/L-Footer.vue'
 import LSubscribe from '@/templates/layout/L-Subscribe.vue'
@@ -922,12 +805,14 @@ export default {
     LFooter,
     LSubscribe,
     CBreadcrumb,
-    CModal
+    CModal,
+    vSelect
   },
 
   data() {
     return {
-      product: []
+      product: [],
+      selectedSize: ''
     }
   },
 
@@ -936,6 +821,9 @@ export default {
   computed: {
     hasProductImages() {
       return this.product?.images?.length
+    }, 
+    getProductCategory() {
+      return this.product?.cats?.join(', ');
     }
   },
 
@@ -943,7 +831,13 @@ export default {
     if(this.$route.params.productData) {
       this.product = this.$route.params.productData
     } else {
-      this.fetchSingleProduct(this.$route.params.productName).then(result => this.product = result);
+      this.fetchSingleProduct(this.$route.params.productName).then(result => {
+        this.product = result
+        this.selectedSize = this.product?.size_attribute[0]?.name;
+        console.log(result);
+
+        this.swiperFn();
+      });
     }
   },
 
@@ -955,6 +849,49 @@ export default {
     ...mapMutations({
       setProductToCart: 'cart/setProductToCart'
     }),
+
+    swiperFn() {
+      const productSlider = this.$el.querySelectorAll('.js-product-row');
+      console.log(productSlider);
+      if (productSlider.length) {
+        productSlider.forEach(slider => {
+          console.log(slider);
+          let sliderContainer = slider.closest('.js-slider-container');
+          let sliderArrows = sliderContainer.querySelector('.c-arrow');
+          let navArrows = false;
+          let countArrows = false;
+          if (sliderArrows) {
+            let next = sliderArrows.querySelector('.js-next');
+            let prev = sliderArrows.querySelector('.js-prev');
+            let countEl = sliderArrows.querySelector('.c-arrow__count');
+            navArrows = {
+              nextEl: next,
+              prevEl: prev
+            }
+            countArrows = {
+              el: countEl,
+              type: "fraction",
+            }
+          }
+
+          new Swiper(slider, {
+            slidesPerView: 'auto',
+            watchOverflow: true,
+            autoplay: {
+              delay: 2500,
+              stopOnLastSlide: false,
+              disableOnInteraction: true,
+            },
+            navigation: navArrows,
+            pagination: countArrows,
+          })
+        })
+      }
+    },
+
+    handleSelectChange(value) {
+      console.log(value);
+    }
   }
 }
 </script>

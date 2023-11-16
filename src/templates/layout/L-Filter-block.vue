@@ -55,19 +55,20 @@ export default {
 
   computed: {
     categorySlugFromRoute() { return this.$route.params.subcategorySlug || this.$route.params.categorySlug },
-    brandSelect() { return this.$route.query.brand || 'Бренд'},
-    sizeSelect() { return this.$route.query.size || 'Размер' },
-    orderbySelect() {return this.$route.query.orderby || 'По новизне'}
-  },
-
-  mounted() {
-    console.log(this.$route);
+    brandSelect() { return this.getFilterByKey('brand', this.$route.query.brand)},
+    sizeSelect() { return this.getFilterByKey('size', this.$route.query.size)},
+    orderbySelect() {return this.getFilterByKey('orderby', this.$route.query.orderby)}
   },
 
   methods: {
     ...mapActions({
       fetchProducts: 'catalog/fetchProducts'
     }),
+
+    getFilterByKey(filterKey, searchParam) {
+      // console.log(ProductFiltersData[filterKey][ProductFiltersData[filterKey].length - 1]);
+      return ProductFiltersData[filterKey].find(filter => filter.key === searchParam) || ProductFiltersData[filterKey][ProductFiltersData[filterKey].length - 1] 
+    },
 
     removeQueryParams(param) {
       const query = { ...this.$route.query };

@@ -24,12 +24,6 @@
                       <C-Product :product="product" />
                     </div>
                   </div>
-                  <!-- <C-LoadMore
-                    :products-length="16" 
-                    :current-page="currentPage"
-                    :category-slug="categorySlugFromRoute"
-                    :count-products="countProducts"
-                  /> -->
                 </div>
                 <C-Pagination 
                   :category-slug-from-route="categorySlugFromRoute" 
@@ -56,7 +50,6 @@ import LFilterBlock from '@/templates/layout/L-Filter-block.vue'
 import CModal from '@/templates/components/C-Modal.vue'
 import CProduct from '@/templates/components/C-Product.vue'
 import CPagination from '@/templates/components/C-Pagination.vue'
-// import CLoadMore from '@/templates/components/C-LoadMore.vue'
 import CBreadcrumb from '@/templates/components/C-Breadcrumbs.vue'
 
 // import Api from '@/api/Axios'
@@ -122,10 +115,6 @@ export default {
     ...mapActions({
       fetchProducts: 'catalog/fetchProducts'
     }),
-
-    // ...mapMutations({
-    //   changeResultProducts: 'catalog/changeResultProducts'
-    // }),
   }
 }
 </script>

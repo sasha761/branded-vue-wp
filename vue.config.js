@@ -8,5 +8,5 @@ module.exports = defineConfig({
         target: process.env.VUE_APP_WP_SITE_URL,
       }
     }
-  }
+  },
 })
