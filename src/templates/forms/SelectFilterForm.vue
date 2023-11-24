@@ -2,6 +2,7 @@
   <select-filter 
     @select-filter="handleSelectChange" 
     :options="options" 
+    :show-all="showAll"
     :filter-param="filterParam" 
     :current-option="currentOption"
   />
@@ -27,6 +28,9 @@ export default {
     options: {
       type: Array,
       required: true,
+    },
+    showAll: {
+      type: Object,
     },
     filterParam: {
       type: String,

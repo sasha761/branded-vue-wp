@@ -24,6 +24,20 @@ const actions = {
       console.log(error);
     });
   },
+
+  fetchRelatedProducts({commit}, id) {
+    return Api.post('product/get_single_product', {
+      id: id
+    })
+    .then((result) => {
+      commit('setSingleProduct', result.data)
+      // console.log(result)
+      return result.data;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }
 };
 
 const getters = {

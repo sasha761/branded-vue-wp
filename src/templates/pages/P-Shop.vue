@@ -13,7 +13,9 @@
             <div class="p-shop__catalog">
               <section class="l-shop" data-categories="Женщинам" data-cat-id="17">
                 <h1 class="u-h2">Женщинам</h1>
-                <L-Filter-Block />
+                <L-Filter-Block 
+                  
+                />
                 <div v-if="products" class="l-shop__product">
                   <div class="row js-load-more">
                     <div
@@ -67,19 +69,10 @@ export default {
     CModal,
     CProduct,
     CPagination,
-    // CLoadMore,
     CBreadcrumb
   },
 
-  data() {
-    return {
-      countProducts: 0,
-    }
-  },
-
   mounted() {
-    // console.log(this.currentPage);
-
     this.fetchProducts({
       url: this.$route.fullPath, 
       page: this.currentPage,
@@ -87,7 +80,6 @@ export default {
       offset: null
     }).then(result => {
       console.log(result);
-      // this.countProducts = result?.products_count;
     })
   },
 
@@ -95,7 +87,6 @@ export default {
     ...mapGetters({
       products: 'catalog/products',
       productsCount: 'catalog/productsCount',
-      // resultProducts: 'catalog/resultProducts',
     }),
 
     offset() {

@@ -65,5 +65,9 @@ export default {
       text: 'Показать все',
       key: 'all'
     }
-  ]
+  ],
+  showAll: {
+    text: 'Показать все',
+    key: 'all'
+  }
 }

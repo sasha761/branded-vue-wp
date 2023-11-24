@@ -19,7 +19,6 @@ export default {
   data() {
     return {
       selected: '',
-      optionsAdapted: []
     }
   },
 
@@ -27,6 +26,9 @@ export default {
     options: {
       type: Array,
       required: true,
+    },
+    showAll: {
+      type: Object,
     },
     filterParam: {
       type: String,
@@ -41,8 +43,10 @@ export default {
     this.selected = this.currentOption.text;
   },
 
-  mounted() {
-    this.optionsAdapted = this.options.filter(x => x.key !== this.currentOption.key);
+  computed: {
+    optionsAdapted() {
+      return this.options.filter(x => x.key !== this.currentOption.key);
+    } 
   },
 
   methods: {

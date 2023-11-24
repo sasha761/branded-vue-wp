@@ -6,6 +6,7 @@
           @select-filter="sortHendler" 
           ref="select" 
           :options="filterBrand" 
+          :show-all="showAll"
           filter-param="brand" 
           :current-option="brandSelect" 
         />
@@ -14,6 +15,7 @@
         <Select-filter-form 
           @select-filter="sortHendler" 
           :options="filterSize" 
+          :show-all="showAll"
           filter-param="size" 
           :current-option="sizeSelect" 
         />
@@ -21,7 +23,7 @@
     </div>
     <div class="l-shop__result">
       <div class="l-shop__result-count">
-        <p class="woocommerce-result-count">Отображение 1–16 из 750</p>
+        <p class="woocommerce-result-count">Отображение {{productCurrentCount}} из {{productsLength}}</p>
       </div>
       <Select-filter-form 
         @select-filter="sortHendler" 
@@ -36,7 +38,7 @@
 <script>
 import SelectFilterForm from '@/templates/forms/SelectFilterForm.vue'
 import ProductFiltersData from '@/config/productFilterNew'
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
   data() {
@@ -45,7 +47,8 @@ export default {
       filterOrderby: ProductFiltersData.orderby,
       filterBrand: ProductFiltersData.brand,
       filterSize: ProductFiltersData.size, 
-      filterTypes: ProductFiltersData.types, 
+      filterTypes: ProductFiltersData.types,
+      showAll: ProductFiltersData.showAll
     }
   },
 
@@ -54,10 +57,34 @@ export default {
   },
 
   computed: {
+    ...mapGetters({
+      products: 'catalog/products',
+      productsLength: 'catalog/productsCount',
+    }),
+
     categorySlugFromRoute() { return this.$route.params.subcategorySlug || this.$route.params.categorySlug },
     brandSelect() { return this.getFilterByKey('brand', this.$route.query.brand)},
     sizeSelect() { return this.getFilterByKey('size', this.$route.query.size)},
-    orderbySelect() {return this.getFilterByKey('orderby', this.$route.query.orderby)}
+    orderbySelect() {return this.getFilterByKey('orderby', this.$route.query.orderby)},
+    currentPage() {
+      const queryPage = this.$route?.query?.page;
+      const currentPageNumber = Number(queryPage) || 1;
+
+      return currentPageNumber;
+    },
+    productsExample() {
+      return this.products.length;
+    },
+
+    // 16 - количество товаров на странице
+    // x - текущее количество товаров которое пришло (10)
+    // y - текущая страница  (3)
+    // 16 * y - x = 33 
+    // 16 * 3 - (16 - 1) = 48 
+
+    productCurrentCount() {
+      return `${16 * this.currentPage - (16 - 1)}-${16 * this.currentPage - (16 - this.products.length)}`;
+    }
   },
 
   methods: {
@@ -66,7 +93,6 @@ export default {
     }),
 
     getFilterByKey(filterKey, searchParam) {
-      // console.log(ProductFiltersData[filterKey][ProductFiltersData[filterKey].length - 1]);
       return ProductFiltersData[filterKey].find(filter => filter.key === searchParam) || ProductFiltersData[filterKey][ProductFiltersData[filterKey].length - 1] 
     },
 
@@ -91,7 +117,6 @@ export default {
       }).then(result => {
         console.log(result);
       })
-      
     },
   },
 }
