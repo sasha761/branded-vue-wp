@@ -43,19 +43,9 @@ export default {
     },
   },
 
-  // computed: {
-    // currentOption() {
-    //   return this.filterParam
-    //   // return this.$route.query[this.filterParam];
-    // }
-  // },
-
-  // mounted() {
-  //   console.log(this.currentOption);
-  // },
-
   methods: {
     addQueryParams(selectedOption) {
+      console.log(selectedOption);
       const query = { ...this.$route.query };
       query[this.filterParam] = selectedOption.key;
       this.$router.push({ path: '', query });
@@ -67,8 +57,9 @@ export default {
     },
 
     handleSelectChange(selectedOption) {
-      if(selectedOption.key !== 'all') {
-         this.addQueryParams(selectedOption);
+      
+      if(selectedOption.key !== this.showAll.key) {
+        this.addQueryParams(selectedOption);
       } else {
         this.removeQueryParams(selectedOption);
       }

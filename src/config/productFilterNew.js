@@ -34,10 +34,6 @@ export default {
     {
       text: 'wearme',
       key: 'WearMe'
-    },
-    {
-      text: 'Показать все',
-      key: 'all'
     }
   ],
   size: [
@@ -60,10 +56,6 @@ export default {
     {
       text: 'XL',
       key: 'xl'
-    },
-    {
-      text: 'Показать все',
-      key: 'all'
     }
   ],
   showAll: {

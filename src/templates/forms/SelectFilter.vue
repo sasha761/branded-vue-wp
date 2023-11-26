@@ -39,24 +39,35 @@ export default {
     },
   },
 
-  beforeMount() {
+  created() {
     this.selected = this.currentOption.text;
   },
 
   computed: {
     optionsAdapted() {
-      return this.options.filter(x => x.key !== this.currentOption.key);
+      const modifiedOptions = [...this.options];
+      if (this.showAll) {
+        modifiedOptions.push(this.showAll);
+      }
+      return modifiedOptions.filter(x => x.key !== this.currentOption.key);
     } 
   },
 
   methods: {
     handleSelectChange(value) {
+      let key;
+      let text;
+
       if (value !== null) {
-        this.$emit('select-filter', {type: this.filterParam, key: value.key, text: value.text})
+        key = value.key;
+        text = value.text;
       } else {
-        this.selected = 'Показать все';
-        this.$emit('select-filter', {type: this.filterParam, key: 'all', text: 'Показать все'})
-      }      
+        this.selected = this.showAll?.text || this.optionsAdapted[0].text;
+        key = this.showAll?.key || this.optionsAdapted[0].key;
+        text = this.showAll?.text || this.optionsAdapted[0].text;
+      }    
+      
+      this.$emit('select-filter', {type: this.filterParam, key: key, text: text})
     },
   },
 }

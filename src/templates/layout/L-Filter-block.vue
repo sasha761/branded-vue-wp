@@ -23,7 +23,7 @@
     </div>
     <div class="l-shop__result">
       <div class="l-shop__result-count">
-        <p class="woocommerce-result-count">Отображение {{productCurrentCount}} из {{productsLength}}</p>
+        <p class="woocommerce-result-count" v-if="products.length">Отображение {{productCurrentCount}} из {{productsLength}}</p>
       </div>
       <Select-filter-form 
         @select-filter="sortHendler" 
@@ -65,7 +65,7 @@ export default {
     categorySlugFromRoute() { return this.$route.params.subcategorySlug || this.$route.params.categorySlug },
     brandSelect() { return this.getFilterByKey('brand', this.$route.query.brand)},
     sizeSelect() { return this.getFilterByKey('size', this.$route.query.size)},
-    orderbySelect() {return this.getFilterByKey('orderby', this.$route.query.orderby)},
+    orderbySelect() { return this.getFilterByKey('orderby', this.$route.query.orderby)},
     currentPage() {
       const queryPage = this.$route?.query?.page;
       const currentPageNumber = Number(queryPage) || 1;
@@ -76,14 +76,17 @@ export default {
       return this.products.length;
     },
 
-    // 16 - количество товаров на странице
-    // x - текущее количество товаров которое пришло (10)
-    // y - текущая страница  (3)
-    // 16 * y - x = 33 
-    // 16 * 3 - (16 - 1) = 48 
-
     productCurrentCount() {
-      return `${16 * this.currentPage - (16 - 1)}-${16 * this.currentPage - (16 - this.products.length)}`;
+      let maxProductsItems = this.products.length ? 16 : 0;
+      let sliceFirstIndex = this.products.length ? 1 : 0;
+
+      // 16 - количество товаров на странице
+      // x - текущее количество товаров которое пришло (10)
+      // y - текущая страница  (3)
+      // 16 * y - x = 33 
+      // 16 * 3 - (16 - 1) = 48 
+
+      return `${maxProductsItems * this.currentPage - (maxProductsItems - sliceFirstIndex)}-${maxProductsItems * this.currentPage - (maxProductsItems - this.products.length)}`;
     }
   },
 
@@ -93,7 +96,8 @@ export default {
     }),
 
     getFilterByKey(filterKey, searchParam) {
-      return ProductFiltersData[filterKey].find(filter => filter.key === searchParam) || ProductFiltersData[filterKey][ProductFiltersData[filterKey].length - 1] 
+      // console.log('getFilterByKey: ', ProductFiltersData[filterKey].find(filter => filter.key === searchParam), this.showAll, ProductFiltersData[filterKey][ProductFiltersData[filterKey][0]] )
+      return ProductFiltersData[filterKey].find(filter => filter.key === searchParam) || this.showAll || ProductFiltersData[filterKey][ProductFiltersData[filterKey][0]]
     },
 
     removeQueryParams(param) {
