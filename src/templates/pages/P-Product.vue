@@ -47,6 +47,7 @@
                       :options="product.size_attribute"
                       label="name">
                     </v-select>
+                    
                     <div class="c-product-form__btn">
                       <button
                         @click="setProductToCart(product)"
@@ -70,15 +71,7 @@
                     <div v-html="product.short_description"></div>
                   </div>
                   <div class="l-product__info ">
-                    <div v-for="(item, index) in accordionItems" :key="index" class="l-product__info-block ">
-                      <div @click="toggleAccordion(index)" class="l-product__info-title ">
-                        <span>{{ item.title }}</span>
-                        <svg width="11px" height="7px" class="u-arrow">
-                          <use xlink:href="#arrow"></use>
-                        </svg>
-                      </div>
-                      <div class="l-product__info-text" :class="{ 'is-open': isAccordionOpen[index] }" v-html="item.content"></div>
-                    </div>
+                    <C-Accordion />
                   </div>
                 </div>
               </div>
@@ -122,6 +115,7 @@ import LComments from '@/templates/layout/L-Comments.vue'
 
 import CModal from '@/templates/components/C-Modal.vue'
 import CBreadcrumb from '@/templates/components/C-Breadcrumbs.vue'
+import CAccordion from '@/templates/components/C-Accordion.vue'
 
 import { mapActions, mapMutations } from 'vuex';
 
@@ -134,6 +128,7 @@ export default {
     LComments,
     CBreadcrumb,
     CModal,
+    CAccordion,
     vSelect
   },
 
@@ -141,21 +136,6 @@ export default {
     return {
       product: [],
       selectedSize: '',
-      isAccordionOpen: [], // Состояние аккордеона для каждого элемента
-      accordionItems: [
-        {
-          title: 'Спецификация',
-          content: '<p><b>Бренд:</b> Staff</p><p><b>Категория:</b> Женщинам, Футболки и поло</p><p><b>Артикул:</b> KKK0936</p><p><b>Наличие:</b> В наличии</p><p><b>Доставка:</b> Отправка завтра</p>',
-        },
-        {
-          title: 'Доставка и возврат',
-          content: '<p>Ваш контент для раздела "Доставка и возврат"</p>',
-        },
-        {
-          title: 'Метод оплаты',
-          content: '<p>Ваш контент для раздела "Метод оплаты"</p>',
-        },
-      ],
     }
   },
 
@@ -167,12 +147,12 @@ export default {
       return this.product?.cats?.join(', ');
     },
 
-    deliverAndReturn() {
-      return this.product?.product_info?.delivery_and_return;
-    },
-    payment_method() {
-      return this.product?.product_info?.payment_method;
-    }
+    // deliverAndReturn() {
+    //   return this.product?.product_info?.delivery_and_return;
+    // },
+    // payment_method() {
+    //   return this.product?.product_info?.payment_method;
+    // }
   },
 
   mounted() {
@@ -196,14 +176,6 @@ export default {
     ...mapMutations({
       setProductToCart: 'cart/setProductToCart'
     }),
-
-    // accordion(item) {
-    //   console.log(item);
-    //   this.$set(this.isAccordionOpen, index, !this.isAccordionOpen[index]);
-    // },
-    toggleAccordion(index) {
-      this.$set(this.isAccordionOpen, index, !this.isAccordionOpen[index]);
-    },
 
     handleSelectChange(value) {
       console.log(value);
