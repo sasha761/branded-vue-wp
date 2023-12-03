@@ -20,7 +20,7 @@
                     :href="product.post_img_xl"
                     class="js-lightbox"
                   >
-                    <img :src="product.post_img_xl" alt="">
+                    <img :src="product.post_img_xl" alt="" height="1440" width="1000">
                   </a>
                 </div>
               </div>
@@ -63,12 +63,12 @@
                       </button>
                     </div>
                   </form>
-                  <div class="l-product__text">
+                  <div  class="l-product__text">
                     <h4 class="l-product__text-title">Описание:</h4>
                     <div v-if="product.sku">
                       <span>Артикул: </span> <span>{{product.sku}}</span>
                     </div>
-                    <div v-html="product.short_description"></div>
+                    <div v-html="product.description"></div>
                   </div>
                   <div class="l-product__info ">
                     <C-Accordion />
@@ -86,13 +86,13 @@
                   :href="imageItem"
                   class="js-lightbox"
                 >
-                  <img :src="imageItem" alt="">
+                  <img :src="imageItem" alt="" height="1440" width="1000">
                 </a>
               </div>
             </div>
           </section>
         </div>
-        <L-Related />
+        <L-Related ref="relatedProductsSection" :products="relatedProducts"/>
         <L-Comments />
         <L-Subscribe />
       </main>
@@ -106,6 +106,8 @@
 </style>
 
 <script>
+import Api from '@/api/Axios'
+
 import vSelect from 'vue-select';
 import LHeader from '@/templates/layout/L-Header.vue'
 import LFooter from '@/templates/layout/L-Footer.vue'
@@ -117,7 +119,7 @@ import CModal from '@/templates/components/C-Modal.vue'
 import CBreadcrumb from '@/templates/components/C-Breadcrumbs.vue'
 import CAccordion from '@/templates/components/C-Accordion.vue'
 
-import { mapActions, mapMutations } from 'vuex';
+import { mapMutations } from 'vuex';
 
 export default {
   components: {
@@ -136,6 +138,8 @@ export default {
     return {
       product: [],
       selectedSize: '',
+      relatedProducts: [],
+      relatedProductsChecker: false
     }
   },
 
@@ -160,26 +164,63 @@ export default {
       this.product = this.$route.params.productData
       this.selectedSize = this.product?.size_attribute[0]?.name;
     } else {
-      this.fetchSingleProduct(this.$route.params.productName).then(result => {
-        this.product = result
-        console.log(result);
-        this.selectedSize = this.product?.size_attribute[0]?.name;
+      Api.post('product/get_single_product', {
+        url: this.$route.params.productName
+      })
+      .then((result) => {
+        console.log(result)
+        this.product = result.data
+        this.selectedSize = result.data?.size_attribute[0]?.name;
+      })
+      .catch((error) => {
+        console.log(error);
       });
     }
+
+    window.addEventListener('scroll', this.handleScroll);
+    window.addEventListener('resize', this.handleResize);
+    // this.checkVisibility();
   },
 
   methods: {
-    ...mapActions({
-      fetchSingleProduct: 'product/fetchSingleProduct'
-    }),
-
     ...mapMutations({
       setProductToCart: 'cart/setProductToCart'
     }),
 
+    handleScroll() {
+      this.checkVisibility();
+    },
+    handleResize() {
+      this.checkVisibility();
+    },
+
+    checkVisibility() {
+      const section = this.$refs.relatedProductsSection.$el;
+      const rect = section.getBoundingClientRect();
+      const isVisible = rect.top < window.innerHeight && rect.bottom >= 0;
+      
+      if (isVisible && this.relatedProductsChecker === false) {
+        this.relatedProductsChecker = true;
+
+        Api.post('product/get_related_products', {
+          id: this.product.id
+        })
+        .then((result) => {
+          this.relatedProducts = result.data.related_products
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      }
+    },
+
     handleSelectChange(value) {
       console.log(value);
     }
+  },
+  beforeDestroy() {
+    window.removeEventListener('scroll', this.handleScroll);
+    window.removeEventListener('resize', this.handleResize);
   }
 }
 </script>

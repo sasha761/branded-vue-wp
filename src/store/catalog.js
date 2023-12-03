@@ -28,7 +28,6 @@ const actions = {
       if(result?.data?.status !== 'nomore') {
         commit('setProductsCount', result.data.products_count);
         commit('setProductsList', result.data.products);
-        // commit('changeResultProducts', result.data.products)
       }
       return result.data;
     })

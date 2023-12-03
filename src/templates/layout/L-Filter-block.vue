@@ -80,12 +80,6 @@ export default {
       let maxProductsItems = this.products.length ? 16 : 0;
       let sliceFirstIndex = this.products.length ? 1 : 0;
 
-      // 16 - количество товаров на странице
-      // x - текущее количество товаров которое пришло (10)
-      // y - текущая страница  (3)
-      // 16 * y - x = 33 
-      // 16 * 3 - (16 - 1) = 48 
-
       return `${maxProductsItems * this.currentPage - (maxProductsItems - sliceFirstIndex)}-${maxProductsItems * this.currentPage - (maxProductsItems - this.products.length)}`;
     }
   },
@@ -96,7 +90,6 @@ export default {
     }),
 
     getFilterByKey(filterKey, searchParam) {
-      // console.log('getFilterByKey: ', ProductFiltersData[filterKey].find(filter => filter.key === searchParam), this.showAll, ProductFiltersData[filterKey][ProductFiltersData[filterKey][0]] )
       return ProductFiltersData[filterKey].find(filter => filter.key === searchParam) || this.showAll || ProductFiltersData[filterKey][ProductFiltersData[filterKey][0]]
     },
 
@@ -118,8 +111,6 @@ export default {
         page: 1,
         slug: this.categorySlugFromRoute,
         offset: null
-      }).then(result => {
-        console.log(result);
       })
     },
   },

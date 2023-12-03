@@ -1,6 +1,10 @@
 <template>
   <div class="c-accordion">
-    <div v-for="(item, index) in accordionItems" :key="index" class="c-accordion__block ">
+    <div 
+      v-for="(item, index) in accordionItems" 
+      :key="index" 
+      class="c-accordion__block"
+    >
       <div @click="toggleAccordion(index)" class="c-accordion__block-title ">
         <span>{{ item.title }}</span>
         <svg width="11px" height="7px" class="u-arrow">

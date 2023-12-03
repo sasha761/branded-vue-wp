@@ -17,12 +17,6 @@ export default {
   components: {
     selectFilter,
   },
-
-  data() {
-    return {
-
-    }
-  },
   
   props: {
     options: {
@@ -45,7 +39,6 @@ export default {
 
   methods: {
     addQueryParams(selectedOption) {
-      console.log(selectedOption);
       const query = { ...this.$route.query };
       query[this.filterParam] = selectedOption.key;
       this.$router.push({ path: '', query });

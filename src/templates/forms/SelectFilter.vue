@@ -8,6 +8,10 @@
   </div>
 </template>
 
+<style>
+  @import "vue-select/dist/vue-select.css";
+</style>
+
 <script>
 import vSelect from "vue-select";
 
@@ -72,6 +76,3 @@ export default {
   },
 }
 </script>
-<style>
-  @import "vue-select/dist/vue-select.css";
-</style>
