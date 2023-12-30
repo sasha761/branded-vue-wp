@@ -3,6 +3,7 @@
     <div 
       v-for="(item, index) in accordionItems" 
       :key="index" 
+      ref="accordionItem"
       class="c-accordion__block"
     >
       <div @click="toggleAccordion(index)" class="c-accordion__block-title ">
@@ -11,7 +12,10 @@
           <use xlink:href="#arrow"></use>
         </svg>
       </div>
-      <div class="c-accordion__block-text" :class="{ 'is-open': isAccordionOpen[index] }" v-html="item.content"></div>
+      <div 
+        class="c-accordion__block-text" 
+        :class="{'is-open': accordionItems[index].active }" 
+        v-html="item.content"></div>
     </div>
   </div>
 </template>
@@ -21,27 +25,54 @@
 export default {
   data() {
     return {
-      isAccordionOpen: [], // Состояние аккордеона для каждого элемента
-      accordionItems: [
-        {
-          title: 'Спецификация',
-          content: '<p><b>Бренд:</b> Staff</p><p><b>Категория:</b> Женщинам, Футболки и поло</p><p><b>Артикул:</b> KKK0936</p><p><b>Наличие:</b> В наличии</p><p><b>Доставка:</b> Отправка завтра</p>',
-        },
-        {
-          title: 'Доставка и возврат',
-          content: '<p>Ваш контент для раздела "Доставка и возврат"</p>',
-        },
-        {
-          title: 'Метод оплаты',
-          content: '<p>Ваш контент для раздела "Метод оплаты"</p>',
-        },
-      ],
+      accordionItems: [],
     }
   },
 
+  props: {
+    accordionInfo: {
+      type: Object,
+    }
+  },
+
+  mounted() {
+    // this.accordionItems = this.accordionInfo.map(item => {
+    //   return { ...item, active: false };
+    // });
+
+    // this.accordionItems = Object.entries(this.accordionInfo).map((index, item) => {
+    //   return { 
+        
+    //     active: false 
+    //   };
+    // });
+    for (const [key, value] of Object.entries(this.accordionInfo)) {
+      const newObj = { 
+        'title': key,
+        'content': value,
+        'active': false
+      };
+
+      this.accordionItems.push(newObj);
+    }
+
+    // Перебор массива ключей
+    // Object.entries(this.accordionInfo).forEach((index, entry) => {
+    //   // Добавление нового свойства в каждый объект
+    //   this.accordionItems[index]
+    //   this.accordionItems[index].active = false;
+    //   console.log(index, entry);
+    // });
+
+    console.log(this.accordionItems);
+  },
+
+  
+
   methods: {
     toggleAccordion(index) {
-      this.$set(this.isAccordionOpen, index, !this.isAccordionOpen[index]);
+      this.accordionItems[index].active = !this.accordionItems[index].active;
+      console.log(index, this.accordionItems[index]);
     },
   }
 }

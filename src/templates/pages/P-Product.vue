@@ -71,7 +71,7 @@
                     <div v-html="product.description"></div>
                   </div>
                   <div class="l-product__info ">
-                    <C-Accordion />
+                    <C-Accordion :accordion-info="product.product_info" v-if="product.product_info"/>
                   </div>
                 </div>
               </div>
@@ -100,10 +100,6 @@
     </div>
   </div>
 </template>
-
-<style>
-  @import 'vue-select/dist/vue-select.css';
-</style>
 
 <script>
 import Api from '@/api/Axios'
@@ -150,13 +146,6 @@ export default {
     getProductCategory() {
       return this.product?.cats?.join(', ');
     },
-
-    // deliverAndReturn() {
-    //   return this.product?.product_info?.delivery_and_return;
-    // },
-    // payment_method() {
-    //   return this.product?.product_info?.payment_method;
-    // }
   },
 
   mounted() {
@@ -171,6 +160,7 @@ export default {
         console.log(result)
         this.product = result.data
         this.selectedSize = result.data?.size_attribute[0]?.name;
+
       })
       .catch((error) => {
         console.log(error);
