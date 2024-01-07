@@ -27,19 +27,19 @@
 		}
 
 		&-text {
-      // padding: 10px 0;
+      padding: 10px 0;
 			display: none;
 			font-size: 13px;
 	    line-height: 20px;
 
-			max-height: 0;
-    	overflow: hidden;
-    	transition: max-height 0.3s ease-out;
+			// max-height: 0;
+    	// overflow: hidden;
+    	// transition: max-height 0.3s ease-out;
 
-			&.is-open {
-        display: block;
-				max-height: 500px;
-			}
+			// &.is-open {
+      //   display: block;
+			// 	max-height: 500px;
+			// }
 
 	    b {
 	    	font-weight: 600;

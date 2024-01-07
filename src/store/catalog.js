@@ -17,7 +17,6 @@ const mutations = {
 };
 const actions = {
   fetchProducts({commit}, {url, page, offset, slug}) {
-    console.log(url, page, offset, slug);
     return Api.post('archive/get_products', {
       url: url,
       page: page,

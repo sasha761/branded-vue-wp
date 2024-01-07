@@ -3,8 +3,8 @@
     <div 
       v-for="(item, index) in accordionItems" 
       :key="index" 
-      ref="accordionItem"
       class="c-accordion__block"
+      :class="{'is-active': accordionItems[index].active }" 
     >
       <div @click="toggleAccordion(index)" class="c-accordion__block-title ">
         <span>{{ item.title }}</span>
@@ -14,13 +14,15 @@
       </div>
       <div 
         class="c-accordion__block-text" 
-        :class="{'is-open': accordionItems[index].active }" 
+        ref="accordionItemText"
         v-html="item.content"></div>
     </div>
   </div>
 </template>
 
 <script>
+
+import {slideUp, slideDown} from '../../assets/js/slideToggle.js';
 
 export default {
   data() {
@@ -36,16 +38,6 @@ export default {
   },
 
   mounted() {
-    // this.accordionItems = this.accordionInfo.map(item => {
-    //   return { ...item, active: false };
-    // });
-
-    // this.accordionItems = Object.entries(this.accordionInfo).map((index, item) => {
-    //   return { 
-        
-    //     active: false 
-    //   };
-    // });
     for (const [key, value] of Object.entries(this.accordionInfo)) {
       const newObj = { 
         'title': key,
@@ -55,24 +47,31 @@ export default {
 
       this.accordionItems.push(newObj);
     }
-
-    // Перебор массива ключей
-    // Object.entries(this.accordionInfo).forEach((index, entry) => {
-    //   // Добавление нового свойства в каждый объект
-    //   this.accordionItems[index]
-    //   this.accordionItems[index].active = false;
-    //   console.log(index, entry);
-    // });
-
-    console.log(this.accordionItems);
   },
-
-  
 
   methods: {
     toggleAccordion(index) {
-      this.accordionItems[index].active = !this.accordionItems[index].active;
-      console.log(index, this.accordionItems[index]);
+      if (this.accordionItems[index].active === true) {
+          this.accordionItems[index].active = false;
+          slideUp(this.$refs.accordionItemText[index]);
+      } else {
+        this.close();
+        this.open(this.accordionItems[index], index);
+      }
+    },
+
+    close() {
+      this.accordionItems.forEach((block, index) => {
+        if (block.active === true) {
+          block.active = false;
+          slideUp(this.$refs.accordionItemText[index]);  
+        }
+      });
+    },
+
+    open(block, index) {
+      block.active = true;
+      slideDown(this.$refs.accordionItemText[index]);
     },
   }
 }

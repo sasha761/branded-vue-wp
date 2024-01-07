@@ -28,17 +28,13 @@
                 <div class="l-product__content">
                   <a
                     href="https://branded.com.ua/brand/staff/"
-                    class="l-product__category"
-                    >{{product.post_attr_brand}}</a
-                  >
+                    class="l-product__category">
+                    {{product.post_attr_brand}}
+                  </a>
                   <h1 class="l-product__name">{{product.name}}</h1>
-
                   <p class="c-price" v-html="product.price_html"></p>
 
-                  <form
-                    class="js-product-form cart c-product-form variations_form wvs-loaded"
-                    :data-product_id="product.id"
-                  >
+                  <form class="c-product-form" :data-product_id="product.id">
                     <span class="c-product-form__size">Размер</span>
 
                     <v-select 
@@ -49,20 +45,24 @@
                     </v-select>
                     
                     <div class="c-product-form__btn">
-                      <button
-                        @click="setProductToCart(product)"
-                        type="button"
-                        class="u-btn is-medium is-black single_add_to_cart_button button disabled wc-variation-selection-needed"
-                        name="add-to-cart"
+                      <CButton 
+                        v-if="product.is_stock != 'outofstock'"
+                        class="u-btn is-medium is-black"
+                        @button-click="addProductToCart(product)"
                         :value="product.id"
                       >
-                        <span>В корзину</span>
-                      </button>
-                      <button type="button" class="u-btn is-medium is-black-border js-quick-add-to-card is-disabled">
-                        <span>Купить в 1 клик</span>
-                      </button>
+                        В корзину
+                      </CButton>
+
+                      <CButton 
+                        v-if="product.is_stock != 'outofstock'"
+                        class="u-btn is-medium is-black-border"
+                      >
+                        Купить в 1 клик
+                      </CButton>
                     </div>
                   </form>
+
                   <div  class="l-product__text">
                     <h4 class="l-product__text-title">Описание:</h4>
                     <div v-if="product.sku">
@@ -70,6 +70,7 @@
                     </div>
                     <div v-html="product.description"></div>
                   </div>
+
                   <div class="l-product__info ">
                     <C-Accordion :accordion-info="product.product_info" v-if="product.product_info"/>
                   </div>
@@ -114,6 +115,7 @@ import LComments from '@/templates/layout/L-Comments.vue'
 import CModal from '@/templates/components/C-Modal.vue'
 import CBreadcrumb from '@/templates/components/C-Breadcrumbs.vue'
 import CAccordion from '@/templates/components/C-Accordion.vue'
+import CButton from '@/templates/components/C-Button.vue'
 
 import { mapMutations } from 'vuex';
 
@@ -127,6 +129,7 @@ export default {
     CBreadcrumb,
     CModal,
     CAccordion,
+    CButton,
     vSelect
   },
 
@@ -135,7 +138,8 @@ export default {
       product: [],
       selectedSize: '',
       relatedProducts: [],
-      relatedProductsChecker: false
+      relatedProductsChecker: false,
+
     }
   },
 
@@ -169,7 +173,6 @@ export default {
 
     window.addEventListener('scroll', this.handleScroll);
     window.addEventListener('resize', this.handleResize);
-    // this.checkVisibility();
   },
 
   methods: {
@@ -190,6 +193,7 @@ export default {
       const isVisible = rect.top < window.innerHeight && rect.bottom >= 0;
       
       if (isVisible && this.relatedProductsChecker === false) {
+
         this.relatedProductsChecker = true;
 
         Api.post('product/get_related_products', {
@@ -206,6 +210,15 @@ export default {
 
     handleSelectChange(value) {
       console.log(value);
+    },
+
+    addProductToCart(product) {
+      let addedProduct = { ...product };
+      addedProduct.size_attribute = {};
+      addedProduct.size_attribute = this.selectedSize;
+      
+      console.log(addedProduct);
+      this.setProductToCart(addedProduct);
     }
   },
   beforeDestroy() {

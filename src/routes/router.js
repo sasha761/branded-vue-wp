@@ -11,6 +11,16 @@ const routes = [
     props: true, 
     name: 'product', 
     component: () => import('../templates/pages/P-Product.vue') 
+  },
+  { 
+    path: '/:cart', 
+    name: 'cart', 
+    component: () => import('../templates/pages/P-Cart.vue') 
+  },
+  { 
+    path: ':checkout', 
+    name: 'checkout', 
+    component: () => import('../templates/pages/P-Checkout.vue') 
   }
 ]
 

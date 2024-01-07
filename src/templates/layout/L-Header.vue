@@ -54,7 +54,6 @@
                 placeholder="Поиск"
                 name="s"
                 id="s"
-                v-on:input="handleSearch"
               />
             </form>
           </div>
@@ -71,42 +70,49 @@
                 <div v-if="getCartProducts">
                   <ul class="l-mini-cart__list">
                     <li 
-                      v-for="product in getCartProducts" 
-                      :key="product.id"
-                      class="l-mini-cart__item"
+                      v-for="(product, index) in getCartProducts" 
+                      :key="index"
                     >
-                      <div class="l-mini-cart__item-img">
-                        <a href="#">
-                          <img :src="product.post_img_md"> 
-                        </a>
-                      </div>
-                      <div class="l-mini-cart__item-info">
-                        <div v-if="product.post_attr_brand" class="is-brand">{{product.post_attr_brand}}</div>
-                        <span class="is-name">{{product.name}}</span>
-                        <!-- {% if product.quantity >= 2 %}
-                          <p class="is-quantity">{{ 'Quantity' | translateString('Cart - Quantity') }}: <b>{{product.quantity}}</b></p>
-                        {% endif %} -->
-                        <div class="l-mini-cart__item-attr">
-                          <!-- {% if product.attr.size %}
-                            <div class="is-size">
-                              <span>{{ 'Size' | translateString('Cart - Size') }}:</span>
-                              <span class="is-bold">{{product.attr.size}}</span>
-                            </div>
-                          {% endif %}	 -->
-                          <!-- {% if product.attr.color %}
-                            <div class="is-color">
-                              <span>{{ 'Color' | translateString('Cart - Color') }}:</span>
-                              <span class="is-bold">{{product.attr.color}}</span>
-                            </div>
-                          {% endif %} -->
+
+                      <div class="l-mini-cart__item" v-if="(index == 0) || product.size_attribute.id != getCartProducts[index-1].size_attribute.id">
+                      <!-- {{ ((index == 0) || product.size_attribute.id != getCartProducts[index-1].size_attribute.id) ? product.size_attribute.id : 'false' }}  -->
+
+                        <div class="l-mini-cart__item-img">
+                          <a href="#">
+                            <img :src="product.post_img_m"> 
+                          </a>
                         </div>
+                        <div class="l-mini-cart__item-info">
+                          <div v-if="product.post_attr_brand" class="is-brand">{{product.post_attr_brand}}</div>
+                          <span class="is-name">{{product.name}}</span>
+                          <!-- {% if product.quantity >= 2 %}
+                            <p class="is-quantity">{{ 'Quantity' | translateString('Cart - Quantity') }}: <b>{{product.quantity}}</b></p>
+                          {% endif %} -->
+                          <div class="l-mini-cart__item-attr">
+                            <div v-if="product.size_attribute" class="is-size">
+                              <span>Размер:</span>
+                              <span class="is-bold">{{product.size_attribute.name}}</span>
+                            </div>
+                            <!-- {% if product.attr.size %}
+                              <div class="is-size">
+                                <span>{{ 'Size' | translateString('Cart - Size') }}:</span>
+                                <span class="is-bold">{{product.attr.size}}</span>
+                              </div>
+                            {% endif %}	 -->
+                            <!-- {% if product.attr.color %}
+                              <div class="is-color">
+                                <span>{{ 'Color' | translateString('Cart - Color') }}:</span>
+                                <span class="is-bold">{{product.attr.color}}</span>
+                              </div>
+                            {% endif %} -->
+                          </div>
 
-                        <p class="c-price">
-                          {{ product.price }}
-                        </p>
+                          <p class="c-price">
+                            {{ product.price }}
+                          </p>
 
+                        </div>
                       </div>
-                      <!-- <a href="#" class="c-remove" :data-product_id="{{ product.delete_productid }}" data-product_sku="{{ product.delete_sku }}">x</a> -->
                     </li>
                   </ul>
                   <div class="l-mini-cart__total">
@@ -115,8 +121,8 @@
                   </div>
 
                   <div class="l-mini-cart__btn">
-                    <a href="" class="u-btn is-black" >Оформление заказа</a>
-                    <a href="" class="is-cart">В корзину</a>
+                    <router-link :to="{name: 'checkout', params: { checkout: getCheckoutUrl } }" class="u-btn is-black">Оформление заказа</router-link>
+                    <router-link :to="{name: 'cart', params: { cart: getCartUrl } }" class="is-cart">В корзину</router-link>
                   </div>
                 </div>
                 <div v-else>
@@ -171,7 +177,7 @@
 
 <script>
 
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
   data() {
@@ -180,25 +186,28 @@ export default {
     }
   },
 
-  // props: {
-  //   products: {
-  //     type: Array,
-  //   }
-  // },
+  mounted() {
+    this.fetchCartUrl();
+  },
+
   computed: {
     ...mapGetters({
       getCartProducts: 'cart/getCartProducts'
     }),
-  },
-  methods: {
-    handleSearch() {
-      // const searchResults = Object.values(this.products).filter(item =>
-      //   item.post_title.toLowerCase().includes(this.search.toLowerCase())
-      // );
 
-      // this.$emit('search-product', this.search)
-      
+    getCartUrl() {
+      return this.$store.getters['cart/getCartUrl'];
+    },
+
+    getCheckoutUrl() {
+      return this.$store.getters['cart/getCheckoutUrl'];
     }
+  },
+
+  methods: {
+    ...mapActions({
+      fetchCartUrl: 'cart/fetchCartUrl'
+    }),
   }
 }
 </script>
