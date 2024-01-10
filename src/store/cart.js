@@ -2,13 +2,24 @@ import Api from '@/api/Axios'
 
 const state = {
   products: [],
+  totalAmount: Number,
   cartUrl: '',
   checkoutUrl: ''
 };
 
 const mutations = {
   setProductToCart(state, product) {
-    state.products = [...state.products, product];
+    state.products = product;
+    localStorage.setItem('cartProducts', JSON.stringify(product));
+  },
+  setTotalAmounth(state) {
+    const productsArray = (state.products.length) ? state.products : JSON.parse(localStorage.getItem('cartProducts'));
+
+    state.totalAmount = productsArray.reduce((accumulator, currentValue) => {
+      return accumulator + (parseInt(currentValue.price) * currentValue.quantity);
+    }, 0);
+
+    console.log(state.totalAmount);
   },
   setCartUrl(state, cartUrl) {
     let path = new URL(cartUrl).pathname;
@@ -37,7 +48,21 @@ const actions = {
 
 const getters = {
   getCartProducts(state) {
-    return state.products;
+    let cartProducts = '';
+
+    if (state.products.length) {
+      cartProducts = state.products;
+    } else if (localStorage.getItem('cartProducts')) {
+      cartProducts = localStorage.getItem('cartProducts');
+    } else {
+      cartProducts = state.products;
+    }
+    return cartProducts;
+    // return (state.products.length) ? state.products : JSON.parse(localStorage.getItem('cartProducts'));
+  },
+
+  getTotalAmount(state) {
+    return (state.totalAmount) ? state.totalAmount : JSON.parse(localStorage.getItem('cartTotalAmount'));
   },
 
   getCartUrl(state) {
@@ -46,7 +71,7 @@ const getters = {
 
   getCheckoutUrl(state) {
     return state.checkoutUrl;
-  }
+  },
 };
 
 export default {namespaced: true, state, mutations, actions, getters};

@@ -74,7 +74,7 @@
                       :key="index"
                     >
 
-                      <div class="l-mini-cart__item" v-if="(index == 0) || product.size_attribute.id != getCartProducts[index-1].size_attribute.id">
+                      <div class="l-mini-cart__item" v-if="(index == 0) || product.size_attribute[0].id != getCartProducts[index-1].size_attribute[0].id">
                       <!-- {{ ((index == 0) || product.size_attribute.id != getCartProducts[index-1].size_attribute.id) ? product.size_attribute.id : 'false' }}  -->
 
                         <div class="l-mini-cart__item-img">
@@ -85,13 +85,11 @@
                         <div class="l-mini-cart__item-info">
                           <div v-if="product.post_attr_brand" class="is-brand">{{product.post_attr_brand}}</div>
                           <span class="is-name">{{product.name}}</span>
-                          <!-- {% if product.quantity >= 2 %}
-                            <p class="is-quantity">{{ 'Quantity' | translateString('Cart - Quantity') }}: <b>{{product.quantity}}</b></p>
-                          {% endif %} -->
+                          <p class="is-quantity" v-if="product.quantity >= 2">Количество: <b>{{product.quantity}}</b></p>
                           <div class="l-mini-cart__item-attr">
                             <div v-if="product.size_attribute" class="is-size">
                               <span>Размер:</span>
-                              <span class="is-bold">{{product.size_attribute.name}}</span>
+                              <span class="is-bold">{{product.size_attribute[0].name}}</span>
                             </div>
                             <!-- {% if product.attr.size %}
                               <div class="is-size">

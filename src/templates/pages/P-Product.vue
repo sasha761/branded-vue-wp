@@ -117,7 +117,7 @@ import CBreadcrumb from '@/templates/components/C-Breadcrumbs.vue'
 import CAccordion from '@/templates/components/C-Accordion.vue'
 import CButton from '@/templates/components/C-Button.vue'
 
-import { mapMutations } from 'vuex';
+import { mapGetters, mapMutations } from 'vuex';
 
 export default {
   components: {
@@ -144,6 +144,10 @@ export default {
   },
 
   computed: {
+    ...mapGetters({
+      cartProducts: 'cart/getCartProducts',
+    }),
+
     hasProductImages() {
       return this.product?.images?.length
     }, 
@@ -155,7 +159,7 @@ export default {
   mounted() {
     if(this.$route.params.productData) {
       this.product = this.$route.params.productData
-      this.selectedSize = this.product?.size_attribute[0]?.name;
+      this.selectedSize = this.product?.size_attribute[0];
     } else {
       Api.post('product/get_single_product', {
         url: this.$route.params.productName
@@ -163,7 +167,7 @@ export default {
       .then((result) => {
         console.log(result)
         this.product = result.data
-        this.selectedSize = result.data?.size_attribute[0]?.name;
+        this.selectedSize = result.data?.size_attribute[0];
 
       })
       .catch((error) => {
@@ -177,7 +181,8 @@ export default {
 
   methods: {
     ...mapMutations({
-      setProductToCart: 'cart/setProductToCart'
+      setProductToCart: 'cart/setProductToCart',
+      setTotalAmounth: 'cart/setTotalAmounth'
     }),
 
     handleScroll() {
@@ -208,17 +213,29 @@ export default {
       }
     },
 
-    handleSelectChange(value) {
-      console.log(value);
+    handleSelectChange() {
+      // console.log(value);
     },
 
     addProductToCart(product) {
-      let addedProduct = { ...product };
-      addedProduct.size_attribute = {};
-      addedProduct.size_attribute = this.selectedSize;
-      
-      console.log(addedProduct);
-      this.setProductToCart(addedProduct);
+      let addedProduct = { ...product, quantity: 1 };
+      addedProduct.size_attribute = addedProduct.size_attribute.filter(obj => obj.name === this.selectedSize.name);
+
+      // Поиск индекса продукта в корзине
+      const index = this.cartProducts.findIndex(obj => obj.size_attribute[0].id === this.selectedSize.id);
+
+      if (index !== -1) {
+        // Если продукт уже есть в корзине, увеличиваем количество
+        this.cartProducts[index].quantity += 1;
+      } else {
+        // Если продукта нет в корзине, добавляем его
+        this.cartProducts.push(addedProduct);
+      }
+
+      // Обновление состояния корзины
+      this.setProductToCart(this.cartProducts);
+
+      this.setTotalAmounth();
     }
   },
   beforeDestroy() {
