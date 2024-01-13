@@ -48,21 +48,11 @@ const actions = {
 
 const getters = {
   getCartProducts(state) {
-    let cartProducts = '';
-
-    if (state.products.length) {
-      cartProducts = state.products;
-    } else if (localStorage.getItem('cartProducts')) {
-      cartProducts = localStorage.getItem('cartProducts');
-    } else {
-      cartProducts = state.products;
-    }
-    return cartProducts;
-    // return (state.products.length) ? state.products : JSON.parse(localStorage.getItem('cartProducts'));
+    return ((state.products.length) ? state.products : JSON.parse(localStorage.getItem('cartProducts'))) || [];
   },
 
   getTotalAmount(state) {
-    return (state.totalAmount) ? state.totalAmount : JSON.parse(localStorage.getItem('cartTotalAmount'));
+    return ((state.totalAmount) ? state.totalAmount : JSON.parse(localStorage.getItem('cartTotalAmount'))) || 0;
   },
 
   getCartUrl(state) {

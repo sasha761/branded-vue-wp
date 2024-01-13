@@ -92,12 +92,12 @@
                 <ul class="l-sidebar-cart__list">
                   <li class="l-sidebar-cart__item">
                     <span>Сумма заказа</span>
-                    <span class="c-price"></span>
+                    <span class="c-price">{{}}</span>
                   </li>
-                  <li class="l-sidebar-cart__item">
+                  <!-- <li class="l-sidebar-cart__item">
                     <span>Доставка</span>
                     <span class="c-price"></span>
-                  </li>
+                  </li> -->
 
                   <!-- {% if coupons %}
                     {% for item in coupons %}
@@ -153,11 +153,8 @@ export default {
   computed: {
     ...mapGetters({
       cartProducts: 'cart/getCartProducts',
+      getCheckoutUrl: 'cart/getCheckoutUrl'
     }),
-
-    getCheckoutUrl() {
-      return this.$store.getters['cart/getCheckoutUrl'];
-    }
   },
 
   methods: {

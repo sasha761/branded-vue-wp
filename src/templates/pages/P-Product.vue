@@ -71,8 +71,8 @@
                     <div v-html="product.description"></div>
                   </div>
 
-                  <div class="l-product__info ">
-                    <C-Accordion :accordion-info="product.product_info" v-if="product.product_info"/>
+                  <div class="l-product__info" v-if="product.product_info">
+                    <C-Accordion :accordion-info="product.product_info" />
                   </div>
                 </div>
               </div>
@@ -219,22 +219,22 @@ export default {
 
     addProductToCart(product) {
       let addedProduct = { ...product, quantity: 1 };
+      let allProducts = this.cartProducts;
       addedProduct.size_attribute = addedProduct.size_attribute.filter(obj => obj.name === this.selectedSize.name);
 
       // Поиск индекса продукта в корзине
-      const index = this.cartProducts.findIndex(obj => obj.size_attribute[0].id === this.selectedSize.id);
+      const index = allProducts.findIndex(obj => obj.size_attribute[0].id === this.selectedSize.id);
 
       if (index !== -1) {
         // Если продукт уже есть в корзине, увеличиваем количество
-        this.cartProducts[index].quantity += 1;
+        allProducts[index].quantity += 1;
       } else {
         // Если продукта нет в корзине, добавляем его
-        this.cartProducts.push(addedProduct);
+        allProducts.push(addedProduct);
       }
 
       // Обновление состояния корзины
-      this.setProductToCart(this.cartProducts);
-
+      this.setProductToCart(allProducts);
       this.setTotalAmounth();
     }
   },

@@ -190,16 +190,10 @@ export default {
 
   computed: {
     ...mapGetters({
-      getCartProducts: 'cart/getCartProducts'
+      getCartProducts: 'cart/getCartProducts',
+      getCartUrl: 'cart/getCartUrl',
+      getCheckoutUrl: 'cart/getCheckoutUrl'
     }),
-
-    getCartUrl() {
-      return this.$store.getters['cart/getCartUrl'];
-    },
-
-    getCheckoutUrl() {
-      return this.$store.getters['cart/getCheckoutUrl'];
-    }
   },
 
   methods: {
