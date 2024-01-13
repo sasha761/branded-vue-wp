@@ -35,9 +35,7 @@
                       {{product.name}}
                     </router-link>
 
-                    <!-- {% if product.attr.size %} -->
-                      <div v-if="product.size_attribute" class="is-size mb-3">Размер: {{product.size_attribute[0].name}}</div>
-                    <!-- {% endif %} -->
+                    <div v-if="product.size_attribute" class="is-size mb-3">Размер: {{product.size_attribute[0].name}}</div>
                     <!-- {% if product.attr.color %}
                       <div class="is-color mb-3">{{ 'Color' | translateString('Cart - Color') }}: {{product.attr.color}}</div>
                     {% endif %} -->
@@ -92,12 +90,12 @@
                 <ul class="l-sidebar-cart__list">
                   <li class="l-sidebar-cart__item">
                     <span>Сумма заказа</span>
-                    <span class="c-price">{{}}</span>
+                    <span class="c-price">{{getTotalAmount}} {{strings.string.currency}}</span>
                   </li>
-                  <!-- <li class="l-sidebar-cart__item">
+                  <li class="l-sidebar-cart__item">
                     <span>Доставка</span>
-                    <span class="c-price"></span>
-                  </li> -->
+                    <span class="c-price">0 {{strings.string.currency}}</span>
+                  </li>
 
                   <!-- {% if coupons %}
                     {% for item in coupons %}
@@ -110,7 +108,7 @@
 
                   <li class="l-sidebar-cart__item">
                     <span>Всего</span>
-                    <span></span>
+                    <span>{{getTotalAmount}} {{strings.string.currency}}</span>
                   </li>
                   
                   <router-link :to="{name: 'checkout', params: { checkout: getCheckoutUrl } }" class="u-btn is-black">Оформить заказ</router-link>
@@ -133,6 +131,8 @@ import LHeader from '@/templates/layout/L-Header.vue'
 import LFooter from '@/templates/layout/L-Footer.vue'
 
 import CModal from '@/templates/components/C-Modal.vue'
+import stringConfig from '@/config/stringConfig.js'
+
 // import CBreadcrumb from '@/templates/components/C-Breadcrumbs.vue'
 // import CButton from '@/templates/components/C-Button.vue'
 
@@ -146,14 +146,15 @@ export default {
 
   data() {
     return {
-
+      strings: stringConfig
     }
   },
 
   computed: {
     ...mapGetters({
       cartProducts: 'cart/getCartProducts',
-      getCheckoutUrl: 'cart/getCheckoutUrl'
+      getCheckoutUrl: 'cart/getCheckoutUrl',
+      getTotalAmount: 'cart/getTotalAmount'
     }),
   },
 

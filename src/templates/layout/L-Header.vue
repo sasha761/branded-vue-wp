@@ -75,8 +75,6 @@
                     >
 
                       <div class="l-mini-cart__item" v-if="(index == 0) || product.size_attribute[0].id != getCartProducts[index-1].size_attribute[0].id">
-                      <!-- {{ ((index == 0) || product.size_attribute.id != getCartProducts[index-1].size_attribute.id) ? product.size_attribute.id : 'false' }}  -->
-
                         <div class="l-mini-cart__item-img">
                           <a href="#">
                             <img :src="product.post_img_m"> 
@@ -88,7 +86,7 @@
                           <p class="is-quantity" v-if="product.quantity >= 2">Количество: <b>{{product.quantity}}</b></p>
                           <div class="l-mini-cart__item-attr">
                             <div v-if="product.size_attribute" class="is-size">
-                              <span>Размер:</span>
+                              <span>Размер: </span>
                               <span class="is-bold">{{product.size_attribute[0].name}}</span>
                             </div>
                             <!-- {% if product.attr.size %}
@@ -106,7 +104,7 @@
                           </div>
 
                           <p class="c-price">
-                            {{ product.price }}
+                            {{ product.price }} {{strings.string.currency}}
                           </p>
 
                         </div>
@@ -115,7 +113,7 @@
                   </ul>
                   <div class="l-mini-cart__total">
                     <span>Сумма заказа</span>
-                    <span class="is-bold"></span>
+                    <span class="is-bold">{{getTotalAmount}} {{strings.string.currency}}</span>
                   </div>
 
                   <div class="l-mini-cart__btn">
@@ -175,30 +173,38 @@
 
 <script>
 
-import { mapActions, mapGetters } from 'vuex';
+import { mapMutations, mapActions, mapGetters } from 'vuex';
+import stringConfig from '@/config/stringConfig.js'
 
 export default {
   data() {
     return {
-      search: ''
+      search: '',
+      strings: stringConfig,
     }
   },
 
   mounted() {
     this.fetchCartUrl();
+    this.setTotalAmounth();
   },
 
   computed: {
     ...mapGetters({
       getCartProducts: 'cart/getCartProducts',
       getCartUrl: 'cart/getCartUrl',
-      getCheckoutUrl: 'cart/getCheckoutUrl'
+      getCheckoutUrl: 'cart/getCheckoutUrl',
+      getTotalAmount: 'cart/getTotalAmount'
     }),
   },
 
   methods: {
     ...mapActions({
       fetchCartUrl: 'cart/fetchCartUrl'
+    }),
+
+    ...mapMutations({
+      setTotalAmounth: 'cart/setTotalAmounth'
     }),
   }
 }

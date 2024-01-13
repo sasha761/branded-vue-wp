@@ -6,7 +6,7 @@
       class="c-accordion__block"
       :class="{'is-active': accordionItems[index].active }" 
     >
-      <div @click="toggleAccordion(index)" class="c-accordion__block-title ">
+      <div @click="toggleAccordion(index)" class="c-accordion__block-title">
         <span>{{ item.title }}</span>
         <svg width="11px" height="7px" class="u-arrow">
           <use xlink:href="#arrow"></use>
@@ -21,7 +21,6 @@
 </template>
 
 <script>
-
 import {slideUp, slideDown} from '../../assets/js/slideToggle.js';
 
 export default {

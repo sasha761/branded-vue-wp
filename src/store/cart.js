@@ -2,7 +2,7 @@ import Api from '@/api/Axios'
 
 const state = {
   products: [],
-  totalAmount: Number,
+  totalAmount: 0,
   cartUrl: '',
   checkoutUrl: ''
 };

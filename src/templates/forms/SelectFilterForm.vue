@@ -50,7 +50,6 @@ export default {
     },
 
     handleSelectChange(selectedOption) {
-      
       if(selectedOption.key !== this.showAll.key) {
         this.addQueryParams(selectedOption);
       } else {
