@@ -186,7 +186,7 @@ export default {
 
   mounted() {
     this.fetchCartUrl();
-    this.setTotalAmounth();
+    this.setTotalAmount();
   },
 
   computed: {
@@ -204,7 +204,7 @@ export default {
     }),
 
     ...mapMutations({
-      setTotalAmounth: 'cart/setTotalAmounth'
+      setTotalAmount: 'cart/setTotalAmount'
     }),
   }
 }

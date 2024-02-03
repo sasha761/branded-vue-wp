@@ -117,6 +117,8 @@ import CBreadcrumb from '@/templates/components/C-Breadcrumbs.vue'
 import CAccordion from '@/templates/components/C-Accordion.vue'
 import CButton from '@/templates/components/C-Button.vue'
 
+// import stringConfig from '@/config/stringConfig.js';
+
 import { mapGetters, mapMutations } from 'vuex';
 
 export default {
@@ -182,7 +184,7 @@ export default {
   methods: {
     ...mapMutations({
       setProductToCart: 'cart/setProductToCart',
-      setTotalAmounth: 'cart/setTotalAmounth'
+      setTotalAmount: 'cart/setTotalAmount'
     }),
 
     handleScroll() {
@@ -217,25 +219,24 @@ export default {
       // console.log(value);
     },
 
-    addProductToCart(product) {
-      let addedProduct = { ...product, quantity: 1 };
+    addProductToCart(product) {      
+      let addedProduct = { ...product };
       let allProducts = this.cartProducts;
+      addedProduct.quantity = 1;
+      
       addedProduct.size_attribute = addedProduct.size_attribute.filter(obj => obj.name === this.selectedSize.name);
 
-      // Поиск индекса продукта в корзине
       const index = allProducts.findIndex(obj => obj.size_attribute[0].id === this.selectedSize.id);
 
       if (index !== -1) {
-        // Если продукт уже есть в корзине, увеличиваем количество
         allProducts[index].quantity += 1;
       } else {
-        // Если продукта нет в корзине, добавляем его
         allProducts.push(addedProduct);
       }
 
-      // Обновление состояния корзины
+      // // Обновление состояния корзины
       this.setProductToCart(allProducts);
-      this.setTotalAmounth();
+      this.setTotalAmount();
     }
   },
   beforeDestroy() {

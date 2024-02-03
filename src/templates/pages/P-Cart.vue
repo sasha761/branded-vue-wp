@@ -5,7 +5,7 @@
     <div class="wrapper">
       <main class="p-cart">
         <div class="u-container">
-          <form class="p-cart__flex woocommerce-cart-form" action="" method="post">
+          <div class="p-cart__flex">
             <div v-if="cartProducts" class="l-cart">
               <h1 class="u-h3">Корзина</h1>
               
@@ -21,10 +21,15 @@
                 </router-link>
                 <div class="c-product-cart__info">
                   <div class="c-product-cart__name">
-                    <!-- {% for item in product.attr.brand %}
-                      {% set brandlink = function('get_category_link', item.term_id) %}
-                      <a href="{{brandlink}}" class="c-product-cart__name-brand">{{ 'Brand' | translateString('Cart - Brand') }}: {{item.name}}</a>
-                    {% endfor %} -->
+                    <router-link
+                      :to="{ 
+                        name: 'brand', 
+                        params: { productName: extractProductName(product.permalink), productData: product }
+                      }" 
+                      class="c-product-cart__name-brand"
+                    >
+                      Бренд: {{product.post_attr_brand}}
+                    </router-link>
                     <router-link
                       :to="{ 
                         name: 'product', 
@@ -39,11 +44,21 @@
                     <!-- {% if product.attr.color %}
                       <div class="is-color mb-3">{{ 'Color' | translateString('Cart - Color') }}: {{product.attr.color}}</div>
                     {% endif %} -->
-                      <div v-if="product.quantity >= 2" class="is-quantity mb-3">Количество: <b>{{product.quantity}}</b></div>
+                    <div class="is-quantity mb-3">
+                      
+
+                      <div class="c-quantity">
+                        <span>Количество: </span>  
+                        <button v-show="product.quantity > 1" @click="quantityMinus(product)" type="button" class="u-btn is-small js-count-minus">-</button>
+                        <b>{{product.quantity}}</b>
+                        <button @click="quantityPlus(product)" type="button" class="u-btn is-small js-count-plus">+</button>
+                      </div>
+                    </div>
 
                     <div class="d-block d-sm-none align-items-center">
                       <div class="c-price">{{product.price * product.quantity}}</div>
-                      <div class="c-remove">
+
+                      <div @click="removeFromCart(product)" class="c-remove">
                         <svg width="20px" height="20px">
                           <use xlink:href="#icon-close"></use>
                         </svg>
@@ -55,7 +70,7 @@
                   <div class="d-none d-sm-block">
                     <div class="c-price">{{product.price * product.quantity}}</div>
                     
-                    <div class="c-remove">
+                    <div @click="removeFromCart(product)" class="c-remove">
                       <svg width="20px" height="20px">
                         <use xlink:href="#icon-close"></use>
                       </svg>
@@ -116,7 +131,7 @@
               </div>
             </aside>
               
-          </form>
+          </div>
         </div>
       </main>
       <L-Footer />
@@ -154,14 +169,62 @@ export default {
     ...mapGetters({
       cartProducts: 'cart/getCartProducts',
       getCheckoutUrl: 'cart/getCheckoutUrl',
-      getTotalAmount: 'cart/getTotalAmount'
+      getTotalAmount: 'cart/getTotalAmount',
     }),
   },
 
   methods: {
     ...mapMutations({
-      setProductToCart: 'cart/setProductToCart'
+      setProductToCart: 'cart/setProductToCart',
+      setTotalAmount: 'cart/setTotalAmount'
     }),
+
+    removeFromCart(product) {
+      let allProducts = this.cartProducts;
+
+      const index = allProducts.findIndex(obj => obj.id === product.id);
+
+      if (index !== -1) {
+        allProducts.splice(index, 1);
+      } 
+
+      this.setProductToCart(allProducts);
+      this.setTotalAmount();
+    },
+
+    quantityMinus(product) {
+      let addedProduct = { ...product };
+      let allProducts = this.cartProducts;
+      
+      const index = allProducts.findIndex(obj => obj.size_attribute[0].id === addedProduct.size_attribute[0].id);
+
+      if (index !== -1) {
+        allProducts[index].quantity -= 1;
+      } else {
+        allProducts.push(addedProduct);
+      }
+
+      // // Обновление состояния корзины
+      this.setProductToCart(allProducts);
+      this.setTotalAmount();
+    },
+
+    quantityPlus(product) {
+      let addedProduct = { ...product };
+      let allProducts = this.cartProducts;
+      
+      const index = allProducts.findIndex(obj => obj.size_attribute[0].id === addedProduct.size_attribute[0].id);
+
+      if (index !== -1) {
+        allProducts[index].quantity += 1;
+      } else {
+        allProducts.push(addedProduct);
+      }
+
+      // // Обновление состояния корзины
+      this.setProductToCart(allProducts);
+      this.setTotalAmount();
+    },
 
     extractProductName(url) {
       if (!url) return;

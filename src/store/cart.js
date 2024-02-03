@@ -11,15 +11,15 @@ const mutations = {
   setProductToCart(state, product) {
     state.products = product;
     localStorage.setItem('cartProducts', JSON.stringify(product));
+
+    console.log('state: ', JSON.parse(localStorage.getItem('cartProducts')));
   },
-  setTotalAmounth(state) {
-    const productsArray = (state.products.length) ? state.products : JSON.parse(localStorage.getItem('cartProducts'));
+  setTotalAmount(state) {
+    const productsArray = ((state.products.length) ? state.products : JSON.parse(localStorage.getItem('cartProducts'))) || [];
 
     state.totalAmount = productsArray.reduce((accumulator, currentValue) => {
       return accumulator + (parseInt(currentValue.price) * currentValue.quantity);
     }, 0);
-
-    console.log(state.totalAmount);
   },
   setCartUrl(state, cartUrl) {
     let path = new URL(cartUrl).pathname;
@@ -48,7 +48,7 @@ const actions = {
 
 const getters = {
   getCartProducts(state) {
-    return ((state.products.length) ? state.products : JSON.parse(localStorage.getItem('cartProducts'))) || [];
+    return (state.products.length) ? state.products : JSON.parse(localStorage.getItem('cartProducts'));
   },
 
   getTotalAmount(state) {

@@ -7,6 +7,11 @@ const routes = [
     component: () => import('../templates/pages/P-Shop.vue') 
   },
   { 
+    path: '/brand/:brandName', 
+    name: 'brand', 
+    component: () => import('../templates/pages/P-Shop.vue') 
+  },
+  { 
     path: '/product/:productName', 
     props: true, 
     name: 'product', 
