@@ -1,4 +1,4 @@
-.l-modal-container {
+.l-modal {
   position: fixed;
   // position: absolute;
   top: 0px;
@@ -10,6 +10,19 @@
   visibility: hidden;
   opacity: 0;
   transition: all 0.2s ease;
+
+	&__overlay {
+		position: fixed;
+		top: 0px;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		background-color: white;
+		// z-index: 10;
+		visibility: hidden;
+		opacity: 0;
+		transition: all 0.2s ease;
+	}
 
   &.is-active {
 		opacity: 1;
@@ -32,9 +45,9 @@
   }
 
   .c-modal {
-	  opacity: 0;
+	  // opacity: 0;
 	  overflow-y: auto;
-	  visibility: hidden;
+	  // visibility: hidden;
 	  background-color: white;
 	  transition: all 0.35s linear;
 	  z-index: 21;

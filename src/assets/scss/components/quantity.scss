@@ -7,6 +7,30 @@
     width: 25px;
     height: 25px;
     padding: 4px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 0;
+
+    &.is-plus {
+      right: 0;
+    }
+
+    &.is-minus {
+      left: 0;
+    }
+  }
+
+  &__btn {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0 25px;
+    margin-left: 15px;
+    position: relative;
   }
   // position: relative;
 

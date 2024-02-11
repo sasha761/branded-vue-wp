@@ -19,8 +19,6 @@ export default {
 
   created() {
     (localStorage.getItem('lang') === null) ? this.open() : this.close();
-
-    
   },
 
   methods: {
