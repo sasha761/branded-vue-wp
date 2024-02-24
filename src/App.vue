@@ -1,12 +1,13 @@
 <template>
   <div>
     <icons />
-    <router-view :key="$route.path"></router-view>
+    <Default-Layout />
   </div>
 </template>
 
 <script>
-import icons from './templates/partial/iconsSvg.vue'
+import icons from '@/templates/partial/iconsSvg.vue'
+import DefaultLayout from '@/templates/layouts/default-layout.vue'
 // import WCApi from '@/api/WCApi'
 
 export default {
@@ -14,6 +15,7 @@ export default {
 
   components: {
     icons,
+    DefaultLayout
   },
 
   mounted() {

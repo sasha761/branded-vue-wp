@@ -19,7 +19,7 @@
       <input type="text" required placeholder="Post Office" v-model="formData.post" name="address">
     </div>
 
-    <input type="hidden" name="product_id" :value="formData.productId">
+    <input type="hidden" name="product_id" :value="productId">
     <!-- <input type="hidden" name="variation_id" :value="variation_id"> -->
 
     <div class="c-form__submit">
@@ -56,14 +56,22 @@ export default {
     CSpinner
   },
 
-  mounted() {
-    
+  props: {
+    popupData: {
+      type: Object
+    }
   },
+
+  computed: {
+    productId() {
+      return this.popupData?.productID
+    }
+  },  
 
   methods: {
     submitForm() {
       Api.post('cart/create_quick_order', {
-        product_id: this.formData.productId,
+        product_id: this.productId,
         name: this.formData.name,
         surname: this.formData.surname,
         phone: this.formData.phone,

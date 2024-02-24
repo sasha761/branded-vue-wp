@@ -27,6 +27,7 @@
         <img
           src="data:image/gif;base64,R0lGODlhBAAFAIAAAP///wAAACH5BAEAAAEALAAAAAAEAAUAAAIEjI+ZBQA7"
           :alt="product.post_title"
+          :title="product.post_title + ' - tooltip'"
           width="342"
           height="435"
           class="lazy entered loaded"

@@ -3,7 +3,7 @@
     <L-Modal />
     <L-Header />
       <div class="wrapper">
-        <slot></slot>
+        <router-view :key="$route.path"></router-view>
       </div>
     <L-Footer />
   </div>

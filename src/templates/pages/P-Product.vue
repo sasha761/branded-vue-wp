@@ -1,107 +1,104 @@
 <template>
-  <Default-Layout>
-    <main
-      class="p-product"
-      :data-id="product.id"
-      :data-price="product.price"
-      :data-categories="getProductCategory"
-    >
-      <div class="u-container">
-        <C-Breadcrumb />
-        <section class="l-product">
-          <div class="row">
-            <div class="col-lg-6 col-md-12 col-sm-12 u-col">
-              <div  class="l-product__img">
-                <a
-                  v-if="product.post_img_xl"
-                  :href="product.post_img_xl"
-                  class="js-lightbox"
-                >
-                  <img :src="product.post_img_xl" alt="" height="1440" width="1000">
-                </a>
-              </div>
-            </div>
-            <div class="col-lg-5 col-md-12 u-col">
-              <div class="l-product__content">
-                <a
-                  href="https://branded.com.ua/brand/staff/"
-                  class="l-product__category">
-                  {{product.post_attr_brand}}
-                </a>
-                <h1 class="l-product__name">{{product.name}}</h1>
-                <p class="c-price" v-html="product.price_html"></p>
-
-                <form class="c-product-form" :data-product_id="product.id">
-                  <span class="c-product-form__size">Размер</span>
-
-                  <v-select 
-                    v-model="selectedSize" 
-                    @input="handleSelectChange" 
-                    :options="product.size_attribute"
-                    label="name">
-                  </v-select>
-                  
-                  <div class="c-product-form__btn">
-                    <CButton 
-                      v-if="product.is_stock != 'outofstock'"
-                      class="u-btn is-medium is-black"
-                      @button-click="addProductToCart(product)"
-                      :value="product.id"
-                    >
-                      В корзину
-                    </CButton>
-
-                    <CButton 
-                      v-if="product.is_stock != 'outofstock'"
-                      class="u-btn is-medium is-black-border"
-                      @button-click="quickBuyModal"
-                    >
-                      Купить в 1 клик
-                    </CButton>
-                  </div>
-                </form>
-
-                <div  class="l-product__text">
-                  <h4 class="l-product__text-title">Описание:</h4>
-                  <div v-if="product.sku">
-                    <span>Артикул: </span> <span>{{product.sku}}</span>
-                  </div>
-                  <div v-html="product.description"></div>
-                </div>
-
-                <div class="l-product__info" v-if="product.product_info">
-                  <C-Accordion :accordion-info="product.product_info" />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row d-none d-lg-flex" v-if="hasProductImages">
-            <div 
-              class="col-lg-6 u-col" 
-              v-for="(imageItem, index) in product.images"
-              :key="index"
-              >
+  <main
+    class="p-product"
+    :data-id="product.id"
+    :data-price="product.price"
+    :data-categories="getProductCategory"
+  >
+    <div class="u-container">
+      <C-Breadcrumb />
+      <section class="l-product">
+        <div class="row">
+          <div class="col-lg-6 col-md-12 col-sm-12 u-col">
+            <div  class="l-product__img">
               <a
-                :href="imageItem"
+                v-if="product.post_img_xl"
+                :href="product.post_img_xl"
                 class="js-lightbox"
               >
-                <img :src="imageItem" alt="" height="1440" width="1000">
+                <img :src="product.post_img_xl" alt="" height="1440" width="1000">
               </a>
             </div>
           </div>
-        </section>
-      </div>
-      <L-Related ref="relatedProductsSection" :products="relatedProducts"/>
-      <L-Comments />
-      <L-Subscribe />
-    </main>
-  </Default-Layout>
+          <div class="col-lg-5 col-md-12 u-col">
+            <div class="l-product__content">
+              <a
+                href="https://branded.com.ua/brand/staff/"
+                class="l-product__category">
+                {{product.post_attr_brand}}
+              </a>
+              <h1 class="l-product__name">{{product.name}}</h1>
+              <p class="c-price" v-html="product.price_html"></p>
+
+              <form class="c-product-form" :data-product_id="product.id">
+                <span class="c-product-form__size">Размер</span>
+
+                <v-select 
+                  v-model="selectedSize" 
+                  @input="handleSelectChange" 
+                  :options="product.size_attribute"
+                  label="name">
+                </v-select>
+                
+                <div class="c-product-form__btn">
+                  <CButton 
+                    v-if="product.is_stock != 'outofstock'"
+                    class="u-btn is-medium is-black"
+                    @button-click="addProductToCart(product)"
+                    :value="product.id"
+                  >
+                    В корзину
+                  </CButton>
+
+                  <CButton 
+                    v-if="product.is_stock != 'outofstock'"
+                    class="u-btn is-medium is-black-border"
+                    @button-click="quickBuyModal"
+                  >
+                    Купить в 1 клик
+                  </CButton>
+                </div>
+              </form>
+
+              <div  class="l-product__text">
+                <h4 class="l-product__text-title">Описание:</h4>
+                <div v-if="product.sku">
+                  <span>Артикул: </span> <span>{{product.sku}}</span>
+                </div>
+                <div v-html="product.description"></div>
+              </div>
+
+              <div class="l-product__info" v-if="product.product_info">
+                <C-Accordion :accordion-info="product.product_info" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row d-none d-lg-flex" v-if="hasProductImages">
+          <div 
+            class="col-lg-6 u-col" 
+            v-for="(imageItem, index) in product.images"
+            :key="index"
+            >
+            <a
+              :href="imageItem"
+              class="js-lightbox"
+            >
+              <img :src="imageItem" alt="" height="1440" width="1000">
+            </a>
+          </div>
+        </div>
+      </section>
+    </div>
+    <L-Related ref="relatedProductsSection" :products="relatedProducts"/>
+    <L-Comments />
+    <L-Subscribe />
+  </main>
 </template>
 
 <script>
 import Api from '@/api/Axios'
 
-import DefaultLayout from '@/templates/layouts/default-layout.vue'
 import vSelect from 'vue-select';
 import LSubscribe from '@/templates/layout/L-Subscribe.vue'
 import LRelated from '@/templates/layout/L-Related.vue'
@@ -117,7 +114,6 @@ import { mapGetters, mapMutations } from 'vuex';
 
 export default {
   components: {
-    DefaultLayout,
     LSubscribe,
     LRelated,
     LComments,
@@ -155,8 +151,10 @@ export default {
       this.product = this.$route.params.productData
       this.selectedSize = this.product?.size_attribute[0];
     } else {
-      Api.post('product/get_single_product', {
-        url: this.$route.params.productName
+      Api.get('product/get_single_product', {
+        params: {
+          url: this.$route.params.productName
+        }
       })
       .then((result) => {
         console.log(result)
@@ -195,8 +193,10 @@ export default {
 
         this.relatedProductsChecker = true;
 
-        Api.post('product/get_related_products', {
-          id: this.product.id
+        return Api.get('product/get_related_products', {
+          params: {
+            id: this.product.id
+          }
         })
         .then((result) => {
           this.relatedProducts = result.data.related_products
@@ -232,9 +232,7 @@ export default {
     },
 
     quickBuyModal() {
-      window.emitter.emit('openModal', {popup: 'PopupQuickBuy'});
-      window.emitter.emit('getProductId', {productId: this.product.id});
-      console.log('product: ', this.product.id);
+      this.$popup.open('PopupQuickBuy', {productID: this.product.id})
     }
   },
   beforeDestroy() {

@@ -1,51 +1,64 @@
 <template>
-  <div class="l-modal" :class="{ 'is-active': isActive }">
+  <div class="l-modal" :class="{ 'is-active': popupName }">
     <div class="l-modal__overlay"></div>
     <div class="l-modal__wrapper">
-      <component :is="popup"></component>
+      <component :is="popupName" :data="popupData"></component>
     </div>
   </div>
 </template>
 
 <script>
 import PopupQuickBuy from '@/templates/popups/PopupQuickBuy.vue';
+import PopupMobileMenu from '@/templates/popups/PopupMobileMenu.vue';
 
 export default {
   data() {
     return {
-      popup: null,
-      isActive: false
+      popupName: null,
+      popupData: null,
+      isActive: false,
     }
   },
   
   components: {
-    PopupQuickBuy
+    PopupQuickBuy,
+    PopupMobileMenu
   },
 
   mounted() {
-    window.emitter.on('getProductId', (data) => {
-      console.log('form: ', data);
-      // this.formData.productId = data.productId;
-    });
-
-    window.emitter.on('closeModal', (data) => {
-      this.closeModal(data);
-    });
-
-    window.emitter.on('openModal', (data) => {
+    // console.log(this.$popup)
+    this.$popup.onOpen({callback: (data)=> {
+      // console.log(data);
       this.openModal(data);
-    });
+    }})
+
+    this.$popup.onClose({callback: (data)=> {
+      // console.log(data);
+      this.openModal(data);
+    }})
+    // this.$popup.onOpen((data) => {
+    //   console.log(data);
+    // });
+    // window.emitter.on('closeModal', (data) => {
+    //   this.closeModal(data);
+    // });
+
+    // window.emitter.on('openModal', ({data, popup}) => {
+    //   this.openModal(data, popup);
+    // });
   },
 
   methods: {
     openModal(data) {
-      this.isActive = true;
-      this.popup = data.popup
+      console.log('openModal: ', data);
+      this.popupData = data.data;
+      this.popupName = data.name;
     },
 
-    closeModal(data) {
-      console.log(data);
-      this.isActive = false;
+    closeModal() {
+      console.log('closeModal: ');
+      this.popupData = null
+      this.popupName = null;
     }
   },
 }

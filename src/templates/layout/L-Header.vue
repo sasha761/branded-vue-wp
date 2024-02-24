@@ -3,30 +3,8 @@
     <div class="l-header__bottom u-relative">
       <div class="u-container">
         <div class="l-header__bottom-left">
-          <div class="c-logo">
-            <a href="https://branded.com.ua">
-              <svg width="100%" height="35px"><use xlink:href="#logo"></use></svg>
-            </a>
-          </div>
-          <ul class="c-menu">
-            <li class="c-menu__item">
-              <a href="https://branded.com.ua/sales" class="d-flex align-items-center">
-                <svg width="18px" height="18px" style="margin-right: 6px">
-                  <use xlink:href="#sales"></use>
-                </svg>
-                <span>Sales</span>
-              </a>
-            </li>
-            <li class="c-menu__item">
-              <a href="https://branded.com.ua/product-category/mans/"> <span>Мужчинам</span> </a>
-            </li>
-            <li class="c-menu__item is-active">
-              <a href="https://branded.com.ua/product-category/women/"> <span>Женщинам</span> </a>
-            </li>
-            <li class="c-menu__item">
-              <a href="#"> <span>Бренды</span> </a>
-            </li>
-          </ul>
+          <C-Logo />
+          <C-Menu :headerMenu="getHeaderMenu" v-if="getHeaderMenu.length"/>
         </div>
         <div class="l-header__bottom-right">
           <div
@@ -138,32 +116,32 @@
               <li><a href="tel:+38(066)3156536">+38 (066) 315 65 36</a></li>
             </ul>
           </div>
-          <div class="c-lang js-lang">
+          <!-- <div class="c-lang js-lang">
             <div class="c-lang__current">
-              ru
+              {{current_lang}}
               <svg width="11px" height="7px" class="c-lang__arrow">
                 <use xlink:href="#arrow"></use>
               </svg>
+              
             </div>
             <div class="c-lang__sub">
-              <a
-                href="https://branded.com.ua/product-category/women/"
-                class="c-lang__item is-active"
-                data-lang="ru"
-              >
-                ru
-              </a>
-              <a
-                href="https://branded.com.ua/uk/product-category/zhinkam/"
-                class="c-lang__item"
-                data-lang="uk"
-              >
-                uk
-              </a>
+              <pre v-pre>{{ this.$route }}</pre>
+              {% for lang in language_code %}
+                <a 
+                  href="{{ lang.url }}" 
+                  class="c-lang__item {% if current_lang == lang.code %}is-active {% endif %}"
+                  data-lang="{{lang.code}}"
+                >
+                  {{ lang.code }}
+                </a>
+              {% endfor %}
             </div>
-          </div>
-          <div class="c-burger d-block d-sm-none" data-modal="#mobile-menu">
-            <span></span> <span></span> <span></span>
+          </div> -->
+
+          <div class="c-burger d-block d-sm-none"  @click="mobileMenuModal">
+            <span></span>
+            <span></span>
+            <span></span>
           </div>
         </div>
       </div>
@@ -175,6 +153,8 @@
 
 import { mapMutations, mapActions, mapGetters } from 'vuex';
 import stringConfig from '@/config/stringConfig.js'
+import CMenu from '@/templates/components/C-Menu.vue';
+import CLogo from '@/templates/components/C-Logo.vue';
 
 export default {
   data() {
@@ -184,8 +164,16 @@ export default {
     }
   },
 
+  components: {
+    CMenu,
+    CLogo,
+  },
+
   mounted() {
     this.fetchCartUrl();
+    this.fetchHeaderMenu();
+    this.fetchMobileMenu();
+    this.fetchLanguages(this.$route.path);
     this.setTotalAmount();
   },
 
@@ -194,18 +182,29 @@ export default {
       getCartProducts: 'cart/getCartProducts',
       getCartUrl: 'cart/getCartUrl',
       getCheckoutUrl: 'cart/getCheckoutUrl',
-      getTotalAmount: 'cart/getTotalAmount'
+      getTotalAmount: 'cart/getTotalAmount',
+      getHeaderMenu: 'menu/getHeaderMenu',
+      getMobileMenu: 'menu/getMobileMenu',
+      getLanguages: 'menu/getLanguages'
     }),
   },
 
   methods: {
     ...mapActions({
-      fetchCartUrl: 'cart/fetchCartUrl'
+      fetchCartUrl: 'cart/fetchCartUrl',
+      fetchHeaderMenu: 'menu/fetchHeaderMenu',
+      fetchMobileMenu: 'menu/fetchMobileMenu',
+      fetchLanguages: 'menu/fetchLanguages'
     }),
 
     ...mapMutations({
       setTotalAmount: 'cart/setTotalAmount'
     }),
+
+    mobileMenuModal() {
+      console.log('some');
+      this.$popup.open('PopupMobileMenu', {menu: this.getMobileMenu})
+    }
   }
 }
 </script>

@@ -3,42 +3,11 @@
     <div class="l-footer__bottom">
       <div class="u-container">
         <div class="row c-footer-menu">
-          <div class="col-lg-3 col-md-6 col-6 u-col">
-            <h3 class="c-footer-menu__title">Покупателям</h3>
-            <ul>
-              <li class="c-footer-menu__items">
-                <a href="https://branded.com.ua/vozvrat-i-obmen/">Возврат и обмен</a>
-              </li>
-              <li class="c-footer-menu__items">
-                <a href="https://branded.com.ua/dostavka-i-oplata/">Доставка и оплата</a>
-              </li>
-              <li class="c-footer-menu__items">
-                <a href="https://branded.com.ua/garantiya/">Гарантия</a>
-              </li>
-              <li class="c-footer-menu__items">
-                <a href="https://branded.com.ua/reviews/">Отзывы</a>
-              </li>
-              <li class="c-footer-menu__items">
-                <a href="https://branded.com.ua/terms-of-use/"
-                  >Публiчний договiр купівлі-продажу</a
-                >
-              </li>
-            </ul>
-          </div>
-          <div class="col-lg-3 col-md-6 col-6 u-col">
-            <h3 class="c-footer-menu__title">Каталог</h3>
-            <ul>
-              <li class="c-footer-menu__items">
-                <a href="https://branded.com.ua/product-category/mans/">Мужчинам</a>
-              </li>
-              <li class="c-footer-menu__items">
-                <a href="https://branded.com.ua/product-category/women/">Женщинам</a>
-              </li>
-              <li class="c-footer-menu__items">
-                <a href="https://branded.com.ua/product-category/children/">Детям</a>
-              </li>
-              <li class="c-footer-menu__items">
-                <a href="https://branded.com.ua/product-category/accessories/">Аксессуары</a>
+          <div v-for="(item, index) in getFooterMenu" :key="index" class="col-lg-3 col-md-6 col-6 u-col">
+            <h3 class="c-footer-menu__title">{{item.title}}</h3>
+            <ul v-if="item.submenu">
+              <li v-for="(item2, index2) in item.submenu" :key="index2" class="c-footer-menu__items">
+                <router-link :to="item2.slug">{{ item2.title }}</router-link>
               </li>
             </ul>
           </div>
@@ -78,3 +47,25 @@
     </div>
   </footer>
 </template>
+
+<script>
+import {mapGetters, mapActions} from 'vuex';
+
+export default {
+  mounted() {
+    this.fetchFooterMenu();
+  },
+
+  computed: {
+    ...mapGetters({
+      getFooterMenu: 'menu/getFooterMenu',
+    })
+  },
+
+  methods: {
+    ...mapActions({
+      fetchFooterMenu: 'menu/fetchFooterMenu',
+    }),
+  }
+}
+</script>

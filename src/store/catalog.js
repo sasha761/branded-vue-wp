@@ -17,11 +17,13 @@ const mutations = {
 };
 const actions = {
   fetchProducts({commit}, {url, page, offset, slug}) {
-    return Api.post('archive/get_products', {
-      url: url,
-      page: page,
-      offset: offset,
-      slug: slug,
+    return Api.get('archive/get_products', {
+      params: {
+        url: url,
+        page: page,
+        offset: offset,
+        slug: slug,
+      }
     })
     .then((result) => {
       if(result?.data?.status !== 'nomore') {

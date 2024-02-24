@@ -3,7 +3,7 @@
     <svg @click="handleCloseClick" width="20px" height="20px" data-modal="close" class="c-modal__close">
       <use xlink:href="#icon-close"></use>
     </svg>
-    <QuickBuyForm />
+    <QuickBuyForm :popupData="data" />
   </div>
 </template>
 
@@ -15,9 +15,15 @@ export default {
     QuickBuyForm,
   },
 
+  props: {
+    data: {
+      type: Object,
+    }
+  },
+
   methods: {
     handleCloseClick() {
-      window.emitter.emit('closeModal');
+      this.$popup.close(1, () => {})
     },
   }
 }

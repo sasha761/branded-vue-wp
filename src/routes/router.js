@@ -23,7 +23,7 @@ const routes = [
     component: () => import('../templates/pages/P-Cart.vue') 
   },
   { 
-    path: ':checkout', 
+    path: '/:checkout', 
     name: 'checkout', 
     component: () => import('../templates/pages/P-Checkout.vue') 
   }

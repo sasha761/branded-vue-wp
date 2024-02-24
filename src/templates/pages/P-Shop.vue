@@ -1,45 +1,40 @@
 <template>
-  <Default-Layout>
-    <main class="p-shop">
-      <div class="u-container">
-        <C-Breadcrumb />
-        <div class="p-shop__flex">
-          <div class="p-shop__sidebar">
-            
-          </div>
-          <div class="p-shop__catalog">
-            <section class="l-shop" data-categories="Женщинам" data-cat-id="17">
-              <h1 class="u-h2">Женщинам</h1>
-              <L-Filter-Block 
-                
-              />
-              <div v-if="products" class="l-shop__product">
-                <div class="row js-load-more">
-                  <div
-                    v-for="product in products"
-                    :key="product.id"
-                    class="col-lg-3 col-md-4 col-sm-6 col-6 u-col js-gallery-item"
-                  >
-                    <C-Product :product="product" />
-                  </div>
+  <main class="p-shop">
+    <div class="u-container">
+      <C-Breadcrumb />
+      <div class="p-shop__flex">
+        <div class="p-shop__sidebar">
+          
+        </div>
+        <div class="p-shop__catalog">
+          <section class="l-shop" data-categories="Женщинам" data-cat-id="17">
+            <h1 class="u-h2">Женщинам</h1>
+            <L-Filter-Block />
+            <div v-if="products" class="l-shop__product">
+              <div class="row js-load-more">
+                <div
+                  v-for="product in products"
+                  :key="product.id"
+                  class="col-lg-3 col-md-4 col-sm-6 col-6 u-col"
+                >
+                  <C-Product :product="product" />
                 </div>
               </div>
-              <C-Pagination 
-                :category-slug-from-route="categorySlugFromRoute" 
-                :count-products="productsCount" 
-                :current-page="currentPage"
-              />
-            </section>
-          </div>
+            </div>
+            <C-Pagination 
+              :category-slug-from-route="categorySlugFromRoute" 
+              :count-products="productsCount" 
+              :current-page="currentPage"
+            />
+          </section>
         </div>
       </div>
-      <L-Subscribe />
-    </main>
-  </Default-Layout>
+    </div>
+    <L-Subscribe />
+  </main>
 </template>
 
 <script>
-import DefaultLayout from '@/templates/layouts/default-layout.vue'
 
 import LSubscribe from '@/templates/layout/L-Subscribe.vue'
 import LFilterBlock from '@/templates/layout/L-Filter-block.vue'
@@ -50,18 +45,21 @@ import CBreadcrumb from '@/templates/components/C-Breadcrumbs.vue'
 
 // import Api from '@/api/Axios'
 
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapMutations, mapGetters } from 'vuex';
 
 export default {
   name: "App",
 
   components: {
     LFilterBlock,
-    DefaultLayout,
     LSubscribe,
     CProduct,
     CPagination,
     CBreadcrumb
+  },
+
+  beforeDestroy() {
+    this.setProductsList([]);
   },
 
   mounted() {
@@ -69,7 +67,7 @@ export default {
       url: this.$route.fullPath, 
       page: this.currentPage,
       slug: this.categorySlugFromRoute,
-      offset: null
+      offset: 0
     }).then(result => {
       console.log(result);
     })
@@ -95,6 +93,10 @@ export default {
   },
 
   methods: {
+    ...mapMutations({
+      setProductsList: 'catalog/setProductsList'
+    }),
+
     ...mapActions({
       fetchProducts: 'catalog/fetchProducts'
     }),

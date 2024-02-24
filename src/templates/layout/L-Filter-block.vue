@@ -110,7 +110,7 @@ export default {
         url: this.$route.fullPath,
         page: 1,
         slug: this.categorySlugFromRoute,
-        offset: null
+        offset: 0
       })
     },
   },
