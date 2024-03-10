@@ -26,9 +26,7 @@ export default {
   },
 
   mounted() {
-    // console.log(this.$popup)
     this.$popup.onOpen({callback: (data)=> {
-      // console.log(data);
       this.openModal(data);
     }})
 

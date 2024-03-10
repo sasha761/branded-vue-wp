@@ -129,7 +129,6 @@ export default {
       selectedSize: '',
       relatedProducts: [],
       relatedProductsChecker: false,
-
     }
   },
 
@@ -216,9 +215,10 @@ export default {
       let allProducts = this.cartProducts;
       addedProduct.quantity = 1;
       
-      addedProduct.size_attribute = addedProduct.size_attribute.filter(obj => obj.name === this.selectedSize.name);
+      // addedProduct.size_attribute = addedProduct.size_attribute.filter(obj => obj.name === this.selectedSize.name);
+      addedProduct.size_selected = addedProduct.size_attribute.filter(obj => obj.name === this.selectedSize.name);
 
-      const index = allProducts.findIndex(obj => obj.size_attribute[0].id === this.selectedSize.id);
+      const index = allProducts.findIndex(obj => obj.size_selected[0].id === this.selectedSize.id);
 
       if (index !== -1) {
         allProducts[index].quantity += 1;
@@ -232,7 +232,7 @@ export default {
     },
 
     quickBuyModal() {
-      this.$popup.open('PopupQuickBuy', {productID: this.product.id})
+      this.$popup.open('PopupQuickBuy', {product: this.product})
     }
   },
   beforeDestroy() {

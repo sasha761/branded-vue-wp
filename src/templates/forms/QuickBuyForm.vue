@@ -19,9 +19,6 @@
       <input type="text" required placeholder="Post Office" v-model="formData.post" name="address">
     </div>
 
-    <input type="hidden" name="product_id" :value="productId">
-    <!-- <input type="hidden" name="variation_id" :value="variation_id"> -->
-
     <div class="c-form__submit">
       <button type="submit" class="u-btn is-black is-medium">Send</button>
     </div>
@@ -47,7 +44,6 @@ export default {
         email: '',
         city: '',
         post: '',
-        productId: ''
       },
     }
   },
@@ -63,15 +59,15 @@ export default {
   },
 
   computed: {
-    productId() {
-      return this.popupData?.productID
-    }
+    product() {
+      return this.popupData?.product
+    },
   },  
 
   methods: {
     submitForm() {
-      Api.post('cart/create_quick_order', {
-        product_id: this.productId,
+      Api.post('cart/create_order', {
+        products: [this.product],
         name: this.formData.name,
         surname: this.formData.surname,
         phone: this.formData.phone,
@@ -83,7 +79,6 @@ export default {
         console.log(result)
         // this.product = result.data
         // this.selectedSize = result.data?.size_attribute[0];
-
       })
       .catch((error) => {
         console.log(error);

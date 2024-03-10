@@ -18,12 +18,12 @@ const routes = [
     component: () => import('../templates/pages/P-Product.vue') 
   },
   { 
-    path: '/:cart', 
+    path: '/cart', 
     name: 'cart', 
     component: () => import('../templates/pages/P-Cart.vue') 
   },
   { 
-    path: '/:checkout', 
+    path: '/checkout-2', 
     name: 'checkout', 
     component: () => import('../templates/pages/P-Checkout.vue') 
   }
