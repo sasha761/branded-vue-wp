@@ -2,6 +2,11 @@ import VueRouter from 'vue-router'
 
 const routes = [
   { 
+    path: '/', 
+    name: 'home-page',
+    component: () => import('../templates/pages/P-Home.vue')  
+  },
+  { 
     path: '/product-category/:categorySlug/:subcategorySlug?', 
     name: 'product-category',
     component: () => import('../templates/pages/P-Shop.vue') 
@@ -26,6 +31,11 @@ const routes = [
     path: '/checkout-2', 
     name: 'checkout', 
     component: () => import('../templates/pages/P-Checkout.vue') 
+  },
+  { 
+    path: '/checkout-2/order-received/:numbers/', 
+    name: 'order-received', 
+    component: () => import('../templates/pages/P-Order-received.vue') 
   }
 ]
 

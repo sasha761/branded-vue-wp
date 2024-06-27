@@ -35,7 +35,15 @@
         />
       </picture>
     </router-link>
-    <div class="c-product__text">
+
+    <div v-if="isBrand" class="c-product__brand">
+      <svg width="61px" height="19px" class="c-product__arrow">
+        <use xlink:href="#small-arrow"></use>
+      </svg>
+      <p>{{product.post_attr_brand}}</p>
+    </div>
+
+    <div v-else class="c-product__text">
       <p class="c-product__text-title">
         {{ product.name }}
       </p>
@@ -50,6 +58,10 @@ export default {
   props: {
     product: {
       type: Object,
+    },
+    isBrand: {
+      type: Boolean,
+      default: false,
     }
   },
   

@@ -17,6 +17,7 @@ const $popup = {
    * @param {number} level - Уровень отображения попапа
    */
   open(name, data = {}, level = 1) {
+    console.log(name);
     $eventBus.$emit(`popup:open${level}`, {
       name,
       data,

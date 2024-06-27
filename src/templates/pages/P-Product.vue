@@ -109,6 +109,7 @@ import CAccordion from '@/templates/components/C-Accordion.vue'
 import CButton from '@/templates/components/C-Button.vue'
 
 // import stringConfig from '@/config/stringConfig.js';
+import waitRequest from '@/mixins/waitRequest';
 
 import { mapGetters, mapMutations } from 'vuex';
 
@@ -122,6 +123,8 @@ export default {
     CButton,
     vSelect
   },
+
+  mixins: [waitRequest],
 
   data() {
     return {
@@ -150,20 +153,23 @@ export default {
       this.product = this.$route.params.productData
       this.selectedSize = this.product?.size_attribute[0];
     } else {
-      Api.get('product/get_single_product', {
-        params: {
-          url: this.$route.params.productName
-        }
-      })
-      .then((result) => {
-        console.log(result)
-        this.product = result.data
-        this.selectedSize = result.data?.size_attribute[0];
+      this.waitRequest(() => {
+        Api.get('product/get_single_product', {
+          params: {
+            url: this.$route.params.productName
+          }
+        })
+        .then((result) => {
+          console.log(result)
+          this.product = result.data
+          this.selectedSize = result.data?.size_attribute[0];
 
+        })
+        .catch((error) => {
+          console.log(error);
+        });
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      
     }
 
     window.addEventListener('scroll', this.handleScroll);

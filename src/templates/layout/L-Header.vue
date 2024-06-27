@@ -51,21 +51,29 @@
                       v-for="(product, index) in getCartProducts" 
                       :key="index"
                     >
-
-                      <div class="l-mini-cart__item" v-if="(index == 0) || product.size_attribute[0].id != getCartProducts[index-1].size_attribute[0].id">
+                      <!-- <pre>{{getCartProducts[index].size_selected}}</pre> -->
+                      <div class="l-mini-cart__item" v-if="(index == 0) || product.size_selected[0].id != getCartProducts[index-1].size_selected[0].id">
                         <div class="l-mini-cart__item-img">
-                          <a href="#">
+                          <router-link
+                            :to="{
+                              name: 'product',
+                              params: {
+                                productName: extractProductName(product.permalink),
+                                productData: product,
+                              },
+                            }"
+                          >
                             <img :src="product.post_img_m"> 
-                          </a>
+                          </router-link>
                         </div>
                         <div class="l-mini-cart__item-info">
                           <div v-if="product.post_attr_brand" class="is-brand">{{product.post_attr_brand}}</div>
                           <span class="is-name">{{product.name}}</span>
                           <p class="is-quantity" v-if="product.quantity >= 2">Количество: <b>{{product.quantity}}</b></p>
                           <div class="l-mini-cart__item-attr">
-                            <div v-if="product.size_attribute" class="is-size">
+                            <div v-if="product.size_selected" class="is-size">
                               <span>Размер: </span>
-                              <span class="is-bold">{{product.size_attribute[0].name}}</span>
+                              <span class="is-bold">{{product.size_selected[0].name}}</span>
                             </div>
                             <!-- {% if product.attr.size %}
                               <div class="is-size">
@@ -169,7 +177,7 @@ export default {
     CLogo,
   },
 
-  mounted() {
+  created() {
     this.fetchCartUrl();
     this.fetchHeaderMenu();
     this.fetchMobileMenu();
@@ -204,7 +212,14 @@ export default {
     mobileMenuModal() {
       console.log('some');
       this.$popup.open('PopupMobileMenu', {menu: this.getMobileMenu})
-    }
+    },
+
+    extractProductName(url) {
+      if (!url) return;
+
+      const parts = url.split("/");
+      return parts[parts.length - 2];
+    },
   }
 }
 </script>

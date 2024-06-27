@@ -1,9 +1,8 @@
 <template>
   <section class="l-subs">
     <img
-      class="is-img lazy"
-      src="data:image/png;base64,TEVITGhbV0IyeWs4cHlvSmFkUiouN2tDTWRuag=="
-      data-src="https://branded.com.ua/wp-content/themes/news/src/img/subs.jpg"
+      class="is-img"
+      src="@/assets/img/subs.jpg"
       alt="Подписаться на украинских производителей Branded"
       width="1920"
       height="647"

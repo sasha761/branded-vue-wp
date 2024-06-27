@@ -1,5 +1,6 @@
 <template>
   <main class="p-shop">
+    <C-PageLoader />
     <div class="u-container">
       <C-Breadcrumb />
       <div class="p-shop__flex">
@@ -11,7 +12,7 @@
             <h1 class="u-h2">Женщинам</h1>
             <L-Filter-Block />
             <div v-if="products" class="l-shop__product">
-              <div class="row js-load-more">
+              <div class="row">
                 <div
                   v-for="product in products"
                   :key="product.id"
@@ -33,12 +34,12 @@
     <L-Subscribe />
   </main>
 </template>
-
 <script>
 
 import LSubscribe from '@/templates/layout/L-Subscribe.vue'
 import LFilterBlock from '@/templates/layout/L-Filter-block.vue'
 
+import CPageLoader from '@/templates/components/C-PageLoader.vue'
 import CProduct from '@/templates/components/C-Product.vue'
 import CPagination from '@/templates/components/C-Pagination.vue'
 import CBreadcrumb from '@/templates/components/C-Breadcrumbs.vue'
@@ -53,12 +54,13 @@ export default {
   components: {
     LFilterBlock,
     LSubscribe,
+    CPageLoader,
     CProduct,
     CPagination,
     CBreadcrumb
   },
 
-  beforeDestroy() {
+  beforeDestroy(){
     this.setProductsList([]);
   },
 
