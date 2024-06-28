@@ -1,6 +1,6 @@
 <template>
   <main class="p-shop">
-    <C-PageLoader />
+    <C-PageLoader v-if="requestInProgress"/>
     <div class="u-container">
       <C-Breadcrumb />
       <div class="p-shop__flex">
@@ -8,9 +8,11 @@
           
         </div>
         <div class="p-shop__catalog">
+          
           <section class="l-shop" data-categories="Женщинам" data-cat-id="17">
             <h1 class="u-h2">Женщинам</h1>
             <L-Filter-Block />
+            <!-- <C-Spinner v-if="requestInProgress"></C-Spinner> -->
             <div v-if="products" class="l-shop__product">
               <div class="row">
                 <div
@@ -44,12 +46,21 @@ import CProduct from '@/templates/components/C-Product.vue'
 import CPagination from '@/templates/components/C-Pagination.vue'
 import CBreadcrumb from '@/templates/components/C-Breadcrumbs.vue'
 
+// import CSpinner from '@/templates/components/C-Spinner.vue'
 // import Api from '@/api/Axios'
 
 import { mapActions, mapMutations, mapGetters } from 'vuex';
+import waitRequest from '@/mixins/waitRequest';
 
 export default {
   name: "App",
+
+  mixins: [waitRequest],
+
+  data() {
+    return {
+    }
+  },
 
   components: {
     LFilterBlock,
@@ -57,7 +68,8 @@ export default {
     CPageLoader,
     CProduct,
     CPagination,
-    CBreadcrumb
+    CBreadcrumb,
+    // CSpinner
   },
 
   beforeDestroy(){
@@ -65,13 +77,15 @@ export default {
   },
 
   mounted() {
-    this.fetchProducts({
-      url: this.$route.fullPath, 
-      page: this.currentPage,
-      slug: this.categorySlugFromRoute,
-      offset: 0
-    }).then(result => {
-      console.log(result);
+    this.waitRequest(() => {
+      return this.fetchProducts({
+        url: this.$route.fullPath, 
+        page: this.currentPage,
+        slug: this.categorySlugFromRoute,
+        offset: 0
+      }).then(result => {
+        console.log(result);
+      })
     })
   },
 

@@ -48,7 +48,7 @@ const actions = {
 
 const getters = {
   getCartProducts(state) {
-    return (state.products.length) ? state.products : JSON.parse(localStorage.getItem('cartProducts'));
+    return ((state.products.length) ? state.products : JSON.parse(localStorage.getItem('cartProducts'))) || [];
   },
 
   getTotalAmount(state) {
