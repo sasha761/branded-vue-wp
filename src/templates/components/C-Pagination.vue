@@ -4,7 +4,8 @@
       v-model="page" 
       :records="countProducts" 
       :per-page="16"
-      @paginate="callback"
+      @paginate="paginationCallback"
+
       :options="{texts: null}"
     />
   </div>
@@ -12,13 +13,15 @@
 
 <script>
 import Pagination from 'vue-pagination-2';
-
+import waitRequest from '@/mixins/waitRequest';
 import { mapActions } from 'vuex';
 
 export default {
   components: {
     Pagination
   },
+
+  mixins: [waitRequest],
 
   data() {
     return {
@@ -51,18 +54,23 @@ export default {
       fetchProducts: 'catalog/fetchProducts'
     }),
 
-    callback: function(changedPage) {
+    paginationCallback(changedPage) {
       this.addQueryParams(changedPage);
 
-      console.log(this.page);
       this.offset = this.productsLength * this.page;
 
-      this.fetchProducts({
-        url: this.$route.fullPath, 
-        page: this.page, 
-        slug: this.categorySlugFromRoute,
-        offset: this.offset, 
+      this.waitRequest(() => {
+        return this.fetchProducts({
+          url: this.$route.fullPath, 
+          page: this.page, 
+          slug: this.categorySlugFromRoute,
+          offset: this.offset, 
+        })
       })
+
+      console.log(this.requestInProgress);
+
+      this.$emit('paginationRequestInProgress', this.requestInProgress);
     },
 
     addQueryParams(currentPage) {

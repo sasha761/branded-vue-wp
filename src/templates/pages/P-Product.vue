@@ -5,6 +5,7 @@
     :data-price="product.price"
     :data-categories="getProductCategory"
   >
+    <C-PageLoader v-if="requestInProgress"/>
     <div class="u-container">
       <C-Breadcrumb />
       <section class="l-product">
@@ -104,9 +105,12 @@ import LSubscribe from '@/templates/layout/L-Subscribe.vue'
 import LRelated from '@/templates/layout/L-Related.vue'
 import LComments from '@/templates/layout/L-Comments.vue'
 
+import CPageLoader from '@/templates/components/C-PageLoader.vue'
+
 import CBreadcrumb from '@/templates/components/C-Breadcrumbs.vue'
 import CAccordion from '@/templates/components/C-Accordion.vue'
 import CButton from '@/templates/components/C-Button.vue'
+// import CSpinner from '@/templates/components/C-Spinner.vue'
 
 // import stringConfig from '@/config/stringConfig.js';
 import waitRequest from '@/mixins/waitRequest';
@@ -121,7 +125,8 @@ export default {
     CBreadcrumb,
     CAccordion,
     CButton,
-    vSelect
+    vSelect,
+    CPageLoader
   },
 
   mixins: [waitRequest],
@@ -132,6 +137,7 @@ export default {
       selectedSize: '',
       relatedProducts: [],
       relatedProductsChecker: false,
+      // relatedRequestInProgress: false
     }
   },
 
@@ -154,7 +160,7 @@ export default {
       this.selectedSize = this.product?.size_attribute[0];
     } else {
       this.waitRequest(() => {
-        Api.get('product/get_single_product', {
+        return Api.get('product/get_single_product', {
           params: {
             url: this.$route.params.productName
           }
@@ -163,13 +169,11 @@ export default {
           console.log(result)
           this.product = result.data
           this.selectedSize = result.data?.size_attribute[0];
-
         })
         .catch((error) => {
           console.log(error);
         });
       })
-      
     }
 
     window.addEventListener('scroll', this.handleScroll);
@@ -196,8 +200,6 @@ export default {
       
       if (isVisible && this.relatedProductsChecker === false) {
 
-        this.relatedProductsChecker = true;
-
         return Api.get('product/get_related_products', {
           params: {
             id: this.product.id
@@ -205,6 +207,7 @@ export default {
         })
         .then((result) => {
           this.relatedProducts = result.data.related_products
+          this.relatedProductsChecker = true;
         })
         .catch((error) => {
           console.log(error);

@@ -12,23 +12,28 @@
           <section class="l-shop" data-categories="Женщинам" data-cat-id="17">
             <h1 class="u-h2">Женщинам</h1>
             <L-Filter-Block />
-            <!-- <C-Spinner v-if="requestInProgress"></C-Spinner> -->
-            <div v-if="products" class="l-shop__product">
-              <div class="row">
-                <div
-                  v-for="product in products"
-                  :key="product.id"
-                  class="col-lg-3 col-md-4 col-sm-6 col-6 u-col"
-                >
-                  <C-Product :product="product" />
-                </div>
-              </div>
+            
+            <C-Product-list 
+              :products="products"
+              :callback="fetchProductsCustom"
+              ref="productsList"
+            ></C-Product-list>
+            
+            <div v-if="maxPages > 0" class="c-pagination">
+              <pagination 
+                v-model="page" 
+                :records="productsCount" 
+                :per-page="16"
+                @paginate="paginationCallback"
+                :options="{texts: null}"
+              />
             </div>
-            <C-Pagination 
+            <!-- <C-Pagination 
+              @pagination-Request-In-Progress="paginationRequst"
               :category-slug-from-route="categorySlugFromRoute" 
               :count-products="productsCount" 
               :current-page="currentPage"
-            />
+            /> -->
           </section>
         </div>
       </div>
@@ -42,15 +47,16 @@ import LSubscribe from '@/templates/layout/L-Subscribe.vue'
 import LFilterBlock from '@/templates/layout/L-Filter-block.vue'
 
 import CPageLoader from '@/templates/components/C-PageLoader.vue'
-import CProduct from '@/templates/components/C-Product.vue'
-import CPagination from '@/templates/components/C-Pagination.vue'
+// import CPagination from '@/templates/components/C-Pagination.vue'
 import CBreadcrumb from '@/templates/components/C-Breadcrumbs.vue'
 
-// import CSpinner from '@/templates/components/C-Spinner.vue'
+import CProductList from '@/templates/components/C-Product-list.vue'
 // import Api from '@/api/Axios'
 
 import { mapActions, mapMutations, mapGetters } from 'vuex';
 import waitRequest from '@/mixins/waitRequest';
+import Pagination from 'vue-pagination-2';
+
 
 export default {
   name: "App",
@@ -59,6 +65,9 @@ export default {
 
   data() {
     return {
+      page: 1,
+      maxPages: 1,
+      // offset: null,
     }
   },
 
@@ -66,14 +75,19 @@ export default {
     LFilterBlock,
     LSubscribe,
     CPageLoader,
-    CProduct,
-    CPagination,
+    CProductList,
+    // CProduct,
+    // CPagination,
     CBreadcrumb,
-    // CSpinner
+    Pagination
   },
 
   beforeDestroy(){
     this.setProductsList([]);
+  },
+
+  beforeMount() {
+    this.page = this.currentPage
   },
 
   mounted() {
@@ -82,7 +96,7 @@ export default {
         url: this.$route.fullPath, 
         page: this.currentPage,
         slug: this.categorySlugFromRoute,
-        offset: 0
+        offset: this.offset
       }).then(result => {
         console.log(result);
       })
@@ -96,14 +110,13 @@ export default {
     }),
 
     offset() {
-      return 16 * this.currentPage;
+      return 16 * (this.currentPage - 1);
     },
     
     categorySlugFromRoute() { return this.$route.params.subcategorySlug || this.$route.params.categorySlug },
     currentPage() { 
       const queryPage = this.$route?.query?.page;
       const currentPageNumber = Number(queryPage) || 1;
-
       return currentPageNumber;
     }
   },
@@ -116,6 +129,41 @@ export default {
     ...mapActions({
       fetchProducts: 'catalog/fetchProducts'
     }),
+
+    paginationCallback(changedPage) {
+      this.addQueryParams(changedPage);
+      // this.fetchProductsCustom();
+      this.$refs.productsList?.callbackInit();
+    },
+
+    fetchProductsCustom() {
+      const offset = this.productsLength * this.page;
+
+      return this.fetchProducts({
+        url: this.$route.fullPath, 
+        page: this.page, 
+        slug: this.categorySlugFromRoute,
+        offset: offset, 
+      })
+    },
+
+    addQueryParams(currentPage) {
+      const query = { ...this.$route.query };
+      query['page'] = currentPage;
+      this.$router.push({ path: '', query });
+    },
+
+    removeQueryParams() {
+      const query = { ...this.$route.query };
+      delete query['page'];
+      this.$router.push({ path: '', query });
+    },
   }
 }
 </script>
+
+<style>
+  .VuePagination__count {
+    display: none;
+  }
+</style>
