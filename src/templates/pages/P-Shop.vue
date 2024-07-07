@@ -9,8 +9,8 @@
         </div>
         <div class="p-shop__catalog">
           
-          <section class="l-shop" data-categories="Женщинам" data-cat-id="17">
-            <h1 class="u-h2">Женщинам</h1>
+          <section class="l-shop" :data-categories="categoryTitle" >
+            <h1 class="u-h2">{{categoryTitle}}</h1>
             <L-Filter-Block />
             
             <C-Product-list 
@@ -28,12 +28,6 @@
                 :options="{texts: null}"
               />
             </div>
-            <!-- <C-Pagination 
-              @pagination-Request-In-Progress="paginationRequst"
-              :category-slug-from-route="categorySlugFromRoute" 
-              :count-products="productsCount" 
-              :current-page="currentPage"
-            /> -->
           </section>
         </div>
       </div>
@@ -107,6 +101,7 @@ export default {
     ...mapGetters({
       products: 'catalog/products',
       productsCount: 'catalog/productsCount',
+      categoryInfo: 'catalog/categoryInfo',
     }),
 
     offset() {
@@ -118,6 +113,18 @@ export default {
       const queryPage = this.$route?.query?.page;
       const currentPageNumber = Number(queryPage) || 1;
       return currentPageNumber;
+    },
+
+    categoryTitle() {
+      let title = '';
+      if (this.categoryInfo.acf_title) {
+        title = this.categoryInfo.acf_title
+      } else if (this.categoryInfo.parent) { 
+        title = this.categoryInfo?.parent + '. ' + this.categoryInfo.name 
+      } else {
+        title = this.categoryInfo.name 
+      } 
+      return title;
     }
   },
 

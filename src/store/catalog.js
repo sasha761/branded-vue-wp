@@ -3,6 +3,7 @@ import Api from '@/api/Axios'
 const state = {
   products: [],
   productsCount: 0,
+  categoryInfo: []
 };
 const mutations = {
   setProductsList(state, products) {
@@ -13,6 +14,9 @@ const mutations = {
   },
   setProductsCount(state, productsCount) {
     state.productsCount = productsCount;
+  },
+  setCategoryInfo(state, categoryInfo) {
+    state.categoryInfo = categoryInfo;
   },
 };
 const actions = {
@@ -29,6 +33,7 @@ const actions = {
       if(result?.data?.status !== 'nomore') {
         commit('setProductsCount', result.data.products_count);
         commit('setProductsList', result.data.products);
+        commit('setCategoryInfo', result.data.product_cat);
       }
       return result.data;
     })
@@ -43,6 +48,9 @@ const getters = {
   },
   productsCount(state) {
     return state.productsCount;
+  },
+  categoryInfo(state) {
+    return state.categoryInfo;
   }
 };
 

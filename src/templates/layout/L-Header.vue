@@ -113,7 +113,7 @@
               </div>
             </div>
           </div>
-          <div class="c-dropdown js-dropdown">
+          <div class="c-dropdown js-dropdown" :class="{'is-active': activeDropdown}" @click="activeDropdown = !activeDropdown">
             <span class="c-dropdown__current">Помощь</span>
             <svg width="11px" height="7px" class="u-arrow"><use xlink:href="#arrow"></use></svg>
             <ul class="c-dropdown__list">
@@ -154,6 +154,7 @@
         </div>
       </div>
     </div>
+    <C-Sticky-Menu />
   </header>
 </template>
 
@@ -163,10 +164,13 @@ import { mapMutations, mapActions, mapGetters } from 'vuex';
 import stringConfig from '@/config/stringConfig.js'
 import CMenu from '@/templates/components/C-Menu.vue';
 import CLogo from '@/templates/components/C-Logo.vue';
+import CStickyMenu from '@/templates/components/C-sticky-menu.vue';
+
 
 export default {
   data() {
     return {
+      activeDropdown: false,
       search: '',
       strings: stringConfig,
     }
@@ -175,6 +179,7 @@ export default {
   components: {
     CMenu,
     CLogo,
+    CStickyMenu
   },
 
   created() {
@@ -210,7 +215,6 @@ export default {
     }),
 
     mobileMenuModal() {
-      console.log('some');
       this.$popup.open('PopupMobileMenu', {menu: this.getMobileMenu})
     },
 

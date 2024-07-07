@@ -21,7 +21,6 @@ import CProduct from '@/templates/components/C-Product.vue'
 import CSpinner from '@/templates/components/C-Spinner.vue'
 import waitRequest from '@/mixins/waitRequest';
 
-
 export default {
   data() {
     return {

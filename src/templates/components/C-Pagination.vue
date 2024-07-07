@@ -5,7 +5,6 @@
       :records="countProducts" 
       :per-page="16"
       @paginate="paginationCallback"
-
       :options="{texts: null}"
     />
   </div>

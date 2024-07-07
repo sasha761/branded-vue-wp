@@ -1,11 +1,11 @@
 <template>
   <main class="p-main">
     <C-PageLoader v-if="requestInProgress"/>
-    <L-Hero-Home :data="heroHome" />
-    <L-Accessory :data="accessory" />
-    <L-Product-Row :data="productRow" />
-    <L-Brand :data="brand" />
-    <L-Outlet :data="outlet" />
+    <L-Hero-Home v-if="homeData.banners_group" :data="homeData.banners_group" />
+    <L-Accessory :data="homeData.accesories" />
+    <L-Product-Row :data="homeData.best_offers" />
+    <L-Brand :data="homeData.products_brand" />
+    <L-Outlet :data="homeData.products_sale" />
     <L-Branded />
     <L-Subscribe />
   </main>
@@ -24,7 +24,7 @@ import LBranded from '@/templates/layout/L-Branded.vue'
 
 import waitRequest from '@/mixins/waitRequest';
 
-import Api from '@/api/Axios'
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
   name: "App",
@@ -42,48 +42,24 @@ export default {
     CPageLoader
   },
 
-  data() {
-    return {
-      heroHome: {},
-      accessory: [],
-      productRow: [],
-      brand: [],
-      outlet: [],
-      branded: []
+  created() {
+    if (!Object.keys(this.homeData).length) {
+      this.waitRequest(() => {
+        return this.fetchHomeData();
+      })
     }
   },
 
-  created() {
-    this.waitRequest(() => {
-      return Api.get('home/get_home_info')
-      .then((result) => {
-        this.heroHome = result.data?.banners_group;
-        this.accessory = result.data?.accesories;
-        this.productRow = result.data?.best_offers;
-        this.brand = result.data?.products_brand;
-        this.outlet = result.data?.products_sale
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    })
-  },
-
   computed: {
-    // ...mapGetters({
-    //   products: 'catalog/products',
-    //   productsCount: 'catalog/productsCount',
-    // }),
+    ...mapGetters({
+      homeData: 'home/getHomeData',
+    }),
   },
 
   methods: {
-    // ...mapMutations({
-    //   setProductsList: 'catalog/setProductsList'
-    // }),
-
-    // ...mapActions({
-    //   fetchProducts: 'catalog/fetchProducts'
-    // }),
+    ...mapActions({
+      fetchHomeData: 'home/fetchHomeData'
+    }),
   }
 }
 </script>

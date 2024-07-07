@@ -2,8 +2,8 @@
   <div class="c-modal c-mobile-menu js-tab-mobile-menu" id="mobile-menu">
     <div class="c-tab">
       <div class="c-tab__nav">
-        <span data-tab="#wooman" class="c-tab__item is-active">For her</span>
-        <span data-tab="#man" class="c-tab__item">For him</span>
+        <span data-tab="#wooman" :class="{ 'is-active': activeTab === '#wooman' }" @click="toggleTab('#wooman')" class="c-tab__item ">For her</span>
+        <span data-tab="#man" :class="{ 'is-active': activeTab === '#man' }" @click="toggleTab('#man')" class="c-tab__item">For him</span>
         
         <span class="js-mobile-menu-back">
           <svg width="28px" height="28px">
@@ -15,7 +15,7 @@
         </svg>
       </div>
       <div class="c-tab__container">
-        <div id="wooman" v-if="data.menu.wooman" class="c-tab__content is-active">
+        <div id="wooman" :class="{ 'is-active': activeTab === '#wooman' }" v-if="data.menu.wooman" class="c-tab__content ">
           <div class="c-mobile-menu__cat">
             <router-link 
               v-for="(item, index) in data.menu.wooman" 
@@ -39,7 +39,7 @@
             </router-link>
           </div>
         </div>
-        <div id="man" class="c-tab__content">
+        <div id="man" :class="{ 'is-active': activeTab === '#man' }" class="c-tab__content">
           <div class="c-mobile-menu__cat">
             <router-link 
               v-for="(item, index) in data.menu.man" 
@@ -73,6 +73,23 @@
 
 
 export default {
+   data() {
+    return {
+      activeTab: '#wooman',
+      // data: {
+      //   menu: {
+      //     wooman: [
+      //       { title: 'Item 1', slug: '/wooman/item1', image: { url: 'image1.jpg' } },
+      //       { title: 'Item 2', slug: '/wooman/item2', image: { url: 'image2.jpg' } },
+      //     ],
+      //     man: [
+      //       { title: 'Item 1', slug: '/man/item1', image: { url: 'image1.jpg' } },
+      //       { title: 'Item 2', slug: '/man/item2', image: { url: 'image2.jpg' } },
+      //     ]
+      //   }
+      // }
+    };
+  },
   mounted() {
 
   },
@@ -90,6 +107,9 @@ export default {
   },
 
   methods: {
+    toggleTab(tab) {
+      this.activeTab = tab;
+    },
     handleCloseClick() {
       this.$popup.close(1, () => {})
     },
