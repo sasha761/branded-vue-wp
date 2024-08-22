@@ -16,6 +16,8 @@
                 v-if="product.post_img_xl"
                 :href="product.post_img_xl"
                 class="js-lightbox"
+                @click.prevent="openLightbox"
+                data-key="0"
               >
                 <img :src="product.post_img_xl" alt="" height="1440" width="1000">
               </a>
@@ -84,6 +86,8 @@
             <a
               :href="imageItem"
               class="js-lightbox"
+              @click.prevent="openLightbox"
+              :data-key="index + 1"
             >
               <img :src="imageItem" alt="" height="1440" width="1000">
             </a>
@@ -238,6 +242,19 @@ export default {
       // // Обновление состояния корзины
       this.setProductToCart(allProducts);
       this.setTotalAmount();
+    },
+
+    openLightbox(event) {
+      // console.log();
+      const elementKey = event.currentTarget.getAttribute('data-key')
+      console.log()
+      this.$popup.open('PopupLightbox', {
+        images: [
+          ...[this.product.post_img_xl], 
+          ...this.product.images, 
+          this.product.video
+        ], 
+        slideKey: elementKey})
     },
 
     quickBuyModal() {

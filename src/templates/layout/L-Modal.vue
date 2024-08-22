@@ -10,6 +10,7 @@
 <script>
 import PopupQuickBuy from '@/templates/popups/PopupQuickBuy.vue';
 import PopupMobileMenu from '@/templates/popups/PopupMobileMenu.vue';
+import PopupLightbox from '@/templates/popups/PopupLightbox.vue';
 
 export default {
   data() {
@@ -22,7 +23,8 @@ export default {
   
   components: {
     PopupQuickBuy,
-    PopupMobileMenu
+    PopupMobileMenu,
+    PopupLightbox
   },
 
   mounted() {
@@ -48,13 +50,13 @@ export default {
 
   methods: {
     openModal(data) {
-      console.log('openModal: ', data);
+      // console.log('openModal: ', data);
       this.popupData = data.data;
       this.popupName = data.name;
     },
 
     closeModal() {
-      console.log('closeModal: ');
+      // console.log('closeModal: ');
       this.popupData = null
       this.popupName = null;
     }

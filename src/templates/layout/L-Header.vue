@@ -7,34 +7,27 @@
           <C-Menu :headerMenu="getHeaderMenu" v-if="getHeaderMenu.length"/>
         </div>
         <div class="l-header__bottom-right">
-          <div
-            class="aws-container"
-            data-url="/?wc-ajax=aws_action"
-            data-siteurl="http://brand.loc"
+          <form
+            role="search"
+            method="get"
+            id="searchform"
+            class="c-search"
+            action="https://branded.com.ua"
           >
-            <form
-              role="search"
-              method="get"
-              id="searchform"
-              class="c-search"
-              action="https://branded.com.ua"
-            >
-              <button type="submit" class="c-search__button">
-                <svg width="15px" height="17px" class="is-search">
-                  <use xlink:href="#search"></use>
-                </svg>
-              </button>
-              <input type="hidden" name="post_type" value="product" />
-              <input type="hidden" name="type_aws" value="true" />
-              <input
-                type="text"
-                v-model="search"
-                placeholder="Поиск"
-                name="s"
-                id="s"
-              />
-            </form>
-          </div>
+            <button type="submit" class="c-search__button">
+              <svg width="15px" height="17px" class="is-search">
+                <use xlink:href="#search"></use>
+              </svg>
+            </button>
+            <input type="hidden" name="post_type" value="product" />
+            <input
+              type="text"
+              v-model="search"
+              placeholder="Поиск"
+              name="s"
+              id="s"
+            />
+          </form>
           <div class="c-service cart d-none d-sm-block">
             <div>
               <span class="c-service__count">{{getCartProducts.length}}</span>
@@ -117,11 +110,11 @@
             <span class="c-dropdown__current">Помощь</span>
             <svg width="11px" height="7px" class="u-arrow"><use xlink:href="#arrow"></use></svg>
             <ul class="c-dropdown__list">
-              <li><a href="https://branded.com.ua/dostavka-i-oplata">Доставка и оплата</a></li>
-              <li><a href="https://branded.com.ua/vozvrat-i-obmen">Возврат и обмен</a></li>
-              <li><a href="https://branded.com.ua/garantiya">Гарантия</a></li>
-              <li><a href="https://branded.com.ua/reviews">Отзывы</a></li>
-              <li><a href="tel:+38(066)3156536">+38 (066) 315 65 36</a></li>
+              <li><router-link to="/dostavka-i-oplata">Доставка и оплата</router-link></li>
+              <li><router-link to="/vozvrat-i-obmen">Возврат и обмен</router-link></li>
+              <li><router-link to="/garantiya">Гарантия</router-link></li>
+              <li><router-link to="/reviews">Отзывы</router-link></li>
+              <li><a to="tel:+38(066)3156536">+38 (066) 315 65 36</a></li>
             </ul>
           </div>
           <!-- <div class="c-lang js-lang">

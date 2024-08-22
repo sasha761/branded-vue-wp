@@ -76,9 +76,9 @@ export default {
     Pagination
   },
 
-  beforeDestroy(){
-    this.setProductsList([]);
-  },
+  // beforeDestroy(){
+  //   this.setProductsList([]);
+  // },
 
   beforeMount() {
     this.page = this.currentPage

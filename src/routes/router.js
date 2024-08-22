@@ -36,7 +36,12 @@ const routes = [
     path: '/checkout-2/order-received/:numbers/', 
     name: 'order-received', 
     component: () => import('../templates/pages/P-Order-received.vue') 
-  }
+  },
+  { 
+    path: '/:catchAll(.*)', 
+    name: 'page', 
+    component: () => import('../templates/pages/P-Page.vue') 
+  },
 ]
 
 export const router = new VueRouter({
