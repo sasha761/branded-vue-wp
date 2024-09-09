@@ -60,6 +60,8 @@
                   >
                     Купить в 1 клик
                   </CButton>
+
+                  <div v-if="product.is_stock == 'outofstock'" class="l-product__manage-stock u-h3 is-red">Out of stock</div>
                 </div>
               </form>
 

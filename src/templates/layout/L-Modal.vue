@@ -11,6 +11,9 @@
 import PopupQuickBuy from '@/templates/popups/PopupQuickBuy.vue';
 import PopupMobileMenu from '@/templates/popups/PopupMobileMenu.vue';
 import PopupLightbox from '@/templates/popups/PopupLightbox.vue';
+import PopupSearch from '@/templates/popups/PopupSearch.vue';
+import PopupMobileMenuMore from '@/templates/popups/PopupMobileMenuMore.vue';
+
 
 export default {
   data() {
@@ -24,7 +27,9 @@ export default {
   components: {
     PopupQuickBuy,
     PopupMobileMenu,
-    PopupLightbox
+    PopupLightbox,
+    PopupSearch,
+    PopupMobileMenuMore
   },
 
   mounted() {

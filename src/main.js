@@ -11,9 +11,11 @@ import emitter from './plugins/emitter.js';
 
 // window.emitter = new Emitter();
 
+
+
 Vue.config.productionTip = false
-Vue.use(VueRouter);
 Vue.use(emitter);
+Vue.use(VueRouter);
 Vue.use(Vuelidate);
 
 
@@ -22,3 +24,13 @@ new Vue({
   store,
   render: h => h(App),
 }).$mount('#app')
+
+// console.log(router);
+
+router.afterEach(() => {
+  Vue.prototype.$popup.close(1, () => {})
+  // console.log('some: ', Vue.prototype.$popup.close(1, () => {}));
+//   // Ваша кастомная функция
+//   // this.$popup.close(1, () => {})
+});
+// console.log(this.$popup);
