@@ -51,9 +51,3 @@ export const router = new VueRouter({
     return { x: 0, y: 0 }
   },
 })
-
-router.afterEach(() => {
-  // console.log(Vue);
-//   // Ваша кастомная функция
-//   // this.$popup.close(1, () => {})
-});
