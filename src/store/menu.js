@@ -25,7 +25,6 @@ const actions = {
     return Api.get('menu/get_menu_header')
     .then((result) => {
       commit('setItemsToHeaderMenu', result.data);
-      console.log('HeaderMenu: ', result.data);
     })
     .catch((error) => {
       console.log(error);
@@ -35,7 +34,6 @@ const actions = {
     return Api.get('menu/get_menu_footer')
     .then((result) => {
       commit('setItemsToFooterMenu', result.data);
-      console.log('FooterMenu: ', result.data);
     })
     .catch((error) => {
       console.log(error);
@@ -45,21 +43,21 @@ const actions = {
     return Api.get('menu/get_menu_mobile')
     .then((result) => {
       commit('setItemsToMobileMenu', result.data);
-      console.log('MobileMenu: ', result.data);
     })
     .catch((error) => {
       console.log(error);
     });
   },
   fetchLanguages({commit}, {url}) {
+    console.log('setLanguages: ', url);
     return Api.get('menu/languages', {
       params: {
         url: url
       }
     })
     .then((result) => {
+      
       commit('setLanguages', result.data);
-      console.log('lang: ', result.data);
     })
     .catch((error) => {
       console.log(error);

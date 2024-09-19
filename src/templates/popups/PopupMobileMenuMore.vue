@@ -65,7 +65,6 @@ export default {
 
   methods: {
     handleCloseClick() {
-      console.log(this.data);
       this.$popup.close(1, () => {})
     },
   }

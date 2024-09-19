@@ -117,27 +117,8 @@
               <li><a to="tel:+38(066)3156536">+38 (066) 315 65 36</a></li>
             </ul>
           </div>
-          <!-- <div class="c-lang js-lang">
-            <div class="c-lang__current">
-              {{current_lang}}
-              <svg width="11px" height="7px" class="c-lang__arrow">
-                <use xlink:href="#arrow"></use>
-              </svg>
-              
-            </div>
-            <div class="c-lang__sub">
-              <pre v-pre>{{ this.$route }}</pre>
-              {% for lang in language_code %}
-                <a 
-                  href="{{ lang.url }}" 
-                  class="c-lang__item {% if current_lang == lang.code %}is-active {% endif %}"
-                  data-lang="{{lang.code}}"
-                >
-                  {{ lang.code }}
-                </a>
-              {% endfor %}
-            </div>
-          </div> -->
+          
+          <C-Lang :langs="getLanguages" v-if="getLanguages.length"/>
 
           <div class="c-burger d-block d-sm-none"  @click="mobileMenuModal">
             <span></span>
@@ -157,6 +138,8 @@ import { mapMutations, mapActions, mapGetters } from 'vuex';
 import stringConfig from '@/config/stringConfig.js'
 import CMenu from '@/templates/components/C-Menu.vue';
 import CLogo from '@/templates/components/C-Logo.vue';
+import CLang from '@/templates/components/C-Lang.vue';
+
 import CStickyMenu from '@/templates/components/C-sticky-menu.vue';
 
 
@@ -172,15 +155,17 @@ export default {
   components: {
     CMenu,
     CLogo,
-    CStickyMenu
+    CStickyMenu,
+    CLang
   },
 
   created() {
     this.fetchCartUrl();
     this.fetchHeaderMenu();
     this.fetchMobileMenu();
-    this.fetchLanguages(this.$route.path);
+    this.fetchLanguages({url: '/uk/product/futbolka-zhenskaya-vyvarennaya-bezhevaya-ot-beom-design'});
     this.setTotalAmount();
+    // console.log('header:', this.$router);
   },
 
   computed: {

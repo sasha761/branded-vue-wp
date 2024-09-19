@@ -64,7 +64,6 @@ export default {
 
   computed: {
     isShow() {
-      console.log(this.countProducts, this.productsLength);
       return this.countProducts > this.productsLength;
     }
   },
@@ -83,8 +82,6 @@ export default {
         this.isShow = false;
         return;
       }
-
-      // console.log(this.$route);
       
       this.isActive = true;
 

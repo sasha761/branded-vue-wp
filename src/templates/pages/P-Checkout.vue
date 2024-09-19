@@ -363,7 +363,7 @@ export default {
           comments: this.formData.comments,
         })
         .then((result) => {
-          console.log(result);
+          // console.log(result);
           const url = new URL(result.data);
           const path = url.pathname + url.search;
 

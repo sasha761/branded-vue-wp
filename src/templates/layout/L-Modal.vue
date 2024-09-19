@@ -38,30 +38,17 @@ export default {
     }})
 
     this.$popup.onClose({callback: (data)=> {
-      // console.log(data);
       this.openModal(data);
     }})
-    // this.$popup.onOpen((data) => {
-    //   console.log(data);
-    // });
-    // window.emitter.on('closeModal', (data) => {
-    //   this.closeModal(data);
-    // });
-
-    // window.emitter.on('openModal', ({data, popup}) => {
-    //   this.openModal(data, popup);
-    // });
   },
 
   methods: {
     openModal(data) {
-      // console.log('openModal: ', data);
       this.popupData = data.data;
       this.popupName = data.name;
     },
 
     closeModal() {
-      // console.log('closeModal: ');
       this.popupData = null
       this.popupName = null;
     }

@@ -88,8 +88,7 @@
             <a
               :href="imageItem"
               class="js-lightbox"
-              @click.prevent="openLightbox"
-              :data-key="index + 1"
+              @click.prevent="openLightbox(index + 1)"
             >
               <img :src="imageItem" alt="" height="1440" width="1000">
             </a>
@@ -105,23 +104,19 @@
 
 <script>
 import Api from '@/api/Axios'
-
+import { mapGetters, mapMutations } from 'vuex';
 import vSelect from 'vue-select';
+
 import LSubscribe from '@/templates/layout/L-Subscribe.vue'
 import LRelated from '@/templates/layout/L-Related.vue'
 import LComments from '@/templates/layout/L-Comments.vue'
 
 import CPageLoader from '@/templates/components/C-PageLoader.vue'
-
 import CBreadcrumb from '@/templates/components/C-Breadcrumbs.vue'
 import CAccordion from '@/templates/components/C-Accordion.vue'
 import CButton from '@/templates/components/C-Button.vue'
-// import CSpinner from '@/templates/components/C-Spinner.vue'
 
-// import stringConfig from '@/config/stringConfig.js';
 import waitRequest from '@/mixins/waitRequest';
-
-import { mapGetters, mapMutations } from 'vuex';
 
 export default {
   components: {
@@ -143,7 +138,6 @@ export default {
       selectedSize: '',
       relatedProducts: [],
       relatedProductsChecker: false,
-      // relatedRequestInProgress: false
     }
   },
 
@@ -168,7 +162,8 @@ export default {
       this.waitRequest(() => {
         return Api.get('product/get_single_product', {
           params: {
-            url: this.$route.params.productName
+            url: this.$route.params.productName,
+            lang: 'uk'
           }
         })
         .then((result) => {
@@ -221,8 +216,8 @@ export default {
       }
     },
 
-    handleSelectChange() {
-      // console.log(value);
+    handleSelectChange(value) {
+      console.log(value);
     },
 
     addProductToCart(product) {      
@@ -246,17 +241,14 @@ export default {
       this.setTotalAmount();
     },
 
-    openLightbox(event) {
-      // console.log();
-      const elementKey = event.currentTarget.getAttribute('data-key')
-      console.log()
+    openLightbox(index = 0) {
       this.$popup.open('PopupLightbox', {
         images: [
           ...[this.product.post_img_xl], 
           ...this.product.images, 
           this.product.video
         ], 
-        slideKey: elementKey})
+        slideKey: index})
     },
 
     quickBuyModal() {

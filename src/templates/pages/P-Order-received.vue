@@ -73,8 +73,6 @@ export default {
   },
 
   created() {
-    console.log(this.$route);
-
     this.waitRequest(() => {
       return Api.get('cart/get_order_info', {
         params: {
@@ -84,7 +82,7 @@ export default {
         }
       })
       .then((result) => {
-        console.log(result)
+        // console.log(result)
         this.orderData = result.data.order_data
         this.products = result.data.products
 

@@ -57,7 +57,6 @@ export default {
 
     open() {
       this.isOpen = true;
-      console.log(this.isOpen);
     },
 
     setLang(lang) {

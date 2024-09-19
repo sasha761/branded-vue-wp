@@ -13,13 +13,11 @@ Vue.use(emitter);
 Vue.use(VueRouter);
 Vue.use(Vuelidate);
 
-
 new Vue({
   router,
   store,
   render: h => h(App),
 }).$mount('#app')
-
 
 router.afterEach(() => {
   Vue.prototype.$popup.close(1, () => {})

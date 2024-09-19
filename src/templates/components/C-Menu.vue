@@ -56,6 +56,6 @@ export default {
     headerMenu: {
       type: Array
     }
-  }
+  },
 }
 </script>

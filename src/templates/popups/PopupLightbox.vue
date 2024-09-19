@@ -39,34 +39,13 @@ export default {
     this.swiperFn();
   },
 
-  
-  watch: { 
-    // data: {
-    //   handler(newVal, oldVal) {
-    //     console.log('data изменился:', oldVal, '->', newVal);
-    //     // Дополнительная логика при изменении данных
-    //     // console.log('swiperInstance: ', this.swiperInstance);
-    //     // this.swiperInstance.slideTo(this.data.slideKey, 0);
-    //   },
-    //   deep: true,
-    //   immediate: true
-    // },
-    swiperInstance: {
-      handler(newVal, oldVal) {
-        console.log('swiperInstance:', oldVal, '->', newVal);
-
-        if (newVal) this.swiperInstance.slideTo(this.data.slideKey, 0)
-      },
-    }
-  },
-
   methods: {
     handleCloseClick() {
       this.$popup.close(1, () => {})
     },
 
     generateTemplateFromFilesArray(array) {
-      return array.map((src) => {
+      return array.filter((currentValue) => currentValue).map((src) => {
         return this.checkFile(src)
       });
     },
@@ -82,6 +61,8 @@ export default {
     },
 
     swiperFn() {
+      const self = this;
+
       this.swiperInstance = new Swiper(this.$refs.lightboxSlider, {
         slidesPerView: 'auto',
         watchOverflow: true,
@@ -90,6 +71,7 @@ export default {
           stopOnLastSlide: false,
           disableOnInteraction: true,
         },
+        initialSlide: self.data.slideKey,
       })
     },
     

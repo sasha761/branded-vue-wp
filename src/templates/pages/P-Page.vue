@@ -58,12 +58,7 @@ export default {
   },
 
   methods: {
-    extractProductName(url) {
-      if (!url) return;
 
-      const parts = url.split('/');
-      return parts[parts.length - 2];
-    }
   }
 }
 </script>

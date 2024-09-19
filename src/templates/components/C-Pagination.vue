@@ -67,8 +67,6 @@ export default {
         })
       })
 
-      console.log(this.requestInProgress);
-
       this.$emit('paginationRequestInProgress', this.requestInProgress);
     },
 

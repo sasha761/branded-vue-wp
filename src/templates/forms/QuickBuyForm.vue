@@ -163,7 +163,6 @@ export default {
           post: this.formData.post
         })
         .then(() => {
-          // console.log(result)
           this.formData.products = [];
           this.formData.firstName = null;
           this.formData.lastName = null;
