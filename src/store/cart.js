@@ -12,7 +12,7 @@ const mutations = {
     state.products = product;
     localStorage.setItem('cartProducts', JSON.stringify(product));
 
-    console.log('state: ', JSON.parse(localStorage.getItem('cartProducts')));
+    // console.log('state: ', JSON.parse(localStorage.getItem('cartProducts')));
   },
   setTotalAmount(state) {
     const productsArray = ((state.products.length) ? state.products : JSON.parse(localStorage.getItem('cartProducts'))) || [];

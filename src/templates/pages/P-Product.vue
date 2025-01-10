@@ -144,6 +144,7 @@ export default {
   computed: {
     ...mapGetters({
       cartProducts: 'cart/getCartProducts',
+      currentLang: 'menu/getCurrentLang',
     }),
 
     hasProductImages() {
@@ -154,29 +155,17 @@ export default {
     },
   },
 
+  watch: {
+    currentLang: 'fetchProductData', // Отслеживаем изменение языка
+  },
+
   mounted() {
     if(this.$route.params.productData) {
       this.product = this.$route.params.productData
       this.selectedSize = this.product?.size_attribute[0];
     } else {
-      this.waitRequest(() => {
-        return Api.get('product/get_single_product', {
-          params: {
-            url: this.$route.params.productName,
-            lang: 'uk'
-          }
-        })
-        .then((result) => {
-          console.log(result)
-          this.product = result.data
-          this.selectedSize = result.data?.size_attribute[0];
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-      })
+      this.fetchProductData();
     }
-
     window.addEventListener('scroll', this.handleScroll);
     window.addEventListener('resize', this.handleResize);
   },
@@ -186,6 +175,41 @@ export default {
       setProductToCart: 'cart/setProductToCart',
       setTotalAmount: 'cart/setTotalAmount'
     }),
+
+    fetchProductData() {
+      this.waitRequest(() => {
+        return Api.get('product/get_single_product', {
+          params: {
+            url: this.$route.params.productName,
+            lang: this.currentLang,
+          }
+        })
+        .then((result) => {
+          console.log(result)
+          this.product = result.data
+          this.selectedSize = result.data?.size_attribute[0];
+          
+          // const apiUrl = new URL(result.data.permalink).pathname;
+          // const currentUrl = this.$route.path;
+
+          
+          // const newParams = {
+          //   productName: this.$route.params.productName,
+          //   lang: this.currentLang === 'ru' ? null : this.currentLang,
+          // };
+
+          // console.log(currentUrl, apiUrl, newParams);
+
+          // // Проверяем, нужно ли обновлять маршрут
+          // if (JSON.stringify(newParams) !== JSON.stringify(this.$route.params)) {
+          //   this.$router.replace({ name: 'product', params: newParams });
+          // }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+      })
+    },
 
     handleScroll() {
       this.checkVisibility();
@@ -200,7 +224,7 @@ export default {
       const isVisible = rect.top < window.innerHeight && rect.bottom >= 0;
       
       if (isVisible && this.relatedProductsChecker === false) {
-
+        this.relatedProductsChecker = true;
         return Api.get('product/get_related_products', {
           params: {
             id: this.product.id
@@ -208,7 +232,7 @@ export default {
         })
         .then((result) => {
           this.relatedProducts = result.data.related_products
-          this.relatedProductsChecker = true;
+          
         })
         .catch((error) => {
           console.log(error);

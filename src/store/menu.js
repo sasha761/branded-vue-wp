@@ -4,7 +4,8 @@ const state = {
   headerMenu: [],
   footerMenu: [],
   mobileMenu: [],
-  languages: []
+  languages: [],
+  currentLang: localStorage.getItem('currentLang') || 'ru', // By default
 };
 const mutations = {
   setItemsToHeaderMenu(state, data) {
@@ -16,13 +17,22 @@ const mutations = {
   setItemsToMobileMenu(state, data) {
     state.mobileMenu = data
   },
-  setLanguages(state, languages) {
-    state.languages = languages
-  }
+  setCurrentLang(state, lang) {
+    localStorage.setItem('currentLang', lang);
+    state.currentLang = lang;
+  },
+  setLanguages(state, data) {
+    const languagesArray = data.languages ? Object.values(data.languages) : [];
+    state.languages = languagesArray;
+    state.currentLang = data.current_lang || 'ru';
+  },
 };
 const actions = {
   fetchHeaderMenu({commit}) {
-    return Api.get('menu/get_menu_header')
+    const lang = localStorage.getItem('currentLang') || 'ru';
+    return Api.get('menu/get_menu_header', {
+      params: { lang },
+    })
     .then((result) => {
       commit('setItemsToHeaderMenu', result.data);
     })
@@ -31,7 +41,10 @@ const actions = {
     });
   },
   fetchFooterMenu({commit}) {
-    return Api.get('menu/get_menu_footer')
+    const lang = localStorage.getItem('currentLang') || 'ru';
+    return Api.get('menu/get_menu_footer', {
+      params: { lang },
+    })
     .then((result) => {
       commit('setItemsToFooterMenu', result.data);
     })
@@ -40,7 +53,10 @@ const actions = {
     });
   },
   fetchMobileMenu({commit}) {
-    return Api.get('menu/get_menu_mobile')
+    const lang = localStorage.getItem('currentLang') || 'ru';
+    return Api.get('menu/get_menu_mobile', {
+      params: { lang },
+    })
     .then((result) => {
       commit('setItemsToMobileMenu', result.data);
     })
@@ -48,19 +64,20 @@ const actions = {
       console.log(error);
     });
   },
-  fetchLanguages({commit}, {url}) {
-    console.log('setLanguages: ', url);
+  updateCurrentLang({ commit }, lang) {
+    commit('setCurrentLang', lang);
+  },
+  fetchLanguages({ commit }) {
+    const lang = localStorage.getItem('currentLang') || 'ru';
     return Api.get('menu/languages', {
-      params: {
-        url: url
-      }
+      params: { lang },
     })
     .then((result) => {
-      
-      commit('setLanguages', result.data);
+      console.log('API response:', result.data); // Проверьте, что возвращается
+      commit('setLanguages', result.data); // Передаем весь объект
     })
     .catch((error) => {
-      console.log(error);
+      console.error('Failed to fetch languages:', error);
     });
   }
 };
@@ -76,6 +93,9 @@ const getters = {
   },
   getLanguages(state) {
     return state.languages;
+  },
+  getCurrentLang(state) {
+    return state.currentLang;
   },
 };
 

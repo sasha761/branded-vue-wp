@@ -160,6 +160,10 @@
     	flex-direction: row-reverse;
 		}
 
+		.screen-reader-text {
+			display: none;
+		}
+
 		del {
 			font-weight: 300;
     	margin-left: 20px;

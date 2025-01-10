@@ -117,8 +117,10 @@
               <li><a to="tel:+38(066)3156536">+38 (066) 315 65 36</a></li>
             </ul>
           </div>
-          
-          <C-Lang :langs="getLanguages" v-if="getLanguages.length"/>
+          <!-- <pre>{{ getCurrentLang }}</pre> -->
+          <!-- <pre>{{ getLanguages.length }}</pre> -->
+          <C-Lang :langs="getLanguages" :current-lang="currentLang" @update:currentLang="updateLanguage" v-if="getLanguages.length" />
+          <!-- <C-Lang :langs="getLanguages" v-if="getLanguages.length"/> -->
 
           <div class="c-burger d-block d-sm-none"  @click="mobileMenuModal">
             <span></span>
@@ -161,11 +163,14 @@ export default {
 
   created() {
     this.fetchCartUrl();
-    this.fetchHeaderMenu();
-    this.fetchMobileMenu();
-    this.fetchLanguages({url: '/uk/product/futbolka-zhenskaya-vyvarennaya-bezhevaya-ot-beom-design'});
+    this.fetchMenu();
+    this.fetchLanguages();
     this.setTotalAmount();
     // console.log('header:', this.$router);
+  },
+
+  watch: {
+    currentLang: 'fetchMenu', // Отслеживаем изменение языка
   },
 
   computed: {
@@ -176,7 +181,8 @@ export default {
       getTotalAmount: 'cart/getTotalAmount',
       getHeaderMenu: 'menu/getHeaderMenu',
       getMobileMenu: 'menu/getMobileMenu',
-      getLanguages: 'menu/getLanguages'
+      getLanguages: 'menu/getLanguages',
+      currentLang: 'menu/getCurrentLang',
     }),
   },
 
@@ -185,12 +191,23 @@ export default {
       fetchCartUrl: 'cart/fetchCartUrl',
       fetchHeaderMenu: 'menu/fetchHeaderMenu',
       fetchMobileMenu: 'menu/fetchMobileMenu',
-      fetchLanguages: 'menu/fetchLanguages'
+      fetchLanguages: 'menu/fetchLanguages',
+      setLanguageInStore: 'menu/updateCurrentLang'
     }),
 
     ...mapMutations({
       setTotalAmount: 'cart/setTotalAmount'
     }),
+
+    updateLanguage(newLang) {
+      this.setLanguageInStore(newLang); // Обновляем Store
+      console.log('Текущий язык изменён:', newLang);
+    },
+
+    fetchMenu() {
+      this.fetchHeaderMenu();
+      this.fetchMobileMenu();
+    },
 
     mobileMenuModal() {
       this.$popup.open('PopupMobileMenu', {menu: this.getMobileMenu})

@@ -45,7 +45,6 @@ import CPageLoader from '@/templates/components/C-PageLoader.vue'
 import CBreadcrumb from '@/templates/components/C-Breadcrumbs.vue'
 
 import CProductList from '@/templates/components/C-Product-list.vue'
-// import Api from '@/api/Axios'
 
 import { mapActions, mapMutations, mapGetters } from 'vuex';
 import waitRequest from '@/mixins/waitRequest';
@@ -85,16 +84,11 @@ export default {
   },
 
   mounted() {
-    this.waitRequest(() => {
-      return this.fetchProducts({
-        url: this.$route.fullPath, 
-        page: this.currentPage,
-        slug: this.categorySlugFromRoute,
-        offset: this.offset
-      }).then(result => {
-        console.log(result);
-      })
-    })
+    this.fetchProductsData();
+  },
+
+  watch: {
+    currentLang: 'fetchProductsData', // Отслеживаем изменение языка
   },
 
   computed: {
@@ -102,6 +96,7 @@ export default {
       products: 'catalog/products',
       productsCount: 'catalog/productsCount',
       categoryInfo: 'catalog/categoryInfo',
+      currentLang: 'menu/getCurrentLang',
     }),
 
     offset() {
@@ -143,6 +138,20 @@ export default {
       this.$refs.productsList?.callbackInit();
     },
 
+    fetchProductsData() {
+      this.waitRequest(() => {
+        return this.fetchProducts({
+          url: this.$route.fullPath, 
+          page: this.currentPage,
+          slug: this.categorySlugFromRoute,
+          offset: this.offset,
+          lang: this.currentLang,
+        }).then(result => {
+          console.log(result);
+        })
+      })
+    },
+
     fetchProductsCustom() {
       const offset = this.productsLength * this.page;
 
@@ -151,6 +160,7 @@ export default {
         page: this.page, 
         slug: this.categorySlugFromRoute,
         offset: offset, 
+        lang: this.currentLang,
       })
     },
 

@@ -6,13 +6,16 @@
     :data-size="product.post_attr_size"
   >
     <router-link
-      :to="{ 
-        name: 'product', 
-        params: { productName: extractProductName(product.permalink), productData: product }
-      }" 
+      :to="{
+        name: 'product',
+        params: {
+          lang: stripLang(product.permalink) || null,
+          productName: stripSlug(product.permalink),
+          productData: product 
+        }
+      }"
       class="c-product__img"
-    >
-      
+    > 
       <picture>
         <source
           :data-srcset="product.post_img_l"
@@ -26,8 +29,8 @@
         />
         <img
           src="data:image/gif;base64,R0lGODlhBAAFAIAAAP///wAAACH5BAEAAAEALAAAAAAEAAUAAAIEjI+ZBQA7"
-          :alt="product.post_title"
-          :title="product.post_title + ' - tooltip'"
+          :alt="product.name"
+          :title="product.name + ' - tooltip'"
           width="342"
           height="435"
           class="lazy entered loaded"
@@ -66,12 +69,30 @@ export default {
   },
   
   methods: {
-    extractProductName(url) {
-      if (!url) return;
+    // extractProductName(url) {
+    //   if (!url) return;
 
-      const parts = url.split('/');
-      return parts[parts.length - 2];
-    }
+    //   const parts = url.split('/');
+    //   return parts[parts.length - 2];
+    // },
+    
+    stripSlug(url) {
+      if (!url) return '';
+
+      return url.split('/').filter(Boolean).pop();
+    },
+
+    stripLang(url) {
+      if (!url) return '';
+
+      const urlObj = new URL(url);
+      const pathParts = urlObj.pathname.split('/');
+
+      // Если первый сегмент пути равен "uk", возвращаем его
+      if (pathParts[1] === 'uk') return pathParts[1];
+      
+      return null;
+    },
   }
 }
 </script>

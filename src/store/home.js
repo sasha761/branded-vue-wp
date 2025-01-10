@@ -10,14 +10,18 @@ const mutations = {
 };
 const actions = {
   fetchHomeData({commit}) {
-    return Api.get('home/get_home_info')
-      .then((result) => {
-        commit('setHomeData', result.data);
-        console.log('setHomeData: ', result.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    const lang = localStorage.getItem('currentLang') || 'ru';
+
+    return Api.get('home/get_home_info', {
+      params: { lang },
+    })
+    .then((result) => {
+      commit('setHomeData', result.data);
+      console.log('setHomeData: ', result.data);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
   },
 };
 const getters = {

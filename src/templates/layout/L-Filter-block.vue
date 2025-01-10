@@ -60,6 +60,7 @@ export default {
     ...mapGetters({
       products: 'catalog/products',
       productsLength: 'catalog/productsCount',
+      currentLang: 'menu/getCurrentLang',
     }),
 
     categorySlugFromRoute() { return this.$route.params.subcategorySlug || this.$route.params.categorySlug },
@@ -110,7 +111,8 @@ export default {
         url: this.$route.fullPath,
         page: 1,
         slug: this.categorySlugFromRoute,
-        offset: 0
+        offset: 0,
+        lang: this.currentLang
       })
     },
   },
