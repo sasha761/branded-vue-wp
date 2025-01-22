@@ -11,7 +11,7 @@
           
           <section class="l-shop" :data-categories="categoryTitle" >
             <h1 class="u-h2">{{categoryTitle}}</h1>
-            <L-Filter-Block />
+            <L-Filter-Block @filterRequestInProgress="filterRequestInProgress"/>
             
             <C-Product-list 
               :products="products"
@@ -41,7 +41,6 @@ import LSubscribe from '@/templates/layout/L-Subscribe.vue'
 import LFilterBlock from '@/templates/layout/L-Filter-block.vue'
 
 import CPageLoader from '@/templates/components/C-PageLoader.vue'
-// import CPagination from '@/templates/components/C-Pagination.vue'
 import CBreadcrumb from '@/templates/components/C-Breadcrumbs.vue'
 
 import CProductList from '@/templates/components/C-Product-list.vue'
@@ -58,6 +57,8 @@ export default {
 
   data() {
     return {
+      currentFullPath: this.$route.fullPath,
+      isReplacingRoute: false,
       page: 1,
       maxPages: 1,
       // offset: null,
@@ -69,15 +70,9 @@ export default {
     LSubscribe,
     CPageLoader,
     CProductList,
-    // CProduct,
-    // CPagination,
     CBreadcrumb,
     Pagination
   },
-
-  // beforeDestroy(){
-  //   this.setProductsList([]);
-  // },
 
   beforeMount() {
     this.page = this.currentPage
@@ -88,7 +83,12 @@ export default {
   },
 
   watch: {
-    currentLang: 'fetchProductsData', // Отслеживаем изменение языка
+    currentLang(newLang, oldLang) {
+      console.log('watch: ', newLang, oldLang)
+      // if (!this.isReplacingRoute && newLang !== oldLang) {
+        this.fetchProductsData();
+      // }
+    }, 
   },
 
   computed: {
@@ -96,7 +96,8 @@ export default {
       products: 'catalog/products',
       productsCount: 'catalog/productsCount',
       categoryInfo: 'catalog/categoryInfo',
-      currentLang: 'menu/getCurrentLang',
+      currentLang: 'lang/getCurrentLang',
+      apiUrl: 'lang/getCurrentLang',
     }),
 
     offset() {
@@ -112,9 +113,7 @@ export default {
 
     categoryTitle() {
       let title = '';
-      if (this.categoryInfo.acf_title) {
-        title = this.categoryInfo.acf_title
-      } else if (this.categoryInfo.parent) { 
+      if (this.categoryInfo.parent) { 
         title = this.categoryInfo?.parent + '. ' + this.categoryInfo.name 
       } else {
         title = this.categoryInfo.name 
@@ -125,12 +124,18 @@ export default {
 
   methods: {
     ...mapMutations({
-      setProductsList: 'catalog/setProductsList'
+      setProductsList: 'catalog/setProductsList',
+      setApiUrl: 'lang/setApiUrl'
     }),
 
     ...mapActions({
       fetchProducts: 'catalog/fetchProducts'
     }),
+
+    setRequestInProgress(status) {
+      console.log(status)
+      this.requestInProgress = status;
+    },
 
     paginationCallback(changedPage) {
       this.addQueryParams(changedPage);
@@ -138,16 +143,20 @@ export default {
       this.$refs.productsList?.callbackInit();
     },
 
+    filterRequestInProgress(request) {
+      this.requestInProgress = request
+    },
+
     fetchProductsData() {
       this.waitRequest(() => {
         return this.fetchProducts({
-          url: this.$route.fullPath, 
+          url: this.currentFullPath, 
           page: this.currentPage,
           slug: this.categorySlugFromRoute,
           offset: this.offset,
           lang: this.currentLang,
         }).then(result => {
-          console.log(result);
+          this.setApiUrl(result.product_cat.url)
         })
       })
     },
@@ -161,6 +170,8 @@ export default {
         slug: this.categorySlugFromRoute,
         offset: offset, 
         lang: this.currentLang,
+      }).then(result => {
+        this.setApiUrl(result.product_cat.url)
       })
     },
 

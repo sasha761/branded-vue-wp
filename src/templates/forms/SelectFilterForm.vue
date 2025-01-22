@@ -50,12 +50,16 @@ export default {
     },
 
     handleSelectChange(selectedOption) {
+      console.log(this.showAll);
       if(selectedOption.key !== this.showAll.key) {
+        console.log('111: ', selectedOption);
         this.addQueryParams(selectedOption);
       } else {
+        console.log('222: ', selectedOption);
         this.removeQueryParams(selectedOption);
       }
 
+      console.log(selectedOption);
       this.$emit('select-filter', selectedOption);
     },
   }

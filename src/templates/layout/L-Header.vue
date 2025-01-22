@@ -181,8 +181,8 @@ export default {
       getTotalAmount: 'cart/getTotalAmount',
       getHeaderMenu: 'menu/getHeaderMenu',
       getMobileMenu: 'menu/getMobileMenu',
-      getLanguages: 'menu/getLanguages',
-      currentLang: 'menu/getCurrentLang',
+      getLanguages: 'lang/getLanguages',
+      currentLang: 'lang/getCurrentLang',
     }),
   },
 
@@ -191,8 +191,8 @@ export default {
       fetchCartUrl: 'cart/fetchCartUrl',
       fetchHeaderMenu: 'menu/fetchHeaderMenu',
       fetchMobileMenu: 'menu/fetchMobileMenu',
-      fetchLanguages: 'menu/fetchLanguages',
-      setLanguageInStore: 'menu/updateCurrentLang'
+      fetchLanguages: 'lang/fetchLanguages',
+      setLanguageInStore: 'lang/updateCurrentLang'
     }),
 
     ...mapMutations({

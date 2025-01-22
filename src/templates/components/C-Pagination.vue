@@ -47,11 +47,18 @@ export default {
       default: 1
     }
   },
+
+  computed: {
+    ...mapGetters({
+      currentLang: 'lang/getCurrentLang',
+    }),
+  },
  
   methods: {
     ...mapActions({
       fetchProducts: 'catalog/fetchProducts'
     }),
+    
 
     paginationCallback(changedPage) {
       this.addQueryParams(changedPage);
@@ -64,6 +71,7 @@ export default {
           page: this.page, 
           slug: this.categorySlugFromRoute,
           offset: this.offset, 
+          lang: this.currentLang
         })
       })
 

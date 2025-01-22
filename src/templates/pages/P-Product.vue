@@ -144,7 +144,7 @@ export default {
   computed: {
     ...mapGetters({
       cartProducts: 'cart/getCartProducts',
-      currentLang: 'menu/getCurrentLang',
+      currentLang: 'lang/getCurrentLang',
     }),
 
     hasProductImages() {
@@ -188,22 +188,6 @@ export default {
           console.log(result)
           this.product = result.data
           this.selectedSize = result.data?.size_attribute[0];
-          
-          // const apiUrl = new URL(result.data.permalink).pathname;
-          // const currentUrl = this.$route.path;
-
-          
-          // const newParams = {
-          //   productName: this.$route.params.productName,
-          //   lang: this.currentLang === 'ru' ? null : this.currentLang,
-          // };
-
-          // console.log(currentUrl, apiUrl, newParams);
-
-          // // Проверяем, нужно ли обновлять маршрут
-          // if (JSON.stringify(newParams) !== JSON.stringify(this.$route.params)) {
-          //   this.$router.replace({ name: 'product', params: newParams });
-          // }
         })
         .catch((error) => {
           console.log(error);

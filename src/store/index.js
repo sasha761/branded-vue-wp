@@ -6,6 +6,7 @@ import catalog from './catalog';
 import cart from './cart';
 import menu from './menu';
 import home from './home';
+import lang from './lang';
 
 Vue.use(Vuex)
 
@@ -15,6 +16,7 @@ export const store = new Vuex.Store({
     catalog,
     cart,
     menu,
-    home
+    home,
+    lang
   },
 });

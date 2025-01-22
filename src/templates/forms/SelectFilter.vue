@@ -66,7 +66,6 @@ export default {
         key = this.showAll?.key || this.optionsAdapted[0].key;
         text = this.showAll?.text || this.optionsAdapted[0].text;
       }    
-      
       this.$emit('select-filter', {type: this.filterParam, key: key, text: text})
     },
   },

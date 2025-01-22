@@ -28,6 +28,7 @@
       <Select-filter-form 
         @select-filter="sortHendler" 
         :options="filterOrderby" 
+        :show-all="showAll"
         filter-param="orderby" 
         :current-option="orderbySelect" 
       />
@@ -36,6 +37,8 @@
 </template>
 
 <script>
+import waitRequest from '@/mixins/waitRequest';
+
 import SelectFilterForm from '@/templates/forms/SelectFilterForm.vue'
 import ProductFiltersData from '@/config/productFilterNew'
 import { mapActions, mapGetters } from 'vuex'
@@ -56,11 +59,17 @@ export default {
     SelectFilterForm,
   },
 
+  mounted() {
+    console.log(this.showAll);
+  },
+
+  mixins: [waitRequest],
+
   computed: {
     ...mapGetters({
       products: 'catalog/products',
       productsLength: 'catalog/productsCount',
-      currentLang: 'menu/getCurrentLang',
+      currentLang: 'lang/getCurrentLang',
     }),
 
     categorySlugFromRoute() { return this.$route.params.subcategorySlug || this.$route.params.categorySlug },
@@ -102,18 +111,24 @@ export default {
 
     sortHendler(selectedOption) {
       if (!selectedOption) return;
-      
+      console.log('sortHendler: ', selectedOption);
+      this.$emit('filterRequestInProgress', true);
+
       if(this.$route.query.page) {
         this.removeQueryParams('page');
       }
 
-      this.fetchProducts({
-        url: this.$route.fullPath,
-        page: 1,
-        slug: this.categorySlugFromRoute,
-        offset: 0,
-        lang: this.currentLang
-      })
+      this.waitRequest(() => {
+        return this.fetchProducts({
+          url: this.$route.fullPath,
+          page: 1,
+          slug: this.categorySlugFromRoute,
+          offset: 0,
+          lang: this.currentLang,
+        });
+      }).finally(() => {
+        this.$emit('filterRequestInProgress', false);
+      }) 
     },
   },
 }
