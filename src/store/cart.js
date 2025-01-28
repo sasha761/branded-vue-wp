@@ -22,27 +22,31 @@ const mutations = {
     }, 0);
   },
   setCartUrl(state, cartUrl) {
-    let path = new URL(cartUrl).pathname;
-    path = path.replace(/\//g, '');
-    state.cartUrl = path;
+    // let path = new URL(cartUrl).pathname;
+    // path = path.replace(/\//g, '');
+    state.cartUrl = cartUrl;
   },
   setCheckoutUrl(state, checkoutUrl) {
-    let path = new URL(checkoutUrl).pathname;
-    path = path.replace(/\//g, '');
-    state.checkoutUrl = path;
+    // let path = new URL(checkoutUrl).pathname;
+    // path = path.replace(/\//g, '');
+    state.checkoutUrl = checkoutUrl;
   }
 };
 
 const actions = {
-  fetchCartUrl({commit}) {
-    return Api.get('cart/get_cart_url')
-      .then((result) => {
-        commit('setCartUrl', result.data?.cart);
-        commit('setCheckoutUrl', result.data?.checkout);
-      })
-      .catch((error) => {
-        console.log(error);
-      })
+  fetchCartUrl({commit}, {lang}) {
+    return Api.get('cart/get_cart_url', {
+      params: {
+        lang: lang
+      }
+    })
+    .then((result) => {
+      commit('setCartUrl', result.data?.cart);
+      commit('setCheckoutUrl', result.data?.checkout);
+    })
+    .catch((error) => {
+      console.log(error);
+    })
   }
 };
 

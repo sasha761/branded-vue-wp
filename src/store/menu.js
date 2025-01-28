@@ -17,8 +17,8 @@ const mutations = {
   },
 };
 const actions = {
-  fetchHeaderMenu({commit}) {
-    const lang = localStorage.getItem('currentLang') || 'ru';
+  fetchHeaderMenu({commit}, {lang}) {
+    // const lang = localStorage.getItem('currentLang') || 'ru';
     return Api.get('menu/get_menu_header', {
       params: { lang },
     })
@@ -29,8 +29,8 @@ const actions = {
       console.log(error);
     });
   },
-  fetchFooterMenu({commit}) {
-    const lang = localStorage.getItem('currentLang') || 'ru';
+  fetchFooterMenu({commit}, {lang}) {
+    // const lang = localStorage.getItem('currentLang') || 'ru';
     return Api.get('menu/get_menu_footer', {
       params: { lang },
     })
@@ -41,8 +41,8 @@ const actions = {
       console.log(error);
     });
   },
-  fetchMobileMenu({commit}) {
-    const lang = localStorage.getItem('currentLang') || 'ru';
+  fetchMobileMenu({commit}, {lang}) {
+    // const lang = localStorage.getItem('currentLang') || 'ru';
     return Api.get('menu/get_menu_mobile', {
       params: { lang },
     })

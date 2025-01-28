@@ -9,7 +9,11 @@
             <router-link
               :to="{ 
                 name: 'product', 
-                params: { productName: extractProductName(product.permalink), productData: product }
+                params: { 
+                  lang: stripLang(product.permalink) || null,
+                  productName: extractProductName(product.permalink), 
+                  productData: product 
+                }
               }" 
               class="c-product-cart__img"
             >
@@ -20,7 +24,10 @@
                 <router-link
                   :to="{ 
                     name: 'brand', 
-                    params: { productName: extractProductName(product.permalink), productData: product }
+                    params: {
+                      lang: stripLang(product.post_brand_url) || null,
+                      brandName: extractProductName(product.post_brand_url), 
+                    }
                   }" 
                   class="c-product-cart__name-brand"
                 >
@@ -29,7 +36,11 @@
                 <router-link
                   :to="{ 
                     name: 'product', 
-                    params: { productName: extractProductName(product.permalink), productData: product }
+                    params: { 
+                      lang: stripLang(product.permalink) || null,
+                      productName: extractProductName(product.permalink), 
+                      productData: product 
+                    }
                   }" 
                   class="c-product-cart__name-title"
                 >
@@ -131,6 +142,8 @@
 import stringConfig from '@/config/stringConfig.js'
 
 import { mapGetters, mapMutations } from 'vuex';
+import { extractProductName, stripSlug, stripLang } from '@/assets/js/utils.js';
+
 export default {
   data() {
     return {
@@ -199,12 +212,9 @@ export default {
       this.setTotalAmount();
     },
 
-    extractProductName(url) {
-      if (!url) return;
-
-      const parts = url.split('/');
-      return parts[parts.length - 2];
-    }
+    extractProductName,
+    stripSlug,
+    stripLang,
   }
 
 }

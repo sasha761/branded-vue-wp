@@ -17,7 +17,6 @@ const $popup = {
    * @param {number} level - Уровень отображения попапа
    */
   open(name, data = {}, level = 1) {
-    console.log(name);
     $eventBus.$emit(`popup:open${level}`, {
       name,
       data,
@@ -50,7 +49,6 @@ const $popup = {
    * @param {Function} callback - функция обратного вызова
    */
   close(level = 1, callback = null) {
-    console.log(callback);
     $eventBus.$emit(`popup:close${level}`, callback);
   },
 

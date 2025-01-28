@@ -44,13 +44,13 @@
                       v-for="(product, index) in getCartProducts" 
                       :key="index"
                     >
-                      <!-- <pre>{{getCartProducts[index].size_selected}}</pre> -->
                       <div class="l-mini-cart__item" v-if="(index == 0) || product.size_selected[0].id != getCartProducts[index-1].size_selected[0].id">
                         <div class="l-mini-cart__item-img">
                           <router-link
                             :to="{
                               name: 'product',
                               params: {
+                                lang: stripLang(product.permalink) || null,
                                 productName: extractProductName(product.permalink),
                                 productData: product,
                               },
@@ -96,8 +96,22 @@
                   </div>
 
                   <div class="l-mini-cart__btn">
-                    <router-link :to="{name: 'checkout', params: { checkout: getCheckoutUrl } }" class="u-btn is-black">Оформление заказа</router-link>
-                    <router-link :to="{name: 'cart', params: { cart: getCartUrl } }" class="is-cart">В корзину</router-link>
+                    <router-link :to="{
+                      name: 'checkout', 
+                      params: { 
+                        lang: stripLang(getCheckoutUrl) || null,
+                        checkout: stripSlug(getCheckoutUrl) 
+                      } 
+                    }" 
+                    class="u-btn is-black">Оформление заказа</router-link>
+                    <router-link :to="{
+                      name: 'cart', 
+                      params: { 
+                        lang: stripLang(getCartUrl) || null,
+                        cart: stripSlug(getCartUrl)
+                      } 
+                    }" 
+                    class="is-cart">В корзину</router-link>
                   </div>
                 </div>
                 <div v-else>
@@ -117,10 +131,8 @@
               <li><a to="tel:+38(066)3156536">+38 (066) 315 65 36</a></li>
             </ul>
           </div>
-          <!-- <pre>{{ getCurrentLang }}</pre> -->
-          <!-- <pre>{{ getLanguages.length }}</pre> -->
+
           <C-Lang :langs="getLanguages" :current-lang="currentLang" @update:currentLang="updateLanguage" v-if="getLanguages.length" />
-          <!-- <C-Lang :langs="getLanguages" v-if="getLanguages.length"/> -->
 
           <div class="c-burger d-block d-sm-none"  @click="mobileMenuModal">
             <span></span>
@@ -137,6 +149,8 @@
 <script>
 
 import { mapMutations, mapActions, mapGetters } from 'vuex';
+import { extractProductName, stripSlug, stripLang } from '@/assets/js/utils.js';
+
 import stringConfig from '@/config/stringConfig.js'
 import CMenu from '@/templates/components/C-Menu.vue';
 import CLogo from '@/templates/components/C-Logo.vue';
@@ -162,15 +176,17 @@ export default {
   },
 
   created() {
-    this.fetchCartUrl();
-    this.fetchMenu();
     this.fetchLanguages();
+    this.fetchCartUrl({lang: this.currentLang});
+    this.fetchMenu();
     this.setTotalAmount();
-    // console.log('header:', this.$router);
   },
 
   watch: {
-    currentLang: 'fetchMenu', // Отслеживаем изменение языка
+    currentLang(newVal) {
+      this.fetchMenu({lang: newVal});
+      this.fetchCartUrl({lang: newVal});
+    },
   },
 
   computed: {
@@ -201,24 +217,21 @@ export default {
 
     updateLanguage(newLang) {
       this.setLanguageInStore(newLang); // Обновляем Store
-      console.log('Текущий язык изменён:', newLang);
+      console.log('Текущий язык изменён:', this.currentLang);
     },
 
     fetchMenu() {
-      this.fetchHeaderMenu();
-      this.fetchMobileMenu();
+      this.fetchHeaderMenu({lang: this.currentLang});
+      this.fetchMobileMenu({lang: this.currentLang});
     },
 
     mobileMenuModal() {
       this.$popup.open('PopupMobileMenu', {menu: this.getMobileMenu})
     },
 
-    extractProductName(url) {
-      if (!url) return;
-
-      const parts = url.split("/");
-      return parts[parts.length - 2];
-    },
+    extractProductName,
+    stripSlug,
+    stripLang,
   }
 }
 </script>

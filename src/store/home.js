@@ -2,22 +2,23 @@ import Api from '@/api/Axios'
 
 const state = {
   homeData: [],
+  homeLang: null,
 };
 const mutations = {
-  setHomeData(state, data) {
-    state.homeData = data
+  setHomeData(state, { data, lang }) {
+    state.homeData = data,
+    state.homeLang = lang;
   },
 };
 const actions = {
-  fetchHomeData({commit}) {
-    const lang = localStorage.getItem('currentLang') || 'ru';
-
+  fetchHomeData({commit}, {lang}) {
     return Api.get('home/get_home_info', {
-      params: { lang },
+      params: { 
+        lang: lang
+      },
     })
     .then((result) => {
-      commit('setHomeData', result.data);
-      console.log('setHomeData: ', result.data);
+      commit('setHomeData', { data: result.data, lang });
     })
     .catch((error) => {
       console.log(error);
@@ -27,6 +28,9 @@ const actions = {
 const getters = {
   getHomeData(state) {
     return state.homeData;
+  },
+  getHomeLang(state) {
+    return state.homeLang;
   }
 };
 

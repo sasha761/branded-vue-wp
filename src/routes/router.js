@@ -36,17 +36,16 @@ const routes = [
     path: '/:lang?/brand/:brandName',
     name: 'brand',
     component: () => import('../templates/pages/P-Shop.vue'),
-    props: true,
   },
 
   // Общие страницы
   {
-    path: '/cart',
+    path: '/:lang?/cart',
     name: 'cart',
     component: () => import('../templates/pages/P-Cart.vue'),
   },
   {
-    path: '/checkout-2',
+    path: '/:lang?/checkout-2',
     name: 'checkout',
     component: () => import('../templates/pages/P-Checkout.vue'),
   },

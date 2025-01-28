@@ -21,7 +21,6 @@ const mutations = {
 };
 const actions = {
   fetchProducts({commit}, {url, page, offset, slug, lang}) {
-    // console.log(lang);
     return Api.get('archive/get_products', {
       params: {
         url: url,
@@ -37,7 +36,7 @@ const actions = {
         commit('setProductsList', result.data.products);
         commit('setCategoryInfo', result.data.product_cat);
       }
-      console.log('fetchData: ', result.data)
+      // console.log('fetchData: ', result.data)
       return result.data;
     })
     .catch((error) => {

@@ -37,11 +37,9 @@
 </template>
 
 <script>
-import waitRequest from '@/mixins/waitRequest';
-
 import SelectFilterForm from '@/templates/forms/SelectFilterForm.vue'
 import ProductFiltersData from '@/config/productFilterNew'
-import { mapActions, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
   data() {
@@ -59,12 +57,6 @@ export default {
     SelectFilterForm,
   },
 
-  mounted() {
-    console.log(this.showAll);
-  },
-
-  mixins: [waitRequest],
-
   computed: {
     ...mapGetters({
       products: 'catalog/products',
@@ -72,7 +64,6 @@ export default {
       currentLang: 'lang/getCurrentLang',
     }),
 
-    categorySlugFromRoute() { return this.$route.params.subcategorySlug || this.$route.params.categorySlug },
     brandSelect() { return this.getFilterByKey('brand', this.$route.query.brand)},
     sizeSelect() { return this.getFilterByKey('size', this.$route.query.size)},
     orderbySelect() { return this.getFilterByKey('orderby', this.$route.query.orderby)},
@@ -81,9 +72,6 @@ export default {
       const currentPageNumber = Number(queryPage) || 1;
 
       return currentPageNumber;
-    },
-    productsExample() {
-      return this.products.length;
     },
 
     productCurrentCount() {
@@ -95,10 +83,6 @@ export default {
   },
 
   methods: {
-    ...mapActions({
-      fetchProducts: 'catalog/fetchProducts'
-    }),
-
     getFilterByKey(filterKey, searchParam) {
       return ProductFiltersData[filterKey].find(filter => filter.key === searchParam) || this.showAll || ProductFiltersData[filterKey][ProductFiltersData[filterKey][0]]
     },
@@ -110,25 +94,13 @@ export default {
     },
 
     sortHendler(selectedOption) {
-      if (!selectedOption) return;
-      console.log('sortHendler: ', selectedOption);
-      this.$emit('filterRequestInProgress', true);
+      if (!selectedOption) return;      
 
       if(this.$route.query.page) {
         this.removeQueryParams('page');
       }
 
-      this.waitRequest(() => {
-        return this.fetchProducts({
-          url: this.$route.fullPath,
-          page: 1,
-          slug: this.categorySlugFromRoute,
-          offset: 0,
-          lang: this.currentLang,
-        });
-      }).finally(() => {
-        this.$emit('filterRequestInProgress', false);
-      }) 
+      this.$emit('fetchProductsData', {url: this.$route.fullPath, page: 1, offset: 0});
     },
   },
 }

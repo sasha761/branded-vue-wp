@@ -11,11 +11,10 @@
           
           <section class="l-shop" :data-categories="categoryTitle" >
             <h1 class="u-h2">{{categoryTitle}}</h1>
-            <L-Filter-Block @filterRequestInProgress="filterRequestInProgress"/>
+            <L-Filter-Block @fetchProductsData="fetchProductsData"/>
             
             <C-Product-list 
               :products="products"
-              :callback="fetchProductsCustom"
               ref="productsList"
             ></C-Product-list>
             
@@ -83,8 +82,8 @@ export default {
   },
 
   watch: {
-    currentLang(newLang, oldLang) {
-      console.log('watch: ', newLang, oldLang)
+    currentLang() {
+      // console.log('watch: ', newLang, oldLang)
       // if (!this.isReplacingRoute && newLang !== oldLang) {
         this.fetchProductsData();
       // }
@@ -132,47 +131,33 @@ export default {
       fetchProducts: 'catalog/fetchProducts'
     }),
 
-    setRequestInProgress(status) {
-      console.log(status)
-      this.requestInProgress = status;
-    },
-
     paginationCallback(changedPage) {
       this.addQueryParams(changedPage);
-      // this.fetchProductsCustom();
-      this.$refs.productsList?.callbackInit();
+
+      const offset = this.productsLength * this.page;
+      this.fetchProductsData({offset});
+      // this.$refs.productsList?.callbackInit();
     },
 
-    filterRequestInProgress(request) {
-      this.requestInProgress = request
-    },
-
-    fetchProductsData() {
+    fetchProductsData({ 
+      url = this.currentFullPath, 
+      page = this.currentPage, 
+      slug = this.categorySlugFromRoute, 
+      offset = this.offset, 
+      lang = this.currentLang 
+    } = {}) {
+      // Выполняем запрос
       this.waitRequest(() => {
         return this.fetchProducts({
-          url: this.currentFullPath, 
-          page: this.currentPage,
-          slug: this.categorySlugFromRoute,
-          offset: this.offset,
-          lang: this.currentLang,
+          url, 
+          page, 
+          slug, 
+          offset, 
+          lang,
         }).then(result => {
-          this.setApiUrl(result.product_cat.url)
-        })
-      })
-    },
-
-    fetchProductsCustom() {
-      const offset = this.productsLength * this.page;
-
-      return this.fetchProducts({
-        url: this.$route.fullPath, 
-        page: this.page, 
-        slug: this.categorySlugFromRoute,
-        offset: offset, 
-        lang: this.currentLang,
-      }).then(result => {
-        this.setApiUrl(result.product_cat.url)
-      })
+          this.setApiUrl(result.product_cat.url);
+        });
+      });
     },
 
     addQueryParams(currentPage) {

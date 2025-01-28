@@ -25,11 +25,19 @@
           </div>
           <div class="col-lg-5 col-md-12 u-col">
             <div class="l-product__content">
-              <a
-                href="https://branded.com.ua/brand/staff/"
-                class="l-product__category">
-                {{product.post_attr_brand}}
-              </a>
+              <router-link
+                :to="{
+                  name: 'brand',
+                  params: {
+                    lang: currentLang !== 'ru' ? currentLang : undefined, 
+                    brandName: product.post_link_brand, // Передаём slug бренда
+                  },
+                }"
+                class="l-product__category"
+              >
+                {{ product.post_attr_brand }}
+              </router-link>
+
               <h1 class="l-product__name">{{product.name}}</h1>
               <p class="c-price" v-html="product.price_html"></p>
 
@@ -156,7 +164,10 @@ export default {
   },
 
   watch: {
-    currentLang: 'fetchProductData', // Отслеживаем изменение языка
+    currentLang() { // Отслеживаем изменение языка
+      this.fetchProductData(),
+      this.relatedProductsChecker = false;
+    }  
   },
 
   mounted() {
@@ -211,12 +222,13 @@ export default {
         this.relatedProductsChecker = true;
         return Api.get('product/get_related_products', {
           params: {
-            id: this.product.id
+            id: this.product.id,
+            lang: this.currentLang,
           }
         })
         .then((result) => {
-          this.relatedProducts = result.data.related_products
-          
+          console.log(result)
+          this.relatedProducts = result.data?.related_products
         })
         .catch((error) => {
           console.log(error);
@@ -261,7 +273,19 @@ export default {
 
     quickBuyModal() {
       this.$popup.open('PopupQuickBuy', {product: this.product})
-    }
+    },
+
+    stripLang(url) {
+      if (!url) return '';
+
+      const urlObj = new URL(url);
+      const pathParts = urlObj.pathname.split('/');
+
+      // Если первый сегмент пути равен "uk", возвращаем его
+      if (pathParts[1] === 'uk') return pathParts[1];
+      
+      return null;
+    },
   },
   beforeDestroy() {
     window.removeEventListener('scroll', this.handleScroll);

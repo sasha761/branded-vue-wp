@@ -42,24 +42,36 @@ export default {
     CPageLoader
   },
 
-  created() {
-    if (!Object.keys(this.homeData).length) {
-      this.waitRequest(() => {
-        return this.fetchHomeData();
-      })
-    }
-  },
-
   computed: {
     ...mapGetters({
       homeData: 'home/getHomeData',
+      homeLang: 'home/getHomeLang',
+      currentLang: 'lang/getCurrentLang',
     }),
+  },
+
+  created() {
+    if (!Object.keys(this.homeData).length || this.homeLang !== this.currentLang) {  
+      this.loadHomeData();
+    }
+  },
+
+  watch: {
+    currentLang: 'loadHomeData' 
   },
 
   methods: {
     ...mapActions({
       fetchHomeData: 'home/fetchHomeData'
     }),
+
+    loadHomeData() {
+      this.waitRequest(() => {
+        return this.fetchHomeData({
+          lang: this.currentLang, // Передаём текущий язык
+        })
+      });
+    },
   }
 }
 </script>

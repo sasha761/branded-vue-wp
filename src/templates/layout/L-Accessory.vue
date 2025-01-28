@@ -32,7 +32,13 @@
       <router-link 
         v-for="(item, index) in data"
         :key="index"
-        :to="item.link" 
+        :to="{
+          name: 'product-category',
+          params: {
+            lang: stripLang(item.link) || null,
+            categorySlug: stripSlug(item.link),
+          }
+        }"
         class="l-accessory__block"
         :class="{ 'is-first': index === 0, 'is-second': index === 1 }"
       >
@@ -71,5 +77,25 @@ export default {
       type: Array,
     }
   },
+
+  methods: {
+    stripSlug(url) {
+      if (!url) return '';
+      // console.log(url.split('/').filter(Boolean).pop());
+      return url.split('/').filter(Boolean).pop();
+    },
+    
+    stripLang(url) {
+      if (!url) return '';
+
+      const urlObj = new URL(url);
+      const pathParts = urlObj.pathname.split('/');
+
+      // Если первый сегмент пути равен "uk", возвращаем его
+      if (pathParts[1] === 'uk') return pathParts[1];
+      
+      return null;
+    },
+  }
 }
 </script>

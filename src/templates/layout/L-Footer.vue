@@ -53,12 +53,13 @@ import {mapGetters, mapActions} from 'vuex';
 
 export default {
   mounted() {
-    this.fetchFooterMenu();
+    this.fetchFooterMenu({lang: this.currentLang});
   },
 
   computed: {
     ...mapGetters({
       getFooterMenu: 'menu/getFooterMenu',
+      currentLang: 'lang/getCurrentLang',
     })
   },
 

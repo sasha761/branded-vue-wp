@@ -6,7 +6,6 @@ const state = {
   apiUrl: '',
 };
 
-console.log('state: ', state.currentLang)
 const mutations = {
   setLanguages(state, data) {
     const languagesArray = data.languages ? Object.values(data.languages) : [];
@@ -14,7 +13,6 @@ const mutations = {
     state.currentLang = data.current_lang || 'ru';
   },
   setCurrentLang(state, lang) {
-    console.log('setCurrentLang: ', lang)
     localStorage.setItem('currentLang', lang);
     state.currentLang = lang;
   },
@@ -25,7 +23,6 @@ const mutations = {
 };
 const actions = {
   updateCurrentLang({ commit }, lang) {
-    console.log('updateCurrentLang: ', lang)
     commit('setCurrentLang', lang);
   },
   updateApiUrl({ commit }, lang) {
@@ -37,7 +34,6 @@ const actions = {
       params: { lang },
     })
     .then((result) => {
-      console.log('API response:', result.data); // Проверьте, что возвращается
       commit('setLanguages', result.data); // Передаем весь объект
     })
     .catch((error) => {
@@ -50,7 +46,6 @@ const getters = {
     return state.languages;
   },
   getCurrentLang(state) {
-    console.log('getCurrentLang: ', state.currentLang)
     return state.currentLang;
   },
   getApiUrl(state) {

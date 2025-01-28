@@ -192,6 +192,7 @@
               >
                 <img :src="product.post_img_m" />
               </router-link>
+              {{product.post_link_brand}}
               <div class="c-product-cart__info">
                 <div class="c-product-cart__name">
                   <router-link
@@ -295,6 +296,8 @@
 import Api from "@/api/Axios";
 import { mapGetters } from "vuex";
 import waitRequest from '@/mixins/waitRequest';
+import { extractProductName, stripSlug, stripLang } from '@/assets/js/utils.js';
+
 
 import {
   required,
@@ -303,6 +306,7 @@ import {
   maxLength,
   helpers,
 } from "vuelidate/lib/validators";
+
 
 export default {
   data() {
@@ -378,12 +382,9 @@ export default {
       });
     },
 
-    extractProductName(url) {
-      if (!url) return;
-
-      const parts = url.split("/");
-      return parts[parts.length - 2];
-    },
+    extractProductName,
+    stripSlug,
+    stripLang,
   },
 };
 </script>
