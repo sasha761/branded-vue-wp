@@ -65,6 +65,8 @@
 </template>
 
 <script>
+import { stripSlug, stripLang } from '@/assets/js/utils.js';
+
 export default {
   data() {
     return {
@@ -79,23 +81,8 @@ export default {
   },
 
   methods: {
-    stripSlug(url) {
-      if (!url) return '';
-      // console.log(url.split('/').filter(Boolean).pop());
-      return url.split('/').filter(Boolean).pop();
-    },
-    
-    stripLang(url) {
-      if (!url) return '';
-
-      const urlObj = new URL(url);
-      const pathParts = urlObj.pathname.split('/');
-
-      // Если первый сегмент пути равен "uk", возвращаем его
-      if (pathParts[1] === 'uk') return pathParts[1];
-      
-      return null;
-    },
+    stripSlug, 
+    stripLang
   }
 }
 </script>

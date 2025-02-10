@@ -1,5 +1,6 @@
 <template>
   <main class="p-checkout">
+    <C-PageLoader v-if="requestInProgress"/>
     <div class="u-container">
       <div class="row">
         <div class="col-lg-6">
@@ -192,7 +193,6 @@
               >
                 <img :src="product.post_img_m" />
               </router-link>
-              {{product.post_link_brand}}
               <div class="c-product-cart__info">
                 <div class="c-product-cart__name">
                   <router-link
@@ -216,14 +216,30 @@
                   </router-link>
 
                   <div class="mb-3">
-                    Size: {{ product.size_selected[0].name }}
+                    Размер: {{ product.size_selected[0].name }}
                   </div>
                   <div class="d-flex justify-content-between">
                     <div class="c-price">{{ product.quantity }} шт</div>
+                    
                     <div class="c-total">
-                      {{ product.price * product.quantity }}
+                      {{ product.price * product.quantity }} {{strings.string.currency}}
                     </div>
                   </div>
+                  <div class="c-quantity">
+                    <div class="c-quantity__btn">
+                      <button 
+                        v-show="product.quantity > 1" 
+                        @click="quantityMinus(product)" 
+                        type="button" 
+                        class="u-btn is-minus">-</button>
+                      <b>{{product.quantity}}</b>
+                      <button 
+                        @click="quantityPlus(product)" 
+                        type="button" 
+                        class="u-btn is-plus">+</button>
+                    </div>
+                  </div>
+                  
                 </div>
               </div>
             </div>
@@ -294,10 +310,11 @@
 
 <script>
 import Api from "@/api/Axios";
-import { mapGetters } from "vuex";
+import { mapGetters, mapMutations } from "vuex";
 import waitRequest from '@/mixins/waitRequest';
 import { extractProductName, stripSlug, stripLang } from '@/assets/js/utils.js';
-
+import stringConfig from '@/config/stringConfig.js'
+import CPageLoader from '@/templates/components/C-PageLoader.vue'
 
 import {
   required,
@@ -306,7 +323,6 @@ import {
   maxLength,
   helpers,
 } from "vuelidate/lib/validators";
-
 
 export default {
   data() {
@@ -320,8 +336,16 @@ export default {
         post: "",
         comments: "",
       },
+      strings: stringConfig
     };
   },
+
+  mixins: [waitRequest],
+
+  components: {
+    CPageLoader,
+  },
+
   computed: {
     ...mapGetters({
       cartProducts: "cart/getCartProducts",
@@ -329,10 +353,6 @@ export default {
       getTotalAmount: "cart/getTotalAmount",
     }),
   },
-
-  mixins: [waitRequest],
-
-  mounted() {},
 
   validations: {
     formData: {
@@ -351,6 +371,11 @@ export default {
   },
 
   methods: {
+    ...mapMutations({
+      setProductToCart: 'cart/setProductToCart',
+      setTotalAmount: 'cart/setTotalAmount'
+    }),
+
     submitForm() {
       this.$v.$touch()
       if (this.$v.$invalid) return;
@@ -367,10 +392,8 @@ export default {
           comments: this.formData.comments,
         })
         .then((result) => {
-          // console.log(result);
           const url = new URL(result.data);
           const path = url.pathname + url.search;
-
           const numbers = path.match(/order-received\/(\d+)\//)[1];
           const orderKey = path.match(/key=([^&]+)/)[1];
 
@@ -380,6 +403,40 @@ export default {
           console.log(error);
         });
       });
+    },
+
+    quantityMinus(product) {
+      let addedProduct = { ...product };
+      let allProducts = this.cartProducts;
+      
+      const index = allProducts.findIndex(obj => obj.size_attribute[0].id === addedProduct.size_attribute[0].id);
+
+      if (index !== -1) {
+        allProducts[index].quantity -= 1;
+      } else {
+        allProducts.push(addedProduct);
+      }
+
+      // // Обновление состояния корзины
+      this.setProductToCart(allProducts);
+      this.setTotalAmount();
+    },
+
+    quantityPlus(product) {
+      let addedProduct = { ...product };
+      let allProducts = this.cartProducts;
+      
+      const index = allProducts.findIndex(obj => obj.size_attribute[0].id === addedProduct.size_attribute[0].id);
+
+      if (index !== -1) {
+        allProducts[index].quantity += 1;
+      } else {
+        allProducts.push(addedProduct);
+      }
+
+      // // Обновление состояния корзины
+      this.setProductToCart(allProducts);
+      this.setTotalAmount();
     },
 
     extractProductName,

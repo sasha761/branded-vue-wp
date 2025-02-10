@@ -46,8 +46,8 @@
                 >
                   {{product.name}}
                 </router-link>
-
-                <div v-if="product.size_attribute" class="is-size mb-3">Размер: {{product.size_attribute[0].name}}</div>
+                <!-- <pre>{{product}}</pre> -->
+                <div v-if="product.size_selected" class="is-size mb-3">Размер: {{product.size_selected[0].name}}</div>
                 <!-- {% if product.attr.color %}
                   <div class="is-color mb-3">{{ 'Color' | translateString('Cart - Color') }}: {{product.attr.color}}</div>
                 {% endif %} -->
@@ -82,7 +82,7 @@
               </div>
               
               <div class="d-none d-sm-block">
-                <div class="c-price">{{product.price * product.quantity}}</div>
+                <div class="c-price">{{product.price * product.quantity}} {{strings.string.currency}}</div>
                 
                 <div @click="removeFromCart(product)" class="c-remove">
                   <svg width="20px" height="20px">
@@ -139,10 +139,9 @@
 </template>      
 
 <script>
-import stringConfig from '@/config/stringConfig.js'
-
 import { mapGetters, mapMutations } from 'vuex';
 import { extractProductName, stripSlug, stripLang } from '@/assets/js/utils.js';
+import stringConfig from '@/config/stringConfig.js'
 
 export default {
   data() {
@@ -182,7 +181,13 @@ export default {
       let addedProduct = { ...product };
       let allProducts = this.cartProducts;
       
-      const index = allProducts.findIndex(obj => obj.size_attribute[0].id === addedProduct.size_attribute[0].id);
+      // const index = allProducts.findIndex(obj => obj.size_attribute[0].id === addedProduct.size_attribute[0].id);
+      const index = allProducts.findIndex(obj => 
+                      obj.size_selected?.length > 0 && 
+                      addedProduct.size_selected?.length > 0 &&
+                      obj.size_selected[0].id === addedProduct.size_selected[0].id
+                    );
+
 
       if (index !== -1) {
         allProducts[index].quantity -= 1;
@@ -198,9 +203,17 @@ export default {
     quantityPlus(product) {
       let addedProduct = { ...product };
       let allProducts = this.cartProducts;
-      
-      const index = allProducts.findIndex(obj => obj.size_attribute[0].id === addedProduct.size_attribute[0].id);
 
+
+      const index = allProducts.findIndex(obj => 
+                      obj.size_selected?.length > 0 && 
+                      addedProduct.size_selected?.length > 0 &&
+                      obj.size_selected[0].id === addedProduct.size_selected[0].id
+                    );
+
+      // console.log();              
+
+      console.log(index);
       if (index !== -1) {
         allProducts[index].quantity += 1;
       } else {
@@ -216,6 +229,5 @@ export default {
     stripSlug,
     stripLang,
   }
-
 }
 </script>

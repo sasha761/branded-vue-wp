@@ -1,5 +1,6 @@
 <template>
   <main class="p-thank" >
+    <C-PageLoader v-if="requestInProgress"/>
     <div class="u-container">
       <div class="row">
         <div class="col-lg-6">
@@ -26,21 +27,21 @@
             <h2 class="u-h3">Ordering information</h2>
             <!-- <pre>{{products}}</pre> -->
             <ul class="p-thank__list">
-                <li 
-                  v-for="product in products"
-                  :key="product.variation_id"
-                  class="p-thank__list-product js-order-item" 
-                  :data-name="product.name"
-                  :data-id="product.id"
-                  :data-quantity="product.qty"
-                  :data-price="product.total"
-                  :data-brand="product.brand[0].name"
-                  :data-categories="product.cats.join(', ')"
-                >
-                  <p><b>{{product.name}}</b></p>
-                  <p>Quantity: <b>{{product.qty}}</b></p>
-                  <p>Price: <b>{{product.total}} {{orderData.order_currency}}</b></p>
-                </li>
+              <li 
+                v-for="product in products"
+                :key="product.variation_id"
+                class="p-thank__list-product js-order-item" 
+                :data-name="product.name"
+                :data-id="product.id"
+                :data-quantity="product.qty"
+                :data-price="product.total"
+                :data-brand="product.brand[0].name"
+                :data-categories="product.cats.join(', ')"
+              >
+                <p><b>{{product.name}}</b></p>
+                <p>Quantity: <b>{{product.qty}}</b></p>
+                <p>Price: <b>{{product.total}} {{orderData.order_currency}}</b></p>
+              </li>
               <li :data-total="orderData.order_total">Total: <b>{{orderData.order_total}} {{orderData.order_currency}}</b></li>
             </ul>
           </div>
@@ -53,6 +54,7 @@
 <script>
 import Api from "@/api/Axios";
 import waitRequest from '@/mixins/waitRequest';
+import CPageLoader from '@/templates/components/C-PageLoader.vue'
 
 import { mapMutations } from 'vuex';
 
@@ -62,6 +64,10 @@ export default {
       orderData: [],
       products: []
     };
+  },
+
+  components: {
+    CPageLoader,
   },
 
   mixins: [waitRequest],

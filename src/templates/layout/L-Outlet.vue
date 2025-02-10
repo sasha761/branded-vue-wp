@@ -62,7 +62,17 @@
           <div ref="ProductRowSlider" class="js-product-row swiper">
             <div class="swiper-wrapper">
               <div v-for="(outlet, index) in data" :key="index" class="col-6 u-col swiper-slide">
-                <router-link :to="outlet.permalink" class="c-outlet">
+                <router-link 
+                  :to="{
+                    name: 'product',
+                    params: {
+                      lang: stripLang(outlet.permalink) || null,
+                      productName: stripSlug(outlet.permalink),
+                      productData: outlet 
+                    }
+                  }"
+                  class="c-outlet"
+                >
                   <picture>
                     <img 
                       :src="outlet.post_img_m" 
@@ -83,6 +93,7 @@
 
 <script>
 import Swiper from 'swiper/bundle';
+import { stripSlug, stripLang } from '@/assets/js/utils.js';
 
 export default {
   props: {
@@ -130,6 +141,9 @@ export default {
     slidePrev() {
       this.swiperInstance.slidePrev();
     },
+
+    stripSlug, 
+    stripLang
   }
 }
 </script>

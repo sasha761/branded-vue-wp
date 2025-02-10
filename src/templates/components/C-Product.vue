@@ -57,6 +57,8 @@
 </template>
 
 <script>
+import { stripSlug, stripLang } from '@/assets/js/utils.js';
+
 export default {
   props: {
     product: {
@@ -69,30 +71,26 @@ export default {
   },
   
   methods: {
-    // extractProductName(url) {
-    //   if (!url) return;
-
-    //   const parts = url.split('/');
-    //   return parts[parts.length - 2];
-    // },
+    stripSlug, 
+    stripLang
     
-    stripSlug(url) {
-      if (!url) return '';
+    // stripSlug(url) {
+    //   if (!url) return '';
 
-      return url.split('/').filter(Boolean).pop();
-    },
+    //   return url.split('/').filter(Boolean).pop();
+    // },
 
-    stripLang(url) {
-      if (!url) return '';
+    // stripLang(url) {
+    //   if (!url) return '';
 
-      const urlObj = new URL(url);
-      const pathParts = urlObj.pathname.split('/');
+    //   const urlObj = new URL(url);
+    //   const pathParts = urlObj.pathname.split('/');
 
-      // Если первый сегмент пути равен "uk", возвращаем его
-      if (pathParts[1] === 'uk') return pathParts[1];
+    //   // Если первый сегмент пути равен "uk", возвращаем его
+    //   if (pathParts[1] === 'uk') return pathParts[1];
       
-      return null;
-    },
+    //   return null;
+    // },
   }
 }
 </script>

@@ -7,14 +7,20 @@ import {store} from './store';
 import {router} from './routes/router.js';
 import emitter from './plugins/emitter.js';
 import LanguageRedirectPlugin from './plugins/language-redirect.js';
+// import { createI18n } from 'vue-i18n'
 
 // window.emitter = new Emitter();
+// const i18n = createI18n({
 
+// });
+
+// console.log(i18n);
 
 Vue.config.productionTip = false
 Vue.use(emitter);
 Vue.use(VueRouter);
 Vue.use(Vuelidate);
+// Vue.use(i18n);
 Vue.use(LanguageRedirectPlugin, { app: { router }, store });
 
 

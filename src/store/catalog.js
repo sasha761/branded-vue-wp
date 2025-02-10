@@ -31,10 +31,11 @@ const actions = {
       }
     })
     .then((result) => {
+      console.log(result)
       if(result?.data?.status !== 'nomore') {
-        commit('setProductsCount', result.data.products_count);
-        commit('setProductsList', result.data.products);
-        commit('setCategoryInfo', result.data.product_cat);
+        commit('setProductsCount', result.data?.products_count);
+        commit('setProductsList', result.data?.products);
+        // commit('setCategoryInfo', result.data?.product_cat);
       }
       // console.log('fetchData: ', result.data)
       return result.data;

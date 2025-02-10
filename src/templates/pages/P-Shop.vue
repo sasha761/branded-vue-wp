@@ -96,7 +96,6 @@ export default {
       productsCount: 'catalog/productsCount',
       categoryInfo: 'catalog/categoryInfo',
       currentLang: 'lang/getCurrentLang',
-      apiUrl: 'lang/getCurrentLang',
     }),
 
     offset() {
@@ -155,7 +154,8 @@ export default {
           offset, 
           lang,
         }).then(result => {
-          this.setApiUrl(result.product_cat.url);
+          console.log(result);
+          // this.setApiUrl(result?.product_cat?.url);
         });
       });
     },

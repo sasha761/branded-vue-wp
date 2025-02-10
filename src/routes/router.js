@@ -50,7 +50,7 @@ const routes = [
     component: () => import('../templates/pages/P-Checkout.vue'),
   },
   {
-    path: '/checkout-2/order-received/:numbers',
+    path: '/:lang?/checkout-2/order-received/:numbers',
     name: 'order-received',
     component: () => import('../templates/pages/P-Order-received.vue'),
     props: true,

@@ -22,3 +22,15 @@ export function stripLang(url) {
 
   return null;
 }
+
+export function stripDomain(url) {
+  if (!url) return '';
+
+  try {
+    const urlObj = new URL(url);
+    return urlObj.pathname; 
+  } catch (e) {
+    console.error("Invalid URL:", url);
+    return url; 
+  }
+}

@@ -42,9 +42,10 @@
               <p class="c-price" v-html="product.price_html"></p>
 
               <form class="c-product-form" :data-product_id="product.id">
-                <span class="c-product-form__size">Размер</span>
+                <span v-if="product.size_attribute" class="c-product-form__size">Размер</span>
 
                 <v-select 
+                  v-if="product.size_attribute"
                   v-model="selectedSize" 
                   @input="handleSelectChange" 
                   :options="product.size_attribute"
@@ -173,7 +174,7 @@ export default {
   mounted() {
     if(this.$route.params.productData) {
       this.product = this.$route.params.productData
-      this.selectedSize = this.product?.size_attribute[0];
+      this.selectedSize = (this.product?.size_attribute?.[0]) ?? { availability: true, id: this.$route.params.productData.id, name: "one size" };
     } else {
       this.fetchProductData();
     }
@@ -198,7 +199,7 @@ export default {
         .then((result) => {
           console.log(result)
           this.product = result.data
-          this.selectedSize = result.data?.size_attribute[0];
+          this.selectedSize = (this.product?.size_attribute?.[0]) ?? [{ availability: true, id: result.data.id, name: "one size" }];
         })
         .catch((error) => {
           console.log(error);
@@ -245,8 +246,13 @@ export default {
       let allProducts = this.cartProducts;
       addedProduct.quantity = 1;
       
-      // addedProduct.size_attribute = addedProduct.size_attribute.filter(obj => obj.name === this.selectedSize.name);
-      addedProduct.size_selected = addedProduct.size_attribute.filter(obj => obj.name === this.selectedSize.name);
+      if (addedProduct.size_attribute === undefined) {
+          addedProduct.size_attribute = [{ availability: true, id: addedProduct.id, name: "one size" }];
+      }
+
+      addedProduct.size_selected = this.selectedSize && this.selectedSize.name
+        ? addedProduct.size_attribute.filter(obj => obj.name === this.selectedSize.name)
+        : [{availability: true, id: addedProduct.id, name: "one size"}];
 
       const index = allProducts.findIndex(obj => obj.size_selected[0].id === this.selectedSize.id);
 
@@ -256,6 +262,8 @@ export default {
         allProducts.push(addedProduct);
       }
 
+      
+      console.log(addedProduct);
       // // Обновление состояния корзины
       this.setProductToCart(allProducts);
       this.setTotalAmount();

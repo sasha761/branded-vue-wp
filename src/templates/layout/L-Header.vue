@@ -7,27 +7,7 @@
           <C-Menu :headerMenu="getHeaderMenu" v-if="getHeaderMenu.length"/>
         </div>
         <div class="l-header__bottom-right">
-          <form
-            role="search"
-            method="get"
-            id="searchform"
-            class="c-search"
-            action="https://branded.com.ua"
-          >
-            <button type="submit" class="c-search__button">
-              <svg width="15px" height="17px" class="is-search">
-                <use xlink:href="#search"></use>
-              </svg>
-            </button>
-            <input type="hidden" name="post_type" value="product" />
-            <input
-              type="text"
-              v-model="search"
-              placeholder="Поиск"
-              name="s"
-              id="s"
-            />
-          </form>
+          <C-SearchForm />
           <div class="c-service cart d-none d-sm-block">
             <div>
               <span class="c-service__count">{{getCartProducts.length}}</span>
@@ -155,7 +135,7 @@ import stringConfig from '@/config/stringConfig.js'
 import CMenu from '@/templates/components/C-Menu.vue';
 import CLogo from '@/templates/components/C-Logo.vue';
 import CLang from '@/templates/components/C-Lang.vue';
-
+import CSearchForm from '@/templates/components/C-SearchForm.vue';
 import CStickyMenu from '@/templates/components/C-sticky-menu.vue';
 
 
@@ -163,7 +143,6 @@ export default {
   data() {
     return {
       activeDropdown: false,
-      search: '',
       strings: stringConfig,
     }
   },
@@ -172,7 +151,8 @@ export default {
     CMenu,
     CLogo,
     CStickyMenu,
-    CLang
+    CLang,
+    CSearchForm
   },
 
   created() {
