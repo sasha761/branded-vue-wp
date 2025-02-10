@@ -8,7 +8,7 @@
     <C-PageLoader v-if="requestInProgress"/>
     <div class="u-container">
       <C-Breadcrumb />
-      <section class="l-product">
+      <section class="l-product" v-if="product">
         <div class="row">
           <div class="col-lg-6 col-md-12 col-sm-12 u-col">
             <div  class="l-product__img">
@@ -26,6 +26,7 @@
           <div class="col-lg-5 col-md-12 u-col">
             <div class="l-product__content">
               <router-link
+                v-if="product.post_link_brand"
                 :to="{
                   name: 'brand',
                   params: {
@@ -47,10 +48,9 @@
                 <v-select 
                   v-if="product.size_attribute"
                   v-model="selectedSize" 
-                  @input="handleSelectChange" 
-                  :options="product.size_attribute"
-                  label="name">
-                </v-select>
+                  @update:modelValue="handleSelectChange" 
+                  :options="product.size_attribute" 
+                  label="name"></v-select>
                 
                 <div class="c-product-form__btn">
                   <CButton 
@@ -114,7 +114,7 @@
 <script>
 import Api from '@/api/Axios'
 import { mapGetters, mapMutations } from 'vuex';
-import vSelect from 'vue-select';
+import vSelect from "vue-select";
 
 import LSubscribe from '@/templates/layout/L-Subscribe.vue'
 import LRelated from '@/templates/layout/L-Related.vue'
@@ -125,6 +125,7 @@ import CBreadcrumb from '@/templates/components/C-Breadcrumbs.vue'
 import CAccordion from '@/templates/components/C-Accordion.vue'
 import CButton from '@/templates/components/C-Button.vue'
 
+import { stripSlug, stripLang } from '@/assets/js/utils.js';
 import waitRequest from '@/mixins/waitRequest';
 
 export default {
@@ -161,7 +162,7 @@ export default {
     }, 
     getProductCategory() {
       return this.product?.cats?.join(', ');
-    },
+    }
   },
 
   watch: {
@@ -215,6 +216,10 @@ export default {
     },
 
     checkVisibility() {
+      if (!this.$refs.relatedProductsSection || !this.$refs.relatedProductsSection.$el) {
+        return; 
+      }
+
       const section = this.$refs.relatedProductsSection.$el;
       const rect = section.getBoundingClientRect();
       const isVisible = rect.top < window.innerHeight && rect.bottom >= 0;
@@ -283,17 +288,8 @@ export default {
       this.$popup.open('PopupQuickBuy', {product: this.product})
     },
 
-    stripLang(url) {
-      if (!url) return '';
-
-      const urlObj = new URL(url);
-      const pathParts = urlObj.pathname.split('/');
-
-      // Если первый сегмент пути равен "uk", возвращаем его
-      if (pathParts[1] === 'uk') return pathParts[1];
-      
-      return null;
-    },
+    stripSlug, 
+    stripLang
   },
   beforeDestroy() {
     window.removeEventListener('scroll', this.handleScroll);

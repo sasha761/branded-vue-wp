@@ -11,7 +11,7 @@
           
           <section class="l-shop" :data-categories="categoryTitle" >
             <h1 class="u-h2">{{categoryTitle}}</h1>
-            <L-Filter-Block @fetchProductsData="fetchProductsData"/>
+            <L-Filter-Block @filtering="filterCallback"/>
             
             <C-Product-list 
               :products="products"
@@ -46,7 +46,7 @@ import CProductList from '@/templates/components/C-Product-list.vue'
 
 import { mapActions, mapMutations, mapGetters } from 'vuex';
 import waitRequest from '@/mixins/waitRequest';
-import Pagination from 'vue-pagination-2';
+import Pagination from 'v-pagination-3';
 
 
 export default {
@@ -83,10 +83,7 @@ export default {
 
   watch: {
     currentLang() {
-      // console.log('watch: ', newLang, oldLang)
-      // if (!this.isReplacingRoute && newLang !== oldLang) {
-        this.fetchProductsData();
-      // }
+      this.fetchProductsData();
     }, 
   },
 
@@ -105,6 +102,7 @@ export default {
     categorySlugFromRoute() { return this.$route.params.subcategorySlug || this.$route.params.categorySlug },
     currentPage() { 
       const queryPage = this.$route?.query?.page;
+      // console.log('queryPage: ', queryPage);
       const currentPageNumber = Number(queryPage) || 1;
       return currentPageNumber;
     },
@@ -131,11 +129,39 @@ export default {
     }),
 
     paginationCallback(changedPage) {
-      this.addQueryParams(changedPage);
+      this.addQueryParams('page', changedPage);
+      // const offset = this.productsLength * this.page;
+      this.fetchProductsData({page: changedPage});
+    },
 
-      const offset = this.productsLength * this.page;
-      this.fetchProductsData({offset});
-      // this.$refs.productsList?.callbackInit();
+    async filterCallback(selectedOption) {
+      if (!selectedOption) return;  
+
+      if(selectedOption.key !== 'all') {
+        await this.addQueryParams(selectedOption.type, selectedOption.key);
+      } else {
+        await this.removeQueryParams(selectedOption.type);
+      }
+
+      if(this.$route.query.page) {
+        await this.removeQueryParams('page');
+      }
+
+      this.fetchProductsData({url: this.$route.fullPath, page: 1, offset: 0});
+
+      // console.log("После-После обновления маршрута:", this.$route.fullPath);
+    },
+
+    async addQueryParams(queryKey, queryVal) {
+      const query = { ...this.$route.query };
+      query[queryKey] = queryVal;
+      await this.$router.push({ path: '', query });
+    },
+
+    async removeQueryParams(param) {
+      const query = { ...this.$route.query };
+      delete query[param];
+      await this.$router.push({ path: '', query });
     },
 
     fetchProductsData({ 
@@ -145,7 +171,6 @@ export default {
       offset = this.offset, 
       lang = this.currentLang 
     } = {}) {
-      // Выполняем запрос
       this.waitRequest(() => {
         return this.fetchProducts({
           url, 
@@ -159,24 +184,18 @@ export default {
         });
       });
     },
-
-    addQueryParams(currentPage) {
-      const query = { ...this.$route.query };
-      query['page'] = currentPage;
-      this.$router.push({ path: '', query });
-    },
-
-    removeQueryParams() {
-      const query = { ...this.$route.query };
-      delete query['page'];
-      this.$router.push({ path: '', query });
-    },
   }
 }
 </script>
 
-<style>
-  .VuePagination__count {
-    display: none;
+<style lang="scss">
+  .VuePagination {
+    .VuePagination__count {
+      display: none;
+    }
+
+    button {
+      color: white;
+    }
   }
 </style>

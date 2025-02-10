@@ -2,22 +2,21 @@
   <div>
     <div class="l-filter">
       <div class="widget">
-        <Select-filter-form 
+        <select-filter
           @select-filter="sortHendler" 
-          ref="select" 
           :options="filterBrand" 
           :show-all="showAll"
-          filter-param="brand" 
-          :current-option="brandSelect" 
+          filter-param="brand"  
+          :current-option="brandSelect"
         />
       </div>
       <div class="widget">
-        <Select-filter-form 
+        <select-filter
           @select-filter="sortHendler" 
           :options="filterSize" 
           :show-all="showAll"
-          filter-param="size" 
-          :current-option="sizeSelect" 
+          filter-param="size"  
+          :current-option="sizeSelect"
         />
       </div>
     </div>
@@ -25,19 +24,20 @@
       <div class="l-shop__result-count">
         <p class="woocommerce-result-count" v-if="products.length">Отображение {{productCurrentCount}} из {{productsLength}}</p>
       </div>
-      <Select-filter-form 
+      <select-filter
         @select-filter="sortHendler" 
         :options="filterOrderby" 
         :show-all="showAll"
-        filter-param="orderby" 
-        :current-option="orderbySelect" 
+        filter-param="orderby"  
+        :current-option="orderbySelect"
       />
     </div>
   </div>
 </template>
 
 <script>
-import SelectFilterForm from '@/templates/forms/SelectFilterForm.vue'
+import selectFilter from '@/templates/forms/SelectFilter.vue'
+
 import ProductFiltersData from '@/config/productFilterNew'
 import { mapGetters } from 'vuex'
 
@@ -54,7 +54,7 @@ export default {
   },
 
   components: {
-    SelectFilterForm,
+    selectFilter,
   },
 
   computed: {
@@ -87,20 +87,8 @@ export default {
       return ProductFiltersData[filterKey].find(filter => filter.key === searchParam) || this.showAll || ProductFiltersData[filterKey][ProductFiltersData[filterKey][0]]
     },
 
-    removeQueryParams(param) {
-      const query = { ...this.$route.query };
-      delete query[param];
-      this.$router.push({ path: '', query });
-    },
-
     sortHendler(selectedOption) {
-      if (!selectedOption) return;      
-
-      if(this.$route.query.page) {
-        this.removeQueryParams('page');
-      }
-
-      this.$emit('fetchProductsData', {url: this.$route.fullPath, page: 1, offset: 0});
+      this.$emit('filtering', selectedOption);
     },
   },
 }

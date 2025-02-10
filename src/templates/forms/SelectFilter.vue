@@ -2,7 +2,7 @@
   <div class="c-sort js-filter-sort">
     <v-select 
       v-model="selected" 
-      @input="handleSelectChange" 
+      @update:modelValue="handleSelectChange" 
       :options="optionsAdapted" 
       label="text"></v-select>
   </div>
@@ -55,18 +55,11 @@ export default {
 
   methods: {
     handleSelectChange(value) {
-      let key;
-      let text;
+      let key = value?.key || this.showAll?.key || this.optionsAdapted[0].key;
+      let text = value?.text || this.showAll?.text || this.optionsAdapted[0].text;
 
-      if (value !== null) {
-        key = value.key;
-        text = value.text;
-      } else {
-        this.selected = this.showAll?.text || this.optionsAdapted[0].text;
-        key = this.showAll?.key || this.optionsAdapted[0].key;
-        text = this.showAll?.text || this.optionsAdapted[0].text;
-      }    
-      this.$emit('select-filter', {type: this.filterParam, key: key, text: text})
+      this.selected = text;
+      this.$emit('select-filter', { type: this.filterParam, key, text });
     },
   },
 }

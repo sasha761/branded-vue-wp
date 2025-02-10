@@ -1,4 +1,4 @@
-import VueRouter from 'vue-router';
+import { createRouter, createWebHistory } from 'vue-router';
 
 const routes = [
   // Главная страница (универсальная)
@@ -19,7 +19,7 @@ const routes = [
     props: (route) => ({
       lang: route.params.lang,
       productName: route.params.productName,
-      productData: route.params.productData
+      productData: route.params.productData,
     }),
   },
 
@@ -64,10 +64,11 @@ const routes = [
   },
 ];
 
-export const router = new VueRouter({
+// Создание маршрутизатора для Vue 3
+export const router = createRouter({
+  history: createWebHistory(), // Заменяет mode: 'history'
   routes,
-  mode: 'history',
   scrollBehavior() {
-    return { x: 0, y: 0 };
+    return { left: 0, top: 0 }; // В Vue 3 используем left вместо x
   },
 });

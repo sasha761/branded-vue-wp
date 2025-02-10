@@ -123,9 +123,8 @@ const $popup = {
 // myPlugin.js
 
 const MyPlugin = {
-  install(Vue) {
-    // Ваш код для установки плагина
-    Vue.prototype.$popup = $popup;
+  install(app) {
+    app.config.globalProperties.$popup = $popup;
   }
 };
 

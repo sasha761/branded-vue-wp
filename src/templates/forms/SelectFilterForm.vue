@@ -1,5 +1,5 @@
 <template>
-  <select-filter 
+  <select-filter
     @select-filter="handleSelectChange" 
     :options="options" 
     :show-all="showAll"
@@ -38,24 +38,7 @@ export default {
   },
 
   methods: {
-    addQueryParams(selectedOption) {
-      const query = { ...this.$route.query };
-      query[this.filterParam] = selectedOption.key;
-      this.$router.push({ path: '', query });
-    },
-    removeQueryParams(selectedOption) {
-      const query = { ...this.$route.query };
-      delete query[selectedOption.type];
-      this.$router.push({ path: '', query });
-    },
-
     handleSelectChange(selectedOption) {
-      if(selectedOption.key !== this.showAll.key) {
-        this.addQueryParams(selectedOption);
-      } else {
-        this.removeQueryParams(selectedOption);
-      }
-
       this.$emit('select-filter', selectedOption);
     },
   }
