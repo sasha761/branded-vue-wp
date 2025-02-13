@@ -16,58 +16,37 @@
         type="text"
         v-model="searchInput"
         placeholder="Поиск"
-        name="s"
-        id="s"
         @keydown.enter="fetchSearch"
       />
     </form>
 
-    <div class="c-search__result">
+    <div class="c-search__result" :class="{'is-active': searchContainerVisability}">
       <C-Spinner v-if="requestInProgress"/>
-      <div v-if="searchResult.length > 0" class="l-mini-cart">
+      <svg v-if="searchResult.length > 0" @click="handleCloseClick" width="20px" height="20px" class="c-search__close">
+        <use xlink:href="#icon-close"></use>
+      </svg>
+      <p v-if="!searchResult.length && !requestInProgress">По вашему запросу ничего не найдено!</p>
+      <div v-if="searchResult.length > 0" class="l-mini-cart" :class="{'is-opacity': requestInProgress}">
         <!-- {{searchResult.length}} -->
         <ul  class="l-mini-cart__list">
           <li 
             v-for="(product, index) in searchResult" 
             :key="index"
+            class="l-mini-cart__item"
           >
-            <div class="l-mini-cart__item">
-              <div class="l-mini-cart__item-img">
-                <router-link
-                  :to="{
-                    name: 'product',
-                    params: {
-                      lang: stripLang(product.permalink) || null,
-                      productName: stripSlug(product.permalink),
-                      productData: product,
-                    },
-                  }"
-                >
-                  <img :src="product.post_img_m"> 
-                </router-link>
-              </div>
-              <div class="l-mini-cart__item-info">
-                <div v-if="product.post_attr_brand" class="is-brand">{{product.post_attr_brand}}</div>
-                <span class="is-name">{{product.name}}</span>
-
-
-                <p class="c-price">
-                  {{ product.price }} {{strings.string.currency}}
-                </p>
-
-              </div>
-            </div>
+            <C-MiniCart-Item :product="product" />
           </li>
         </ul>
       </div>
     </div>
   </div>
-  
 </template>
 
 <script>
 import Api from '@/api/Axios'
 import CSpinner from '@/templates/components/C-Spinner.vue'
+import CMiniCartItem from '@/templates/components/C-MiniCart-item.vue'
+
 import stringConfig from '@/config/stringConfig.js'
 
 import waitRequest from '@/mixins/waitRequest';
@@ -79,13 +58,15 @@ export default {
     return {
       searchInput: '',
       searchResult: [],
+      searchContainerVisability: false,
       debounceTimeout: null,
       strings: stringConfig,
     }
   },
 
   components: {
-    CSpinner
+    CSpinner,
+    CMiniCartItem
   },
 
   mixins: [waitRequest],
@@ -106,19 +87,25 @@ export default {
 
   methods: {
     fetchSearch() {
+      this.searchContainerVisability = true;
       this.waitRequest(() => {
         return Api.post('search/search', {
 					lang: this.currentLang,
           query: this.searchInput,
 				})
 				.then((result) => {
-					this.searchResult = result.data?.products
+					this.searchResult = result.data
 					console.log(this.searchResult)
 				})
 				.catch((error) => {
 					console.log(error);
+          this.searchContainerVisability = false;
 				});
       })
+    },
+
+    handleCloseClick() {
+      this.searchContainerVisability = false;
     },
 
     debouncedSearch() {
@@ -130,7 +117,7 @@ export default {
       // Устанавливаем новый таймер на 500 мс
       this.debounceTimeout = setTimeout(() => {
         this.fetchSearch();
-      }, 500);
+      }, 1000);
     },
 
     stripSlug, 
