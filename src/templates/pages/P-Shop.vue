@@ -85,6 +85,13 @@ export default {
     currentLang() {
       this.fetchProductsData();
     }, 
+    '$route.query.page': {
+      immediate: true,
+      handler(newPage) {
+        console.log("Изменился параметр `page` в URL:", newPage);
+        this.page = Number(newPage) || 1;
+      }
+    }
   },
 
   computed: {
@@ -95,16 +102,14 @@ export default {
       currentLang: 'lang/getCurrentLang',
     }),
 
-    offset() {
-      return 16 * (this.currentPage - 1);
-    },
-    
     categorySlugFromRoute() { return this.$route.params.subcategorySlug || this.$route.params.categorySlug },
     currentPage() { 
-      const queryPage = this.$route?.query?.page;
-      // console.log('queryPage: ', queryPage);
-      const currentPageNumber = Number(queryPage) || 1;
-      return currentPageNumber;
+      return this.page;
+    },
+
+    offset() {
+      console.log('offset: ', 16 * (this.currentPage - 1));
+      return 16 * (this.currentPage - 1);
     },
 
     categoryTitle() {
@@ -171,6 +176,8 @@ export default {
       offset = this.offset, 
       lang = this.currentLang 
     } = {}) {
+
+      console.log('currentPage: ', this.currentPage);
       this.waitRequest(() => {
         return this.fetchProducts({
           url, 

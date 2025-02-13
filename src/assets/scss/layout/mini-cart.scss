@@ -26,69 +26,11 @@
   }
 
   &__item {
-    position: relative;
-    display: flex;
+    // position: relative;
+    // display: flex;
     margin-bottom: 10px;
     padding-bottom: 10px;
     border-bottom: 1px solid #efeded;
-
-    &-img {
-      max-width: 70px;
-      margin: 0 15px 0 0;
-      flex-shrink: 0;
-    }
-
-    &-attr {
-      display: flex;
-      align-items: center;
-      margin-bottom: 10px;
-      margin-top: 8px;
-
-      .is-size {
-        margin-right: 15px;
-      }
-    }
-
-    &-info {
-      font-size: 13px;
-      line-height: 1.2;
-      display: block;
-      // padding-top: 15px;
-      font-weight: 400;
-      font-style: normal;
-      // letter-spacing: 1px;
-      color: #333333;
-      padding-right: 10px;
-
-      .is-brand {
-        font-size: 10px;
-        line-height: 9px;
-        margin-bottom: 8px;
-        text-transform: uppercase;
-        font-weight: 600;
-      }
-      .is-name {
-        font-size: 12px;
-        line-height: 15px;
-        margin-bottom: 5px;
-      }
-    }
-
-    .c-price {
-      font-size: 12px;
-      line-height: 15px;
-
-      &__sale,
-      &__wrong {
-        font-size: 12px;
-        line-height: 15px;
-        font-weight: 600;
-      }
-
-      &__current {
-
-      }
-    }
   }
 
   &__bottom {
@@ -171,5 +113,66 @@
 
   .is-bold {
     font-weight: 500;
+  }
+}
+
+.c-minicart-product {
+  display: flex;
+  &__img {
+    max-width: 70px;
+    margin: 0 15px 0 0;
+    flex-shrink: 0;
+  }
+
+  &__attr {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    margin-top: 8px;
+
+    .is-size {
+      margin-right: 15px;
+    }
+  }
+
+  &__info {
+    font-size: 13px;
+    line-height: 1.2;
+    display: block;
+    // padding-top: 15px;
+    font-weight: 400;
+    font-style: normal;
+    // letter-spacing: 1px;
+    color: #333333;
+    padding-right: 10px;
+
+    .is-brand {
+      font-size: 10px;
+      line-height: 9px;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+    .is-name {
+      font-size: 12px;
+      line-height: 15px;
+      margin-bottom: 5px;
+    }
+  }
+
+  .c-price {
+    font-size: 12px;
+    line-height: 15px;
+
+    &__sale,
+    &__wrong {
+      font-size: 12px;
+      line-height: 15px;
+      font-weight: 600;
+    }
+
+    &__current {
+
+    }
   }
 }

@@ -36,6 +36,8 @@
           class="lazy entered loaded"
           data-ll-status="loaded"
         />
+        <span v-if="product.percent" class="c-product__sale">-{{product.percent}}%</span>
+        <span v-if="product.stockStatus === 'Out of stock'" class="c-product__stock">{{product.stockStatus}}</span>
       </picture>
     </router-link>
 
@@ -73,24 +75,6 @@ export default {
   methods: {
     stripSlug, 
     stripLang
-    
-    // stripSlug(url) {
-    //   if (!url) return '';
-
-    //   return url.split('/').filter(Boolean).pop();
-    // },
-
-    // stripLang(url) {
-    //   if (!url) return '';
-
-    //   const urlObj = new URL(url);
-    //   const pathParts = urlObj.pathname.split('/');
-
-    //   // Если первый сегмент пути равен "uk", возвращаем его
-    //   if (pathParts[1] === 'uk') return pathParts[1];
-      
-    //   return null;
-    // },
   }
 }
 </script>

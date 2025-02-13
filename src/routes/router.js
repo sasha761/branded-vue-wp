@@ -56,6 +56,13 @@ const routes = [
     props: true,
   },
 
+  {
+    path: '/:lang?/search',
+    name: 'SearchResults',
+    component: () => import('../templates/pages/P-Shop.vue'),
+    props: route => ({ lang: route.params.lang })
+  },
+
   // Маршрут для 404 страниц
   {
     path: '/:catchAll(.*)',

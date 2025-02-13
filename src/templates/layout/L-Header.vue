@@ -14,7 +14,13 @@
               <svg width="20px" height="20px"><use xlink:href="#cart"></use></svg>
             </div>
             <div class="c-service__dropdown">
-              <L-MiniCart :cartButtons="true" :cartTitle="true" :cartProducts="getCartProducts" :totalAmount="getTotalAmount" :cartUrl="getCartUrl"  :checkoutUrl="getCheckoutUrl"/>
+              <L-MiniCart 
+                :cartButtons="true" 
+                :cartTitle="true" 
+                :cartProducts="getCartProducts" 
+                :totalAmount="getTotalAmount" 
+                :cartUrl="getCartUrl"  
+                :checkoutUrl="getCheckoutUrl" />
             </div>
           </div>
           <div class="c-dropdown js-dropdown" :class="{'is-active': activeDropdown}" @click="activeDropdown = !activeDropdown">

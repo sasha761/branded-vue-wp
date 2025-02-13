@@ -5,7 +5,7 @@
       method="get"
       id="searchform"
       class="c-search-form"
-      @submit.prevent="fetchSearch"
+      @submit.prevent="handleSearchSubmit"
     >
       <button type="submit" class="c-search-form__button">
         <svg width="15px" height="17px" class="is-search">
@@ -27,13 +27,8 @@
       </svg>
       <p v-if="!searchResult.length && !requestInProgress">По вашему запросу ничего не найдено!</p>
       <div v-if="searchResult.length > 0" class="l-mini-cart" :class="{'is-opacity': requestInProgress}">
-        <!-- {{searchResult.length}} -->
         <ul  class="l-mini-cart__list">
-          <li 
-            v-for="(product, index) in searchResult" 
-            :key="index"
-            class="l-mini-cart__item"
-          >
+          <li v-for="(product, index) in searchResult" :key="index" class="l-mini-cart__item">
             <C-MiniCart-Item :product="product" />
           </li>
         </ul>
@@ -87,6 +82,7 @@ export default {
 
   methods: {
     fetchSearch() {
+      if (!this.searchInput.trim() || this.searchInput.trim().length < 3) return;
       this.searchContainerVisability = true;
       this.waitRequest(() => {
         return Api.post('search/search', {
@@ -94,7 +90,7 @@ export default {
           query: this.searchInput,
 				})
 				.then((result) => {
-					this.searchResult = result.data
+					this.searchResult = result.data?.products
 					console.log(this.searchResult)
 				})
 				.catch((error) => {
@@ -109,15 +105,27 @@ export default {
     },
 
     debouncedSearch() {
-      // Если уже есть запущенный таймер - очищаем его
       if (this.debounceTimeout) {
         clearTimeout(this.debounceTimeout);
       }
 
-      // Устанавливаем новый таймер на 500 мс
       this.debounceTimeout = setTimeout(() => {
         this.fetchSearch();
       }, 1000);
+    },
+
+    async goToSearchPage() {
+      if (!this.searchInput.trim()) return;
+      const lang = this.currentLang === 'uk' ? `/${this.currentLang}` : '';
+      const searchUrl = `${lang}/search?s=${encodeURIComponent(this.searchInput)}`;
+
+      // Делаем переход на страницу поиска
+      await this.$router.push(searchUrl);
+    },
+
+    handleSearchSubmit() {
+      this.goToSearchPage();
+      this.handleCloseClick();
     },
 
     stripSlug, 
